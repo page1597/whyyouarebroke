@@ -1,14 +1,11 @@
-// root
-// import Header from "src/components/Header";
+// root of the project
 import { Header } from "@/components/header";
-import classNames from "classnames";
 import {
   DrawerLeft,
   DrawerLeftTrigger,
   DrawerLeftContent,
   DrawerLeftHeader,
   DrawerLeftTitle,
-  DrawerLeftDescription,
   DrawerLeftFooter,
   DrawerLeftClose,
 } from "@/components/ui/drawerLeft";
@@ -17,16 +14,18 @@ import {
   DrawerRightTrigger,
   DrawerRightContent,
   DrawerRightHeader,
-  DrawerRightTitle,
-  DrawerRightDescription,
   DrawerRightFooter,
   DrawerRightClose,
 } from "@/components/ui/drawerRight";
 import DocsSidebarNav from "@/components/ui/sidebar";
-import { useAuthenticateAdmin, useAuthenticateUser } from "@/hooks/useAuthenticate";
+import { useAuth, useAuthAdmin, useUser } from "@/hooks/useAuth";
 import { Link, Outlet } from "react-router-dom";
 import logo from "src/assets/logo.png";
 import { Input } from "@/components/ui/formInput";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getUser } from "@/firebase";
+
 export const sidebarNav = [
   {
     title: "ROCK/POP/ETC",
@@ -57,16 +56,19 @@ export const sidebarNav = [
     href: "/category/merchandise",
   },
 ];
-export default function Layout() {
-  const isLoggedIn = useAuthenticateUser();
-  const isAdmin = useAuthenticateAdmin();
+
+export default function Layout({ isLoggedIn, isAdmin }: { isLoggedIn: boolean; isAdmin: boolean }) {
+  // const isAdmin = useAuthAdmin();
+  // const isAdmin = false;
+  // const isLoggedIn = useAuth();
+  // const [user, setUser] = useState<UserInfoType>();
 
   const headerNav = [
-    isLoggedIn ? { title: "로그아웃", href: "/logout" } : { title: "로그인", href: "/login" },
+    isLoggedIn ? { title: "로그아웃", href: "/" } : { title: "로그인", href: "/login" },
     { title: "장바구니", href: "/basket" },
     !isLoggedIn && { title: "회원가입", href: "/signup" },
-    !isAdmin && { title: "마이페이지", href: "/mypage" },
-    isAdmin && { title: "주문조회", href: "/orders" },
+    !isAdmin ? { title: "마이페이지", href: "/mypage" } : { title: "주문조회", href: "/orders" },
+    // isAdmin && { title: "주문조회", href: "/orders" },
   ];
 
   return (
@@ -74,10 +76,10 @@ export default function Layout() {
       <div className="hidden md:inline-block">
         <Header items={headerNav} />
         <div className="hidden md:flex flex-row bg-slate-100 flex-grow">
-          <div className="flex flex-col">
+          <Link to={"/"} className="flex flex-col">
             <img src={logo} width={120} />
             <DocsSidebarNav items={sidebarNav} />
-          </div>
+          </Link>
           <div className="p-10 flex-grow">
             <Outlet />
           </div>
@@ -112,7 +114,9 @@ export default function Layout() {
               </DrawerLeftFooter>
             </DrawerLeftContent>
           </DrawerLeft>
-          <img src={logo} width={70} />
+          <Link to={"/"}>
+            <img src={logo} width={70} />
+          </Link>
           <DrawerRight direction="right">
             <DrawerRightTrigger>
               <svg

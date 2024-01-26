@@ -1,13 +1,16 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { UserInfo } from "./types";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { NavigateFunction } from "react-router-dom";
+import { UserSignUpType } from "./types";
+import { collection, addDoc, getFirestore, setDoc, doc, DocumentData, getDoc } from "firebase/firestore";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
   authDomain: "commerce-fee29.firebaseapp.com",
@@ -19,37 +22,70 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth();
-
+// const analytics = getAnalytics(app);
+const firebaseAuth = getAuth();
+export const db = getFirestore(app);
 //Email 회원가입
-export function signUp(user: UserInfo) {
-  return createUserWithEmailAndPassword(auth, user.email, user.password)
-    .then((userCredential) => {
-      // signed in
-      const singedInUser = userCredential.user;
-      console.log(singedInUser);
-      console.log(user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-    });
+export async function signUp(user: UserSignUpType, navigate: NavigateFunction) {
+  console.log(user.name);
+  try {
+    const userCredential = await createUserWithEmailAndPassword(firebaseAuth, user.email, user.password!);
+    try {
+      const updated = await updateProfile(userCredential.user, { displayName: user.name });
+      console.log(updated);
+      try {
+        const uid = userCredential.user.uid;
+        const userRef = doc(db, "users", uid); // 파이어베이스 자동생성 유저 고유 아이디
+        await setDoc(userRef, {
+          id: user.id,
+          email: user.email,
+          type: user.type,
+          name: user.name,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+
+      alert("회원가입 되었습니다.");
+      console.log(userCredential);
+      signOut(firebaseAuth).then(() => navigate("/login")); // 동작 어색함..
+    } catch (e) {
+      console.log(e);
+    }
+  } catch (e) {
+    console.log(e);
+  }
 }
-// export function updateUser() {
-//   return updateProfile(auth.currentUser, {
-//     displayName: nickname,
-//     photoURL: '',
-//   })
-//     .then(() => {
-//       console.log();
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
 //Email 로그인
-export function logIn(email: string, password: string) {
-  return signInWithEmailAndPassword(auth, email, password);
+export async function logIn(email: string, password: string, navigate: NavigateFunction) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+    console.log(userCredential);
+    navigate("/");
+    alert("로그인 되었습니다.");
+
+    return userCredential;
+  } catch (e) {
+    console.log(e);
+    alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+    return e;
+  }
 }
+
+export async function logOut(navigate: NavigateFunction) {
+  try {
+    const response = await signOut(firebaseAuth);
+    alert("로그아웃 되었습니다.");
+    console.log("로그아웃 되었습니다.");
+    console.log(response);
+    navigate("/");
+  } catch (e) {
+    console.log(e);
+  }
+}
+export async function getUser(uid: string): Promise<DocumentData | undefined> {
+  const result = await getDoc(doc(db, "users", uid));
+  console.log(result.data());
+  return result.data();
+}
+// export async function getUser
