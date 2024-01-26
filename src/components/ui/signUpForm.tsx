@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/formInput";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { signUp } from "@/firebase";
-import { UserInfo } from "@/types";
-import { userInfo } from "os";
+import { NavigateFunction } from "react-router-dom";
+import { UserSignUpType } from "@/types";
 
 // var passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
 const idRegx = RegExp(/^[a-zA-Z][0-9a-zA-Z]{3,15}$/);
@@ -72,7 +72,7 @@ const formSchema = z
     }
   });
 
-export default function SignUpForm() {
+export default function SignUpForm({ navigate }: { navigate: NavigateFunction }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,31 +82,25 @@ export default function SignUpForm() {
       password: "",
       confirmPassword: "",
       name: "",
-      nickname: "",
-      image: "",
-      greeting: "",
       email: "",
+      //   nickname: "",
+      //   image: "",
+      //   greeting: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log("?");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    console.log("...");
-    const user: UserInfo = {
+    const user: UserSignUpType = {
       type: values.type,
       id: values.id,
       password: values.password,
       confirmPassword: values.confirmPassword,
       name: values.name,
-      //   nickname: values.nickname,
-      //   image: values.image,
       email: values.email,
     };
-    signUp(user);
+    signUp(user, navigate);
   }
 
   return (
@@ -119,9 +113,9 @@ export default function SignUpForm() {
             <FormItem {...field}>
               <FormLabel>회원 구분 *</FormLabel>
               <FormControl>
-                <RadioGroup className="flex" defaultValue={field.value} onValueChange={field.onChange}>
+                <RadioGroup className="flex" defaultValue={"일반 회원"} onValueChange={field.onChange}>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="일반 회원" defaultChecked />
+                    <RadioGroupItem value="일반 회원" defaultChecked={true} />
                     <Label htmlFor="일반 회원">일반 회원</Label>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -130,7 +124,6 @@ export default function SignUpForm() {
                   </div>
                 </RadioGroup>
               </FormControl>
-              <FormMessage></FormMessage>
             </FormItem>
           )}
         />
