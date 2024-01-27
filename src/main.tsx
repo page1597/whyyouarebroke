@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 
 import App from "./App.tsx";
-import { UserProvider } from "./context/userContext.tsx";
+import AuthProvider from "./provider/authProvider.tsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -60,8 +60,12 @@ import { UserProvider } from "./context/userContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    {/* <UserProvider> */}
     {/* 전역 상태 공유: 이 안에서 useUser()를 실행하면 auth와 setAuth 사용 가능 */}
     {/* <RouterProvider router={router} /> */}
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+    {/* </UserProvider> */}
   </React.StrictMode>
 );

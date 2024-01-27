@@ -63,10 +63,10 @@ export type UserSubscriptionPlan = SubscriptionPlan &
   };
 
 export type UserInfoType = {
-  email: string;
-  id: string;
-  name: string;
-  type: string;
+  email: string?;
+  // id: string?;
+  name: string?;
+  type: string?;
   // nickname: string;
   // image: string;
   // greeting: string;
@@ -74,7 +74,7 @@ export type UserInfoType = {
 // 회원가입 폼 타입
 export type UserSignUpType = {
   type: string;
-  id: string;
+  // id: string;
   password: string;
   confirmPassword: string;
   name: string;

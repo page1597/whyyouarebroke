@@ -18,13 +18,13 @@ import {
   DrawerRightClose,
 } from "@/components/ui/drawerRight";
 import DocsSidebarNav from "@/components/ui/sidebar";
-import { useAuth, useAuthAdmin, useUser } from "@/hooks/useAuth";
 import { Link, Outlet } from "react-router-dom";
 import logo from "src/assets/logo.png";
 import { Input } from "@/components/ui/formInput";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getUser } from "@/firebase";
+import { AuthContext } from "@/context/authContext";
 
 export const sidebarNav = [
   {
@@ -57,16 +57,14 @@ export const sidebarNav = [
   },
 ];
 
-export default function Layout({ isLoggedIn, isAdmin }: { isLoggedIn: boolean; isAdmin: boolean }) {
-  // const isAdmin = useAuthAdmin();
-  // const isAdmin = false;
-  // const isLoggedIn = useAuth();
-  // const [user, setUser] = useState<UserInfoType>();
-
+export default function Layout() {
+  const userInfo = useContext(AuthContext);
+  const isAdmin = userInfo?.type === "관리자" ? true : false;
+  // 전역관리 유저타입 저장
   const headerNav = [
-    isLoggedIn ? { title: "로그아웃", href: "/" } : { title: "로그인", href: "/login" },
+    userInfo ? { title: "로그아웃", href: "/" } : { title: "로그인", href: "/login" },
     { title: "장바구니", href: "/basket" },
-    !isLoggedIn && { title: "회원가입", href: "/signup" },
+    !userInfo && { title: "회원가입", href: "/signup" },
     !isAdmin ? { title: "마이페이지", href: "/mypage" } : { title: "주문조회", href: "/orders" },
     // isAdmin && { title: "주문조회", href: "/orders" },
   ];

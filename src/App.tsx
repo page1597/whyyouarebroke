@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import PrivateRoutes from "./routes/privateRoute.tsx";
@@ -14,50 +14,63 @@ import Merchandise from "./routes/category/merchandise.tsx";
 import LogIn from "./routes/login.tsx";
 import SignUp from "./routes/signup.tsx";
 import Basket from "./routes/basket.tsx";
-import { UserProvider } from "./context/userContext.tsx";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getUser } from "./firebase.tsx";
+import { AuthContext } from "./context/authContext.tsx";
 
 export default function App() {
-  const auth = getAuth();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(isLoggedIn);
-
+  // const auth = getAuth();
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(isLoggedIn);
+  // const { user } = useAuth();
+  const userInfo = useContext(AuthContext);
+  const isAdmin = userInfo?.type === "관리자" ? true : false;
+  console.log(isAdmin);
   useEffect(() => {
     // 로그인 상태 확인
     console.log("상태 변화 감지");
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setIsLoggedIn(true);
-        await getUser(user.uid).then((user) => {
-          if (user) {
-            setIsAdmin(user.type === "관리자");
-          }
-        });
-      } else {
-        setIsLoggedIn(false);
-        setIsAdmin(false);
-        // setUser(null);
-      }
-    });
+    // console.log(userInfo);
+    // onAuthStateChanged(auth, async (user) => {
+    //   if (user) {
+    //     // setIsLoggedIn(true);
+    //     await getUser(user.uid).then((user) => {
+    //       if (user) {
+    //         // setIsAdmin(user.type === "관리자");
+    //         // 상태관리
+    //         setUser({
+    //           type: user.type,
+    //         });
+    //       }
+    //     });
+    //   }
+    //   // else {
+    //   //   setIsLoggedIn(false);
+    //   //   setIsAdmin(false);
+    //   //   // setUser(null);
+    //   // }
+    // });
     // useAuth().then((response) => {
     //   setIsLoggedIn(response);
     // });
   }, []);
 
+  // useEffect(() => {
+  //   onUserStateChange((user) => {
+  //     setUser(user);
+  //   })
+  // })
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout isLoggedIn={isLoggedIn} isAdmin={isAdmin} />,
+      element: <Layout />,
       children: [
-        {
-          path: "/login", // member/login
-          element: <LogIn />,
-        },
-        {
-          path: "/signup", // member/signup
-          element: <SignUp />,
-        },
+        // {
+        //   path: "/login", // member/login
+        //   element: <LogIn />,
+        // },
+        // {
+        //   path: "/signup", // member/signup
+        //   element: <SignUp />,
+        // },
         {
           path: "/basket", // order/basket
           element: <Basket />,
@@ -90,14 +103,17 @@ export default function App() {
           path: "/category/merchandise",
           element: <Merchandise />,
         },
-        isLoggedIn && isAdmin ? PrivateRoutes() : PublicRoute(isLoggedIn),
+        isAdmin ? PrivateRoutes() : PublicRoute(userInfo),
       ],
     },
   ]);
 
   return (
-    <UserProvider>
+    // <UserProvider>
+    <>
+      <button onClick={() => console.log(userInfo)}>유저 정보확인</button>
       <RouterProvider router={router} />
-    </UserProvider>
+    </>
+    // </UserProvider>
   );
 }
