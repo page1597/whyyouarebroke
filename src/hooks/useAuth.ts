@@ -1,12 +1,5 @@
-import { useContext } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { UserContext } from "@/context/userContext";
 import { getUser } from "@/firebase";
-
-// 유저 정보 저장
-export function useUser() {
-  return useContext(UserContext);
-}
 
 var isLoggedIn = false;
 // 로그인 확인
