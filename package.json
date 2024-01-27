@@ -28,7 +28,6 @@
     "react-hook-form": "^7.49.3",
     "react-router-dom": "^6.21.3",
     "react-social-login": "^3.4.17",
-    "react-social-login-buttons": "^3.9.1",
     "reactjs-social-login": "^2.6.3",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
