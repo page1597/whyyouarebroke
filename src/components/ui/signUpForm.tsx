@@ -10,27 +10,42 @@ import { Label } from "@radix-ui/react-label";
 import { signUp } from "@/firebase";
 import { NavigateFunction } from "react-router-dom";
 import { UserSignUpType } from "@/types";
+import { Regex } from "lucide-react";
 
-// var passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
 const idRegx = RegExp(/^[a-zA-Z][0-9a-zA-Z]{3,15}$/);
+var forbiddenWords = [
+  "123",
+  "11111",
+  "12345",
+  "1234",
+  "123445",
+  "654321",
+  "123123",
+  "admin123",
+  "test",
+  "login",
+  "abc",
+  "admin",
+  "password",
+  "qwerty",
+  "letmein",
+  "welcome",
+  "monkey",
+];
 const passwordRegx = RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,15}$/);
+const patternStrignRegx = new RegExp(`/^(?!.*(${forbiddenWords.join("|")}))/`);
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 const formSchema = z
   .object({
-    // id: z.string().min(4, { message: "영문 소문자 / 숫자 (4자~16자)으로 입력해주세요." }).max(16, {
-    //   message: "영문 소문자 / 숫자 (4자~16자)으로 입력해주세요.",
-    // }),
     type: z.string(),
     id: z.string().regex(idRegx, "영문 소문자 / 숫자 (4자~16자)로 입력해주세요."),
-    // password: z.string().min(8).max(16, {
-    //   message: "영문 대소문자 / 숫자 / 특수문자 중 3가지 이상 조합 (8자~16자)으로 입력해주세요.",
-    // }),
     password: z
       .string()
-      .regex(passwordRegx, "영문 대소문자 / 숫자 / 특수문자 중 3가지 이상 조합 (8자~16자)으로 입력해주세요."),
+      .regex(passwordRegx, "영문 대소문자 / 숫자 / 특수문자 중 3가지 이상 조합 (8자~16자)으로 입력해주세요.")
+      .regex(patternStrignRegx, "일련번호, 잘 알려진 단어, 키보드 상 나란히 있는 문자를 제외해주세요."),
     confirmPassword: z.string(),
     name: z
       .string()
@@ -40,23 +55,6 @@ const formSchema = z
       .max(16, {
         message: "이름을 16자 이하로 입력해주세요.",
       }),
-    // nickname: z
-    //   .string()
-    //   .min(2, {
-    //     message: "닉네임을 입력해주세요.",
-    //   })
-    //   .max(16, {
-    //     message: "닉네임을 16자 이하로 입력해주세요.",
-    //   }),
-    // image: z
-    //   .any()
-    //   .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-    //   .refine(
-    //     (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-    //     "Only .jpg, .jpeg, .png and .webp formats are supported."
-    //   ),
-    // image: z.any(),
-    // greeting: z.string(),
     email: z.string().email({
       message: "올바른 이메일 형식이 아닙니다.",
     }),
@@ -91,6 +89,7 @@ export default function SignUpForm({ navigate }: { navigate: NavigateFunction })
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    forbiddenWords.push(values.id);
     console.log(values);
     const user: UserSignUpType = {
       type: values.type,
