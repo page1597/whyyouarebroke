@@ -1,51 +1,30 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/formInput";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
-import { signUp } from "@/firebase";
+import { googleSignUp, signUp } from "@/firebase";
 import { NavigateFunction } from "react-router-dom";
 import { UserSignUpType } from "@/types";
-import { Regex } from "lucide-react";
+import GoogleLoginButton from "./googleLoginButton";
 
-const idRegx = RegExp(/^[a-zA-Z][0-9a-zA-Z]{3,15}$/);
-var forbiddenWords = [
-  "123",
-  "11111",
-  "12345",
-  "1234",
-  "123445",
-  "654321",
-  "123123",
-  "admin123",
-  "test",
-  "login",
-  "abc",
-  "admin",
-  "password",
-  "qwerty",
-  "letmein",
-  "welcome",
-  "monkey",
-];
-const passwordRegx = RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,15}$/);
-const patternStrignRegx = new RegExp(`/^(?!.*(${forbiddenWords.join("|")}))/`);
+const passwordRegx = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?()_+~-]).{8,15}$/;
+const easyStringRegex =
+  /^(?!.*(123|abc|admin|password|qwerty|letmein|welcome|monkey|12345|123456|654321|11111|123123|admin123|password123|test|pass|login|letme|welcome1|admin1234|admin@123))/;
 
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const strongPasswordRegex = new RegExp(`${easyStringRegex.source}${passwordRegx.source}`);
 
 const formSchema = z
   .object({
     type: z.string(),
-    id: z.string().regex(idRegx, "영문 소문자 / 숫자 (4자~16자)로 입력해주세요."),
+    // id: z.string().regex(idRegx, "영문 소문자 / 숫자 (4자~16자)로 입력해주세요."),
     password: z
       .string()
       .regex(passwordRegx, "영문 대소문자 / 숫자 / 특수문자 중 3가지 이상 조합 (8자~16자)으로 입력해주세요.")
-      .regex(patternStrignRegx, "일련번호, 잘 알려진 단어, 키보드 상 나란히 있는 문자를 제외해주세요."),
+      .regex(easyStringRegex, "일련번호, 잘 알려진 단어, 키보드 상 나란히 있는 문자를 제외해주세요."),
     confirmPassword: z.string(),
     name: z
       .string()
@@ -71,29 +50,22 @@ const formSchema = z
   });
 
 export default function SignUpForm({ navigate }: { navigate: NavigateFunction }) {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       type: "",
-      id: "",
       password: "",
       confirmPassword: "",
       name: "",
       email: "",
-      //   nickname: "",
-      //   image: "",
-      //   greeting: "",
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    forbiddenWords.push(values.id);
+    // forbiddenWords.push(values.id);
     console.log(values);
     const user: UserSignUpType = {
       type: values.type,
-      id: values.id,
       password: values.password,
       confirmPassword: values.confirmPassword,
       name: values.name,
@@ -105,6 +77,20 @@ export default function SignUpForm({ navigate }: { navigate: NavigateFunction })
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <GoogleLoginButton onClick={() => googleSignUp(navigate, form.getValues("type"))} type="회원가입" />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>이메일 *</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="type"
@@ -126,19 +112,7 @@ export default function SignUpForm({ navigate }: { navigate: NavigateFunction })
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>아이디 *</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage>영문 소문자 / 숫자 (4자~16자)</FormMessage>
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="password"
@@ -178,77 +152,6 @@ export default function SignUpForm({ navigate }: { navigate: NavigateFunction })
             </FormItem>
           )}
         />
-        {/* <FormField
-          control={form.control}
-          name="nickname"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>닉네임 *</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-        {/* <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>이미지 *</FormLabel>
-              <FormControl>
-                <div>
-                  <input
-                    {...field}
-                    id="profile"
-                    type="file"
-                    className="text-sm file:mr-2 file:bg-zinc-400 file:py-1 file:px-2 file:text-sm file:cursor-pointer file:outline-none file:border-none file:text-white hover:file:bg-zinc-500 hover:cursor-pointer focus:outline-none disabled:pointer-events-none disabled:opacity-60"
-                  />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-        {/* <FormField
-          control={form.control}
-          name="greeting"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>인사말 *</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>이메일 *</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="휴대폰" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <Button type="submit">회원가입</Button>
       </form>
     </Form>
