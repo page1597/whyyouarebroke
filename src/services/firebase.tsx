@@ -11,7 +11,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { NavigateFunction } from "react-router-dom";
-import { UserSignUpType } from "./types";
+import { UserSignUpType } from "../types";
 import { getFirestore, setDoc, doc, DocumentData, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -23,9 +23,7 @@ const firebaseConfig = {
   appId: "1:15783501222:web:0c81c141fefd0bf5ecc367",
   measurementId: "G-FD0CJWB3K4",
 };
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 export const firebaseAuth = getAuth();
 export const db = getFirestore(app);
 //Email 회원가입
