@@ -82,6 +82,14 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      gridTemplateColumns: {
+        // 데스크탑 화면
+        202: "200px 1fr",
+        102: "110px 1fr",
+
+        // 모바일 화면
+        302: "100px 190px",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
