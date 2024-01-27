@@ -103,7 +103,7 @@ export default function LogInForm({ navigate }: { navigate: NavigateFunction }) 
       >
         <GoogleLoginButton />
       </LoginSocialGoogle> */}
-      {/* <GoogleLoginButton onClick={googleLogIn}>구글 로그인</GoogleLoginButton> */}
+      <GoogleLoginButton onClick={() => googleLogIn(navigate)} type="로그인" />
     </Form>
   );
 }

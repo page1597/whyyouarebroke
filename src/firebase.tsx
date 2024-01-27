@@ -1,15 +1,18 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
 import { NavigateFunction } from "react-router-dom";
 import { UserSignUpType } from "./types";
-import { collection, addDoc, getFirestore, setDoc, doc, DocumentData, getDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, DocumentData, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -23,11 +26,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
-const firebaseAuth = getAuth();
+export const firebaseAuth = getAuth();
 export const db = getFirestore(app);
 //Email 회원가입
 export async function signUp(user: UserSignUpType, navigate: NavigateFunction) {
-  console.log(user.name);
   try {
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, user.email, user.password!);
     try {
@@ -37,7 +39,6 @@ export async function signUp(user: UserSignUpType, navigate: NavigateFunction) {
         const uid = userCredential.user.uid;
         const userRef = doc(db, "users", uid); // 파이어베이스 자동생성 유저 고유 아이디
         await setDoc(userRef, {
-          id: user.id,
           email: user.email,
           type: user.type,
           name: user.name,
@@ -61,6 +62,7 @@ export async function logIn(email: string, password: string, navigate: NavigateF
   try {
     const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
     console.log(userCredential);
+
     navigate("/");
     alert("로그인 되었습니다.");
 
@@ -68,6 +70,44 @@ export async function logIn(email: string, password: string, navigate: NavigateF
   } catch (e) {
     console.log(e);
     alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+    return e;
+  }
+}
+
+export async function googleSignUp(navigate: NavigateFunction, type: string) {
+  const provider = new GoogleAuthProvider(); // provider 구글 설정
+  try {
+    const userCredential = await signInWithPopup(firebaseAuth, provider);
+    try {
+      const uid = userCredential.user.uid;
+      const userRef = doc(db, "users", uid); // 파이어베이스 자동생성 유저 고유 아이디
+      await setDoc(userRef, {
+        email: userCredential.user.email,
+        type: type,
+        name: userCredential.user.displayName,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    alert("회원가입 되었습니다.");
+    console.log(userCredential);
+    signOut(firebaseAuth).then(() => navigate("/login")); // 동작 어색함..
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function googleLogIn(navigate: NavigateFunction) {
+  const provider = new GoogleAuthProvider(); // provider 구글 설정
+  try {
+    const userCredential = await signInWithPopup(firebaseAuth, provider);
+    console.log(userCredential);
+    navigate("/");
+    alert("로그인 되었습니다.");
+    return userCredential;
+  } catch (e) {
+    console.log(e);
+    alert("로그인에 실패하였습니다.");
     return e;
   }
 }
@@ -89,3 +129,9 @@ export async function getUser(uid: string): Promise<DocumentData | undefined> {
   return result.data();
 }
 // export async function getUser
+
+export function onUserStateChange(callback: any) {
+  onAuthStateChanged(firebaseAuth, (user) => {
+    callback(user);
+  });
+}
