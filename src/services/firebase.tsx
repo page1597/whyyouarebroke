@@ -19,12 +19,11 @@ import {
   DocumentData,
   getDoc,
   updateDoc,
-  addDoc,
   collection,
   query,
   getDocs,
 } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+import { getBlob, getDownloadURL, getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid"; // 랜덤 식별자를 생성해주는 라이브러리
 
 const firebaseConfig = {
@@ -147,12 +146,28 @@ export function onUserStateChange(callback: any) {
   });
 }
 
+// 모든 제품 가져오기
+//최신 순으로 정렬합니다
+export async function getProducts() {
+  // const image = collection(db, "products"); // 흠..?
+  let products: DocumentData[] = [];
+  const q = query(collection(db, "products"));
+  const result = await getDocs(q);
+  result.forEach((doc) => {
+    products.push(doc.data());
+  });
+  return products;
+}
+
 export async function addProduct(product: ProductType, navigate: NavigateFunction) {
   console.log(product);
   const storage = getStorage();
-
+  // await addDoc(collection(db, "products")
+  // await setDoc(doc(db, "products", product.name)
+  // 아이디 - product.name
   try {
-    const productRef = await addDoc(collection(db, "products"), {
+    await setDoc(doc(db, "products", product.id), {
+      id: product.id,
       category: product.category,
       name: product.name,
       price: product.price,
@@ -166,13 +181,14 @@ export async function addProduct(product: ProductType, navigate: NavigateFunctio
     // await setDoc(productRef, product);
     const images: string[] = [];
 
+    //data:
     await product.image.map((image: string, index: string) => {
-      const imageRef = ref(storage, `products/${productRef.id}/image${index}`);
+      const imageRef = ref(storage, `products/${product.id}/image${index}`);
       console.log(image, typeof image);
       uploadString(imageRef, image, "data_url").then(async (snapshot: any) => {
         const downloadURL = await getDownloadURL(snapshot.ref);
         images.push(downloadURL);
-        await updateDoc(doc(db, "products", productRef.id), {
+        await updateDoc(doc(db, "products", product.id), {
           image: images,
         });
       });
@@ -180,4 +196,24 @@ export async function addProduct(product: ProductType, navigate: NavigateFunctio
   } catch (e) {
     console.log(e);
   }
+}
+
+export async function getPrevImagesURL(id: string, images: string[]) {
+  // productRef.id으로 해야되는디
+  const storage = getStorage();
+  let prevImages: string[] = [];
+  let dataUrlList: string[] = [];
+  for (let i = 0; i < images.length; i++) {
+    const imageRef = ref(storage, `products/${id}/image${i}`);
+    const result = await getBlob(imageRef);
+    const blob_url = URL.createObjectURL(result);
+
+    let fileReader = new FileReader();
+    fileReader.onload = () => {
+      dataUrlList.push(fileReader.result as string);
+    };
+    prevImages.push(blob_url);
+    fileReader.readAsDataURL(result);
+  }
+  return [prevImages, dataUrlList];
 }
