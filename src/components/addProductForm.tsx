@@ -8,11 +8,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { NavigateFunction } from "react-router-dom";
 import { ProductType } from "@/types";
-import { addProduct, getBlobURL, getPrevImagesURL } from "@/services/firebase";
+import { addProduct, getPrevImagesURL } from "@/services/firebase";
 import { useEffect, useState } from "react";
-import { getBlob, getStorage, ref } from "firebase/storage";
 import { MouseEvent } from "react";
 import { v4 as uuidv4 } from "uuid"; // 고윳값 생성
+import { ComboboxDemo } from "./ui/comboBox";
+import { sidebarNav } from "@/routes";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -38,12 +39,16 @@ const formSchema = z.object({
   label: z.string().optional(),
   released: z.string().optional(),
   format: z.string().optional(),
+  timestamp: z.number(),
 });
 
 export default function AddProductForm({ products, navigate }: { products?: ProductType; navigate: NavigateFunction }) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
   const [selectedImages, setSelectedImages] = useState<string[]>([]); // real url data
   const uuid = uuidv4();
+  const [category, setCategory] = useState<string>(products ? products.category : "");
+  // 등록시간 기준
+  const uploadedDate = +new Date();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,6 +64,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       label: products?.label || "",
       released: products?.released || "",
       format: products?.format || "",
+      timestamp: products?.timestamp || uploadedDate,
     },
   });
 
@@ -69,7 +75,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       setSelectedImages(result[1]); // selected : data_url
     }
   }
-  // 로딩 추가
+  // 로딩 추가하기
   useEffect(() => {
     getPrevImages();
   }, []);
@@ -77,18 +83,22 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const product: ProductType = {
       id: values.id,
-      category: values.category,
+      category: category,
       name: values.name,
       price: values.price,
       image: selectedImages,
       stock: values.stock,
       description: values.description,
-      artist: values.artist,
-      label: values.label,
-      released: values.released,
-      format: values.format,
+      artist: values.artist || null,
+      label: values.label || null,
+      released: values.released || null,
+      format: values.format || null,
+      timestamp: values.timestamp,
     };
-    addProduct(product, navigate);
+    addProduct(product).then(() => {
+      alert(product ? "상품을 수정했습니다." : "상품을 등록했습니다.");
+      navigate("/");
+    });
   }
 
   function addImages(e: React.ChangeEvent<HTMLInputElement>) {
@@ -126,17 +136,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       e.preventDefault();
     }
   }
-  //   useEff
-
-  //   useEffect(() => {
-  //     console.log(previewImages);
-  //     // form.setValue("image", previewImages);
-  //   }, [previewImages]);
-
-  // useEffect(() => {
-  //   console.log(selectedImages);
-  //   // form.setValue("image", previewImages);
-  // }, [selectedImages]);
 
   return (
     <>
@@ -150,7 +149,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
           </div>
           <div className="hidden md:grid grid-cols-102 gap-4 border border-zinc-300 rounded p-8 mt-3">
             <FormLabel>카테고리 *</FormLabel>
-
             <FormField
               control={form.control}
               name="category"
@@ -158,7 +156,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input {...field} onKeyDown={onKeyDown} />
+                      <ComboboxDemo categories={sidebarNav} category={category} setCategory={setCategory} {...field} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />

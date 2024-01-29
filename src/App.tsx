@@ -20,6 +20,8 @@ export default function App() {
   const userInfo = useContext(AuthContext);
   const isAdmin = userInfo?.type === "관리자" ? true : false;
 
+  console.log(isAdmin);
+
   const router = createBrowserRouter([
     {
       path: "/",

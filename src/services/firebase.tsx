@@ -22,9 +22,10 @@ import {
   collection,
   query,
   getDocs,
+  deleteDoc,
+  orderBy,
 } from "firebase/firestore";
-import { getBlob, getDownloadURL, getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid"; // 랜덤 식별자를 생성해주는 라이브러리
+import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -151,7 +152,7 @@ export function onUserStateChange(callback: any) {
 export async function getProducts() {
   // const image = collection(db, "products"); // 흠..?
   let products: DocumentData[] = [];
-  const q = query(collection(db, "products"));
+  const q = query(collection(db, "products"), orderBy("timestamp", "desc"));
   const result = await getDocs(q);
   result.forEach((doc) => {
     products.push(doc.data());
@@ -159,12 +160,11 @@ export async function getProducts() {
   return products;
 }
 
-export async function addProduct(product: ProductType, navigate: NavigateFunction) {
+export async function addProduct(product: ProductType) {
   console.log(product);
   const storage = getStorage();
   // await addDoc(collection(db, "products")
   // await setDoc(doc(db, "products", product.name)
-  // 아이디 - product.name
   try {
     await setDoc(doc(db, "products", product.id), {
       id: product.id,
@@ -177,6 +177,7 @@ export async function addProduct(product: ProductType, navigate: NavigateFunctio
       label: product.label,
       released: product.released,
       format: product.format,
+      timestamp: product.timestamp,
     });
     // await setDoc(productRef, product);
     const images: string[] = [];
@@ -216,4 +217,20 @@ export async function getPrevImagesURL(id: string, images: string[]) {
     fileReader.readAsDataURL(result);
   }
   return [prevImages, dataUrlList];
+}
+
+export async function deleteProduct(id: string) {
+  const storage = getStorage();
+  const productRef = ref(storage, `products/${id}`);
+  // doc(db, "products", product.id)
+  try {
+    await deleteDoc(doc(db, "products", id)); // 고유 아이디
+  } catch (e) {
+    console.log("e1:", e);
+    try {
+      await deleteObject(productRef);
+    } catch (e) {
+      console.log("e2", e);
+    }
+  }
 }
