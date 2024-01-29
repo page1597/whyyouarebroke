@@ -85,6 +85,7 @@ export type UserSignUpType = {
 };
 
 export type ProductType = {
+  id: string; // 고유 아이디
   category: string;
   name: string;
   price: number;

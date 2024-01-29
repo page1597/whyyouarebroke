@@ -8,12 +8,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { NavigateFunction } from "react-router-dom";
 import { ProductType } from "@/types";
-import { addProduct } from "@/services/firebase";
+import { addProduct, getBlobURL, getPrevImagesURL } from "@/services/firebase";
 import { useEffect, useState } from "react";
+import { getBlob, getStorage, ref } from "firebase/storage";
+import { MouseEvent } from "react";
+import { v4 as uuidv4 } from "uuid"; // 고윳값 생성
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const formSchema = z.object({
+  id: z.string(),
   category: z.string(),
   name: z.string(),
   price: z.preprocess(Number, z.number()),
@@ -36,29 +40,43 @@ const formSchema = z.object({
   format: z.string().optional(),
 });
 
-export default function AddProductForm({ navigate }: { navigate: NavigateFunction }) {
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
+export default function AddProductForm({ products, navigate }: { products?: ProductType; navigate: NavigateFunction }) {
+  const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
   const [selectedImages, setSelectedImages] = useState<string[]>([]); // real url data
+  const uuid = uuidv4();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      category: "",
-      name: "",
-      price: 0,
-      image: selectedImages,
-      stock: 0,
-      description: "",
-      artist: "",
-      label: "",
-      released: "",
-      format: "",
+      id: products?.id || uuid,
+      category: products?.category || "",
+      name: products?.name || "",
+      price: products?.price || 0,
+      image: selectedImages, // 추가되는 형식으로 바꾸기
+      stock: products?.stock || 0,
+      description: products?.description || "",
+      artist: products?.artist || "",
+      label: products?.label || "",
+      released: products?.released || "",
+      format: products?.format || "",
     },
   });
 
+  async function getPrevImages() {
+    if (products) {
+      const result = await getPrevImagesURL(products.id, products?.image);
+      setPreviewImages(result[0]); // preview : blob
+      setSelectedImages(result[1]); // selected : data_url
+    }
+  }
+  // 로딩 추가
+  useEffect(() => {
+    getPrevImages();
+  }, []);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const product: ProductType = {
+      id: values.id,
       category: values.category,
       name: values.name,
       price: values.price,
@@ -74,6 +92,7 @@ export default function AddProductForm({ navigate }: { navigate: NavigateFunctio
   }
 
   function addImages(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
     let images = e.target.files;
 
     let previewImageUrlList = [...previewImages];
@@ -96,7 +115,8 @@ export default function AddProductForm({ navigate }: { navigate: NavigateFunctio
     }
   }
   // X버튼 클릭 시 이미지 삭제
-  function deleteImage(id: number) {
+  function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
+    e.preventDefault();
     setPreviewImages(previewImages.filter((_, index) => index !== id));
     setSelectedImages(selectedImages.filter((_, index) => index !== id));
   }
@@ -106,16 +126,17 @@ export default function AddProductForm({ navigate }: { navigate: NavigateFunctio
       e.preventDefault();
     }
   }
+  //   useEff
 
-  useEffect(() => {
-    console.log(previewImages);
-    // form.setValue("image", previewImages);
-  }, [previewImages]);
+  //   useEffect(() => {
+  //     console.log(previewImages);
+  //     // form.setValue("image", previewImages);
+  //   }, [previewImages]);
 
-  useEffect(() => {
-    console.log(selectedImages);
-    // form.setValue("image", previewImages);
-  }, [selectedImages]);
+  // useEffect(() => {
+  //   console.log(selectedImages);
+  //   // form.setValue("image", previewImages);
+  // }, [selectedImages]);
 
   return (
     <>
@@ -212,7 +233,7 @@ export default function AddProductForm({ navigate }: { navigate: NavigateFunctio
                           {previewImages.map((image, id) => (
                             <div key={id} className="w-20 h-20 relative">
                               <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
-                              <button onClick={() => deleteImage(id)} className="absolute right-0">
+                              <button onClick={(e) => deleteImage(e, id)} className="absolute right-0">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   width="24"
@@ -254,6 +275,7 @@ export default function AddProductForm({ navigate }: { navigate: NavigateFunctio
                               id="input-file"
                               multiple
                               onChange={addImages}
+                              onKeyDown={onKeyDown}
                             />
                           </div>
                         </Label>
