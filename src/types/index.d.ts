@@ -83,3 +83,16 @@ export type UserSignUpType = {
   // image: string;
   // greeting: string;
 };
+
+export type ProductType = {
+  category: string;
+  name: string;
+  price: number;
+  stock: number;
+  image: any;
+  description: string;
+  artist: string?;
+  label: string?;
+  released: string?;
+  format: string?;
+};
