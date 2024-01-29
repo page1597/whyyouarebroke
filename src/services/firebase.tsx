@@ -11,8 +11,21 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { NavigateFunction } from "react-router-dom";
-import { UserSignUpType } from "../types";
-import { getFirestore, setDoc, doc, DocumentData, getDoc } from "firebase/firestore";
+import { ProductType, UserSignUpType } from "../types";
+import {
+  getFirestore,
+  setDoc,
+  doc,
+  DocumentData,
+  getDoc,
+  updateDoc,
+  addDoc,
+  collection,
+  query,
+  getDocs,
+} from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid"; // 랜덤 식별자를 생성해주는 라이브러리
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -132,4 +145,39 @@ export function onUserStateChange(callback: any) {
   onAuthStateChanged(firebaseAuth, (user) => {
     callback(user);
   });
+}
+
+export async function addProduct(product: ProductType, navigate: NavigateFunction) {
+  console.log(product);
+  const storage = getStorage();
+
+  try {
+    const productRef = await addDoc(collection(db, "products"), {
+      category: product.category,
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      description: product.description,
+      artist: product.artist,
+      label: product.label,
+      released: product.released,
+      format: product.format,
+    });
+    // await setDoc(productRef, product);
+    const images: string[] = [];
+
+    await product.image.map((image: string, index: string) => {
+      const imageRef = ref(storage, `products/${productRef.id}/image${index}`);
+      console.log(image, typeof image);
+      uploadString(imageRef, image, "data_url").then(async (snapshot: any) => {
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        images.push(downloadURL);
+        await updateDoc(doc(db, "products", productRef.id), {
+          image: images,
+        });
+      });
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }
