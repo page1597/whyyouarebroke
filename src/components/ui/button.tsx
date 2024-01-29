@@ -42,7 +42,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          `${buttonVariants({ variant, size, className })} text-base rounded bg-zinc-400 hover:bg-zinc-500`
+          `bg-zinc-400 hover:bg-zinc-500 text-base ${buttonVariants({ variant, size, className })} rounded`
         )}
         ref={ref}
         {...props}
