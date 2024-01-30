@@ -1,19 +1,8 @@
-import { useContext } from "react";
+import { Suspense, lazy, useContext } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import PrivateRoutes from "./routes/private/admin/index.tsx";
 import PublicRoute from "./routes/public/index.tsx";
-import Layout from "./routes/index.tsx";
-import RockPopEtc from "./routes/public/category/rockpopetc.tsx";
-import RSDExclusive from "./routes/public/category/RSDExclusive.tsx";
-import Jazz from "./routes/public/category/jazz.tsx";
-import OST from "./routes/public/category/ost.tsx";
-import JPopCityPopAsia from "./routes/public/category/jpopCityPopAsia.tsx";
-import KPop from "./routes/public/category/kpop.tsx";
-import Merchandise from "./routes/public/category/merchandise.tsx";
-// import LogIn from "./routes/login.tsx";
-// import SignUp from "./routes/signup.tsx";
-import Basket from "./routes/public/basket.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -23,10 +12,24 @@ export default function App() {
 
   const queryClient = new QueryClient();
 
+  const Layout = lazy(() => import("./routes/index"));
+  const Basket = lazy(() => import("./routes/public/basket"));
+  const RockPopEtc = lazy(() => import("./routes/public/category/rockpopetc"));
+  const RSDExclusive = lazy(() => import("./routes/public/category/RSDExclusive"));
+  const Jazz = lazy(() => import("./routes/public/category/jazz"));
+  const OST = lazy(() => import("./routes/public/category/ost"));
+  const KPop = lazy(() => import("./routes/public/category/kpop"));
+  const Merchandise = lazy(() => import("./routes/public/category/merchandise"));
+  const JPopCityPopAsia = lazy(() => import("./routes/public/category/jpopCityPopAsia"));
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: (
+        <Suspense fallback={<div>loading...</div>}>
+          <Layout />
+        </Suspense>
+      ),
       children: [
         // {
         //   path: "/login", // member/login

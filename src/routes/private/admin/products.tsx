@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
-import { ProductType } from "@/types";
 
 export default function Products() {
   // 판매상품 리스트 목록
@@ -72,7 +71,7 @@ export default function Products() {
                       onClick={() => navigate("/product", { state: value as DocumentData })}
                     >
                       {value.image ? (
-                        <img src={value["image"][0]} className="h-60 w-60" />
+                        <img src={value["image"][0]} width={60} height={60} className="h-60 w-60" alt={value.name} />
                       ) : (
                         <div className="w-60 h-60 bg-zinc-100" />
                       )}

@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-// import { Input } from "@/components/ui/formInput";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
@@ -16,7 +15,7 @@ const passwordRegx = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?()_+~-]).{8,15}$/
 const easyStringRegex =
   /^(?!.*(123|abc|admin|password|qwerty|letmein|welcome|monkey|12345|123456|654321|11111|123123|admin123|password123|test|pass|login|letme|welcome1|admin1234|admin@123))/;
 
-const strongPasswordRegex = new RegExp(`${easyStringRegex.source}${passwordRegx.source}`);
+// const strongPasswordRegex = new RegExp(`${easyStringRegex.source}${passwordRegx.source}`);
 
 const formSchema = z
   .object({

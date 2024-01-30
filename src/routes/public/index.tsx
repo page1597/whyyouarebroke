@@ -1,13 +1,14 @@
-// import { lazy } from "react";
 import { Navigate } from "react-router-dom";
-import Products from "./products";
-import MyPage from "./member/myPage";
 import { UserInfoType } from "@/types";
-import LogIn from "./login";
-import SignUp from "./signup";
+import { lazy } from "react";
 
 // 로그인 한 상태에서 구매자가 볼 수 있는 화면
 export default function PublicRoute(userInfo: UserInfoType | null) {
+  const Products = lazy(() => import("./products"));
+  const MyPage = lazy(() => import("./member/myPage"));
+  const LogIn = lazy(() => import("./login"));
+  const SignUp = lazy(() => import("./signup"));
+
   return {
     children: [
       { path: "/", element: <Products /> }, // 판매상품조회

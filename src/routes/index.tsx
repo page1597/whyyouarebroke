@@ -1,21 +1,21 @@
 // root of the project
 import { Header } from "@/components/header";
-import {
-  DrawerLeft,
-  DrawerLeftTrigger,
-  DrawerLeftContent,
-  DrawerLeftHeader,
-  DrawerLeftTitle,
-  DrawerLeftFooter,
-  DrawerLeftClose,
-} from "@/components/ui/drawerLeft";
+// import {
+//   DrawerLeft,
+//   DrawerLeftTrigger,
+//   DrawerLeftContent,
+//   DrawerLeftHeader,
+//   DrawerLeftTitle,
+//   DrawerLeftFooter,
+//   DrawerLeftClose,
+// } from "@/components/ui/drawerLeft";
 import {
   DrawerRight,
   DrawerRightTrigger,
   DrawerRightContent,
   DrawerRightHeader,
-  DrawerRightFooter,
-  DrawerRightClose,
+  // DrawerRightFooter,
+  // DrawerRightClose,
 } from "@/components/ui/drawerRight";
 import DocsSidebarNav from "@/components/sidebar";
 import { Link, Outlet } from "react-router-dom";
@@ -75,7 +75,7 @@ export default function Layout() {
       <div className="md:px-12 md:py-8 md:flex md:flex-row md:flex-grow md:h-full">
         <div className="hidden md:inline-block">
           <Link to={"/"} className="flex flex-col mb-7">
-            <img src={logo} width={120} />
+            <img src={logo} width={120} height={120} alt={"logo"} />
           </Link>
           <DocsSidebarNav items={sidebarNav} />
         </div>
@@ -83,10 +83,10 @@ export default function Layout() {
         <div className="md:hidden px-5 py-3 flex justify-between">
           <DocsSidebarNav items={sidebarNav} />
           <Link to={"/"}>
-            <img src={logo} width={70} />
+            <img src={logo} width={70} height={70} alt={"logo"} />
           </Link>
           <DrawerRight direction="right">
-            <DrawerRightTrigger>
+            <DrawerRightTrigger name="search">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

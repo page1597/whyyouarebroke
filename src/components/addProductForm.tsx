@@ -4,7 +4,6 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { NavigateFunction } from "react-router-dom";
 import { ProductType } from "@/types";
@@ -14,9 +13,10 @@ import { MouseEvent } from "react";
 import { v4 as uuidv4 } from "uuid"; // 고윳값 생성
 import { ComboboxDemo } from "./ui/comboBox";
 import { sidebarNav } from "@/routes";
+import Resizer from "react-image-file-resizer";
 
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+// const MAX_FILE_SIZE = 5000000;
+// const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const formSchema = z.object({
   id: z.string(),
   category: z.string(),
@@ -44,8 +44,7 @@ const formSchema = z.object({
 
 export default function AddProductForm({ products, navigate }: { products?: ProductType; navigate: NavigateFunction }) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
-  const [selectedImages, setSelectedImages] = useState<string[]>([]); // real url data
-  const [test, setTest] = useState<boolean>(false);
+  // const [selectedImages, setSelectedImages] = useState<string[]>([]); // real url data
   const uuid = uuidv4();
   const [category, setCategory] = useState<string>(products ? products.category : "");
   // 등록시간 기준
@@ -58,7 +57,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       category: products?.category || "",
       name: products?.name || "",
       price: products?.price || 0,
-      image: selectedImages, // 추가되는 형식으로 바꾸기
+      image: previewImages, // 추가되는 형식으로 바꾸기
       stock: products?.stock || 0,
       description: products?.description || "",
       artist: products?.artist || "",
@@ -72,8 +71,8 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
   async function getPrevImages() {
     if (products) {
       const result = await getPrevImagesURL(products.id, products?.image);
-      setPreviewImages(result[0]); // preview : blob
-      setSelectedImages(result[1]); // selected : data_url
+      setPreviewImages(result); // preview : blob
+      // setSelectedImages(result[1]); // selected : data_url
     }
   }
   // 로딩 추가하기
@@ -87,7 +86,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       category: category,
       name: values.name,
       price: values.price,
-      image: selectedImages,
+      image: previewImages,
       stock: values.stock,
       description: values.description,
       artist: values.artist || null,
@@ -102,41 +101,65 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
     });
   }
 
-  function addImages(e: ChangeEvent<HTMLInputElement>) {
-    console.log("add images");
-    setTest(!test);
-
+  const resizeFile = (file: Blob) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        300,
+        "WEBP",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "base64"
+      );
+    });
+  let previewImageUrlList: any[] = [...previewImages];
+  // let dataUrlList: string[] = [...selectedImages];
+  async function addImages(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     let images = e.target.files;
 
-    let previewImageUrlList = [...previewImages];
-    let dataUrlList = [...selectedImages];
-
+    // 왜 갑자기 두개씩 선택이 안되는가
     if (images) {
-      for (let i = 0; i < images.length; i++) {
-        const previewImageUrl = URL.createObjectURL(images[i]); // 프리뷰를 위한 Url list
-        previewImageUrlList.push(previewImageUrl);
+      console.log(images.length);
+      // 성능 최적화를 위한 이미지 리사이징 기능
 
-        let fileReader = new FileReader();
-        fileReader.onload = () => {
-          dataUrlList.push(fileReader.result as string);
-        };
-        fileReader.readAsDataURL(images[i]);
+      for (let i = 0; i < images.length; i++) {
+        const resizedImage = await resizeFile(images[i]);
+
+        // dataUrlList.push(image);
+        // previewImageUrlList.push(resizedBlob);
+        previewImageUrlList.push(resizedImage);
+        // const previewImageUrl = URL.createObjectURL(images[i]); // 프리뷰를 위한 Url list
+        // previewImageUrlList.push(previewImageUrl);
+        // URL.revokeObjectURL(previewImageUrl); // 메모리 누수 방지
+
+        // let fileReader = new FileReader();
+        // fileReader.onload = () => {
+        //   dataUrlList.push(fileReader.result as string);
+        // };
+        // fileReader.readAsDataURL(images[i]);
       }
-      setSelectedImages(dataUrlList);
+      console.log(previewImageUrlList);
+      // setPickedImages(resizedFileList);
+      // console.log(dataUrlList);
+      // console.log(previewImageUrlList); // blob:~
+      // setSelectedImages(previewImageUrlList);
       setPreviewImages(previewImageUrlList);
     }
   }
-  useEffect(() => {
-    console.log(selectedImages);
-    console.log(previewImages);
-    console.log(test);
-  }, [selectedImages]);
+
+  // useEffect(() => {
+  //   console.log(previewTestImages);
+  // }, [previewTestImages]);
   // X버튼 클릭 시 이미지 삭제
   function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
     e.preventDefault();
     setPreviewImages(previewImages.filter((_, index) => index !== id));
-    setSelectedImages(selectedImages.filter((_, index) => index !== id));
+    // setSelectedImages(selectedImages.filter((_, index) => index !== id));
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
@@ -150,7 +173,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* 소셜 로그인 - 구글 */}
-
           <div className="flex mt-10 flex-row justify-between items-end">
             <div>상품정보</div>
             <div className="text-xs text-zinc-600">* 필수입력사항</div>
@@ -238,7 +260,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
                     <FormControl>
                       <div className="flex">
                         <div className="flex gap-2">
-                          {previewImages.map((image, id) => (
+                          {previewImages?.map((image, id) => (
                             <div key={id} className="w-20 h-20 relative">
                               <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
                               <button onClick={(e) => deleteImage(e, id)} className="absolute right-0">

@@ -212,20 +212,21 @@ export async function getPrevImagesURL(id: string, images: string[]) {
   // productRef.id으로 해야되는디
   const storage = getStorage();
   let prevImages: string[] = [];
-  let dataUrlList: string[] = [];
+  // let dataUrlList: string[] = [];
   for (let i = 0; i < images.length; i++) {
     const imageRef = ref(storage, `products/${id}/image${i}`);
     const result = await getBlob(imageRef);
     const blob_url = URL.createObjectURL(result);
+    URL.revokeObjectURL(blob_url);
 
-    let fileReader = new FileReader();
-    fileReader.onload = () => {
-      dataUrlList.push(fileReader.result as string);
-    };
-    prevImages.push(blob_url);
-    fileReader.readAsDataURL(result);
+    // let fileReader = new FileReader();
+    // fileReader.onload = () => {
+    //   dataUrlList.push(fileReader.result as string);
+    // };
+    // prevImages.push(blob_url);
+    // fileReader.readAsDataURL(result);
   }
-  return [prevImages, dataUrlList];
+  return prevImages;
 }
 
 export async function deleteProduct(id: string) {
