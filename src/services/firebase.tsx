@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
@@ -25,6 +24,7 @@ import {
   deleteDoc,
   orderBy,
   limit,
+  startAfter,
 } from "firebase/firestore";
 import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 
@@ -140,7 +140,6 @@ export async function getUser(uid: string): Promise<DocumentData | undefined> {
   console.log(result.data());
   return result.data();
 }
-// export async function getUser
 
 export function onUserStateChange(callback: any) {
   onAuthStateChanged(firebaseAuth, (user) => {
@@ -149,22 +148,26 @@ export function onUserStateChange(callback: any) {
 }
 
 // 모든 제품 가져오기
-//최신 순으로 정렬합니다
-export async function getProducts() {
-  // const image = collection(db, "products"); // 흠..?
+// 정렬 기본값: 최신순
+export async function getProducts(pageParam: string) {
   let products: DocumentData[] = [];
-  // const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(15));
 
-  // const documentSnapshots = await getDocs(q);
-  // const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
-  // console.log("last", lastVisible);
-  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
-  const result = await getDocs(q);
+  if (pageParam) {
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), startAfter(pageParam), limit(12));
+    const querySnapshot = await getDocs(q);
 
-  result.forEach((doc) => {
-    products.push(doc.data());
-  });
-  return products;
+    querySnapshot.forEach((doc) => {
+      products.push(doc.data());
+    });
+    return products;
+  } else {
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(12));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      products.push(doc.data());
+    });
+    return products;
+  }
 }
 
 export async function addProduct(product: ProductType) {
@@ -189,7 +192,6 @@ export async function addProduct(product: ProductType) {
     // await setDoc(productRef, product);
     const images: string[] = [];
 
-    //data:
     await product.image.map((image: string, index: string) => {
       const imageRef = ref(storage, `products/${product.id}/image${index}`);
       console.log(image, typeof image);

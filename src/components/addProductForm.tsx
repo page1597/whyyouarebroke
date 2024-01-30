@@ -9,7 +9,7 @@ import { Label } from "@radix-ui/react-label";
 import { NavigateFunction } from "react-router-dom";
 import { ProductType } from "@/types";
 import { addProduct, getPrevImagesURL } from "@/services/firebase";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { MouseEvent } from "react";
 import { v4 as uuidv4 } from "uuid"; // 고윳값 생성
 import { ComboboxDemo } from "./ui/comboBox";
@@ -45,6 +45,7 @@ const formSchema = z.object({
 export default function AddProductForm({ products, navigate }: { products?: ProductType; navigate: NavigateFunction }) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
   const [selectedImages, setSelectedImages] = useState<string[]>([]); // real url data
+  const [test, setTest] = useState<boolean>(false);
   const uuid = uuidv4();
   const [category, setCategory] = useState<string>(products ? products.category : "");
   // 등록시간 기준
@@ -101,7 +102,10 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
     });
   }
 
-  function addImages(e: React.ChangeEvent<HTMLInputElement>) {
+  function addImages(e: ChangeEvent<HTMLInputElement>) {
+    console.log("add images");
+    setTest(!test);
+
     e.preventDefault();
     let images = e.target.files;
 
@@ -110,8 +114,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
 
     if (images) {
       for (let i = 0; i < images.length; i++) {
-        // 프리뷰를 위한 Url list
-        const previewImageUrl = URL.createObjectURL(images[i]);
+        const previewImageUrl = URL.createObjectURL(images[i]); // 프리뷰를 위한 Url list
         previewImageUrlList.push(previewImageUrl);
 
         let fileReader = new FileReader();
@@ -124,6 +127,11 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       setPreviewImages(previewImageUrlList);
     }
   }
+  useEffect(() => {
+    console.log(selectedImages);
+    console.log(previewImages);
+    console.log(test);
+  }, [selectedImages]);
   // X버튼 클릭 시 이미지 삭제
   function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
     e.preventDefault();
@@ -147,7 +155,11 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
             <div>상품정보</div>
             <div className="text-xs text-zinc-600">* 필수입력사항</div>
           </div>
-          <div className="hidden md:grid grid-cols-102 gap-4 border border-zinc-300 rounded p-8 mt-3">
+          {/* md:hidden grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3 */}
+          {/* (min-width: 768px)  */}
+          <div className="grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3 md:grid-cols-102 md:gap-4">
+            {/* md 이상의 뷰포트에서만 보임 */}
+
             <FormLabel>카테고리 *</FormLabel>
             <FormField
               control={form.control}
@@ -165,7 +177,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
                 </FormItem>
               )}
             />
-
             <FormLabel>상품명 *</FormLabel>
             <FormField
               control={form.control}
@@ -183,7 +194,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
                 </FormItem>
               )}
             />
-
             <FormLabel>판매가 *</FormLabel>
             <FormField
               control={form.control}
@@ -266,12 +276,13 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
                               <line x1="12" y1="5" x2="12" y2="19" />
                               <line x1="5" y1="12" x2="19" y2="12" />
                             </svg>
-                            <Input
+
+                            <input
                               {...field}
                               type="file"
                               className="hidden"
-                              id="input-file"
                               multiple
+                              id="input-file"
                               onChange={addImages}
                               onKeyDown={onKeyDown}
                             />
@@ -286,7 +297,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
                 </FormItem>
               )}
             />
-
             <FormLabel>상품설명 *</FormLabel>
             <FormField
               control={form.control}
@@ -377,94 +387,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
               )}
             />
           </div>
-
-          {/* 모바일 화면 */}
-          <div className="md:hidden grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3">
-            <FormLabel>이메일 *</FormLabel>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <div>
-                    <FormControl>
-                      <Input {...field} className="w-56" onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <FormMessage className="mt-2" />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormLabel>회원 구분 *</FormLabel>
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem {...field}>
-                  <FormControl>
-                    <RadioGroup className="flex" defaultValue={"일반 회원"} onValueChange={field.onChange}>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="일반 회원" defaultChecked={true} />
-                        <Label htmlFor="일반 회원">일반 회원</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="관리자" />
-                        <Label htmlFor="관리자">관리자</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <FormLabel>비밀번호 *</FormLabel>
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <div>
-                    <FormControl>
-                      <Input type="password" {...field} className="w-56" />
-                    </FormControl>
-                    <FormMessage className="mt-2" />
-                  </div>
-                </FormItem>
-              )}
-            />
-
-            <FormLabel>비밀번호 확인 *</FormLabel>
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <div>
-                    <FormControl>
-                      <Input type="password" {...field} className="w-56" />
-                    </FormControl>
-                    <FormMessage className="mt-2" />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormLabel>이름 *</FormLabel>
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <div>
-                    <FormControl>
-                      <Input {...field} className="w-56" />
-                    </FormControl>
-                    <FormMessage className="mt-2" />
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-
           <div className="flex w-full justify-center">
             <Button type="submit" className="mt-6 w-32">
               상품등록

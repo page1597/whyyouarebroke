@@ -70,26 +70,17 @@ export default function Layout() {
 
   return (
     <div className="w-full flex flex-col h-screen">
-      {/* 데스크탑 레이아웃 */}
-      <div className="hidden md:inline-block">
-        <Header items={headerNav} />
-        <div className="px-12 py-8 hidden md:flex flex-row flex-grow h-full">
-          <div>
-            <Link to={"/"} className="flex flex-col mb-7">
-              <img src={logo} width={120} />
-            </Link>
-            <DocsSidebarNav items={sidebarNav} />
-          </div>
-          <div className="flex-grow ">
-            <Outlet />
-          </div>
+      <Header items={headerNav} />
+      {/* 반응형 구현 */}
+      <div className="md:px-12 md:py-8 md:flex md:flex-row md:flex-grow md:h-full">
+        <div className="hidden md:inline-block">
+          <Link to={"/"} className="flex flex-col mb-7">
+            <img src={logo} width={120} />
+          </Link>
+          <DocsSidebarNav items={sidebarNav} />
         </div>
-      </div>
 
-      {/* 모바일 레이아웃 */}
-      <div className="md:hidden">
-        <Header items={headerNav} />
-        <div className="px-5 py-3 flex justify-between">
+        <div className="md:hidden px-5 py-3 flex justify-between">
           <DocsSidebarNav items={sidebarNav} />
           <Link to={"/"}>
             <img src={logo} width={70} />
@@ -114,17 +105,12 @@ export default function Layout() {
             <DrawerRightContent>
               <DrawerRightHeader>
                 <Input className="bg-zinc-600 text-white h-10" />
-                {/* <DrawerRightTitle>Are you absolutely sure?</DrawerRightTitle>
-                <DrawerRightDescription>This action cannot be undone.</DrawerRightDescription> */}
               </DrawerRightHeader>
-              <DrawerRightFooter>
-                {/* <Button>Submit</Button> */}
-                <DrawerRightClose>{/* <Button variant="outline">Cancel</Button> */}</DrawerRightClose>
-              </DrawerRightFooter>
             </DrawerRightContent>
           </DrawerRight>
         </div>
-        <div className="flex-grow h-full px-6">
+        {/* <div className="md:flex-grow h-full px-6"> */}
+        <div className="md:flex-grow md:px-0 h-full px-6">
           <Outlet />
         </div>
       </div>
