@@ -1,14 +1,15 @@
-import { Suspense, lazy, useContext } from "react";
+import { Suspense, lazy, useContext, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import PrivateRoutes from "./routes/private/admin/index.tsx";
-import PublicRoute from "./routes/public/index.tsx";
+import PublicRoutes from "./routes/public/index.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 export default function App() {
   const userInfo = useContext(AuthContext);
-  const isAdmin = userInfo?.type === "관리자" ? true : false;
+  // const isAdmin = userInfo?.type === "관리자" ? true : false;
+  const isAdmin = localStorage.getItem("user type") == "관리자";
 
   const queryClient = new QueryClient();
 
@@ -21,7 +22,16 @@ export default function App() {
   const KPop = lazy(() => import("./routes/public/category/kpop"));
   const Merchandise = lazy(() => import("./routes/public/category/merchandise"));
   const JPopCityPopAsia = lazy(() => import("./routes/public/category/jpopCityPopAsia"));
-
+  // const ShowRoutes = isAdmin ? PrivateRoutes() : PublicRoutes(userInfo);
+  // const [showRoutes, setShowRoutes] = useState<any[]>();
+  // useEffect(() => {
+  //   if (isAdmin) {
+  //     setShowRoutes(PrivateRoutes());
+  //   } else {
+  //     setShowRoutes(PublicRoutes(userInfo));
+  //   }
+  // }, []);
+  // console.log(PrivateRoutes().children);
   const router = createBrowserRouter([
     {
       path: "/",
@@ -71,7 +81,7 @@ export default function App() {
           path: "/category/merchandise",
           element: <Merchandise />,
         },
-        isAdmin ? PrivateRoutes() : PublicRoute(userInfo),
+        ...(isAdmin ? PrivateRoutes() : PublicRoutes(userInfo)),
       ],
     },
   ]);
