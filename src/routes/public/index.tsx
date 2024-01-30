@@ -8,7 +8,6 @@ import SignUp from "./signup";
 
 // 로그인 한 상태에서 구매자가 볼 수 있는 화면
 export default function PublicRoute(userInfo: UserInfoType | null) {
-  console.log(userInfo);
   return {
     children: [
       { path: "/", element: <Products /> }, // 판매상품조회

@@ -96,5 +96,5 @@ export type ProductType = {
   label: string?;
   released: string?;
   format: string?;
-  timestamp: number;
+  createdAt: number;
 };
