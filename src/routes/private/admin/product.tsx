@@ -18,7 +18,7 @@ export default function Product() {
       <div className="flex flex-row">
         <div className="w-70 h-70 bg-emerald-700">
           {product.image ? (
-            <img src={product.image[0]} className="w-60 h-60" />
+            <img src={product.image[0]} alt={product.name} className="w-60 h-60" />
           ) : (
             <div className="w-60 h-60 bg-zinc-100" />
           )}

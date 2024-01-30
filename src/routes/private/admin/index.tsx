@@ -1,13 +1,14 @@
-// import { lazy } from "react";
 import { Navigate } from "react-router-dom";
-import Orders from "./orders";
-import Products from "./products";
-import AddProduct from "./addProduct";
-import EditProduct from "./editProduct";
-import Product from "./product";
+import { lazy } from "react";
 
 // 로그인 한 상태에서 판매자(관리자)가 볼 수 있는 화면
 export default function PrivateRoutes() {
+  const Products = lazy(() => import("./products"));
+  const Orders = lazy(() => import("./orders"));
+  const Product = lazy(() => import("./product"));
+  const AddProduct = lazy(() => import("./addProduct"));
+  const EditProduct = lazy(() => import("./editProduct"));
+
   return {
     children: [
       { path: "/", element: <Products /> }, // 판매상품조회
