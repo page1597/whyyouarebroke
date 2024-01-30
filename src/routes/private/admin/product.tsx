@@ -11,20 +11,20 @@ export default function Product() {
   const product = state as ProductType;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ml-10">
       <div className="text-xl text-zinc-800">
         [{product.format}] {product.name}
       </div>
-      <div className="flex flex-row">
-        <div className="w-70 h-70 bg-emerald-700">
+
+      <div className="flex flex-row mt-8">
+        <div className="w-80 h-80">
           {product.image ? (
-            <img src={product.image[0]} alt={product.name} className="w-60 h-60" />
+            <img src={product.image[0]} alt={product.name} width={320} height={320} />
           ) : (
             <div className="w-60 h-60 bg-zinc-100" />
           )}
-          asdf
         </div>
-        <div className="ml-6 w-full">
+        <div className="ml-6 flex-grow">
           <hr />
           <div className="grid grid-cols-402 text-xl text-zinc-900 my-3 ml-4">
             <h3>상품명</h3>

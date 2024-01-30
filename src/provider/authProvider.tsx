@@ -18,10 +18,12 @@ function AuthProvider({ children }: { children: ReactNode }) {
               name: user.name,
               email: user.email,
             });
+            localStorage.setItem("user type", user.type); // 판매자이거나 구매자인 상태
           }
         });
       } else {
         setUser(null);
+        localStorage.removeItem("user type"); // 로그아웃 상태
       }
     });
   }, []);
