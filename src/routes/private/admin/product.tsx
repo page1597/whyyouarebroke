@@ -16,17 +16,24 @@ export default function Product() {
         [{product.format}] {product.name}
       </div>
       <div className="flex flex-row">
-        <img src={product.image[0]} className="w-[240px] h-60" />
+        <div className="w-70 h-70 bg-emerald-700">
+          {product.image ? (
+            <img src={product.image[0]} className="w-60 h-60" />
+          ) : (
+            <div className="w-60 h-60 bg-zinc-100" />
+          )}
+          asdf
+        </div>
         <div className="ml-6 w-full">
           <hr />
-          <div className="grid grid-cols-2 text-xl text-zinc-900 my-3 ml-4">
+          <div className="grid grid-cols-402 text-xl text-zinc-900 my-3 ml-4">
             <h3>상품명</h3>
             <h3>
               [{product.format}] {product.name}
             </h3>
           </div>
           <hr />
-          <div className="grid grid-cols-2 mt-3 ml-4 gap-1">
+          <div className="grid grid-cols-402 mt-3 ml-4 gap-1">
             <h4 className="text-zinc-600 text-base font-bold">판매가</h4>
             <h4 className="text-zinc-600 text-base font-bold">{product.price}</h4>
             <h5 className="text-zinc-900 text-base mt-2">재고</h5>
@@ -47,8 +54,9 @@ export default function Product() {
       </div>
       <div className="w-full right-0 flex justify-end items-center gap-3 mt-5">
         <Button
-          onClick={() => {
-            deleteProduct(product.id);
+          onClick={async () => {
+            await deleteProduct(product.id);
+            alert("상품이 삭제되었습니다.");
             navigate("/");
           }}
           className="bg-zinc-500 w-28 hover:bg-zinc-600"

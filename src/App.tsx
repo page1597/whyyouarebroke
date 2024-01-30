@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import PrivateRoutes from "./routes/private/admin/index.tsx";
