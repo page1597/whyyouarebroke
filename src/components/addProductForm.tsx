@@ -39,7 +39,7 @@ const formSchema = z.object({
   label: z.string().optional(),
   released: z.string().optional(),
   format: z.string().optional(),
-  timestamp: z.number(),
+  createdAt: z.number(),
 });
 
 export default function AddProductForm({ products, navigate }: { products?: ProductType; navigate: NavigateFunction }) {
@@ -64,7 +64,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       label: products?.label || "",
       released: products?.released || "",
       format: products?.format || "",
-      timestamp: products?.timestamp || uploadedDate,
+      createdAt: products?.createdAt || uploadedDate,
     },
   });
 
@@ -93,7 +93,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       label: values.label || null,
       released: values.released || null,
       format: values.format || null,
-      timestamp: values.timestamp,
+      createdAt: values.createdAt,
     };
     addProduct(product).then(() => {
       alert(product ? "상품을 수정했습니다." : "상품을 등록했습니다.");

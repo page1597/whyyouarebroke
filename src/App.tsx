@@ -15,12 +15,13 @@ import Merchandise from "./routes/public/category/merchandise.tsx";
 // import SignUp from "./routes/signup.tsx";
 import Basket from "./routes/public/basket.tsx";
 import { AuthContext } from "./context/authContext.tsx";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 export default function App() {
   const userInfo = useContext(AuthContext);
   const isAdmin = userInfo?.type === "관리자" ? true : false;
 
-  console.log(isAdmin);
+  const queryClient = new QueryClient();
 
   const router = createBrowserRouter([
     {
@@ -73,8 +74,8 @@ export default function App() {
   ]);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </>
+    </QueryClientProvider>
   );
 }

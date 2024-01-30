@@ -24,6 +24,7 @@ import {
   getDocs,
   deleteDoc,
   orderBy,
+  limit,
 } from "firebase/firestore";
 import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 
@@ -152,8 +153,14 @@ export function onUserStateChange(callback: any) {
 export async function getProducts() {
   // const image = collection(db, "products"); // 흠..?
   let products: DocumentData[] = [];
-  const q = query(collection(db, "products"), orderBy("timestamp", "desc"));
+  // const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(15));
+
+  // const documentSnapshots = await getDocs(q);
+  // const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+  // console.log("last", lastVisible);
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
   const result = await getDocs(q);
+
   result.forEach((doc) => {
     products.push(doc.data());
   });
@@ -177,7 +184,7 @@ export async function addProduct(product: ProductType) {
       label: product.label,
       released: product.released,
       format: product.format,
-      timestamp: product.timestamp,
+      createdAt: product.createdAt,
     });
     // await setDoc(productRef, product);
     const images: string[] = [];
