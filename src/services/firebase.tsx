@@ -27,7 +27,16 @@ import {
   startAfter,
   where,
 } from "firebase/firestore";
-import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
+import {
+  deleteObject,
+  getBlob,
+  getBytes,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadString,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -196,11 +205,26 @@ export async function getCategoryProducts(category: string, orderby: string, pag
   return products;
 }
 
+async function blobUriToBlob(blobUri: string) {
+  try {
+    // Blob URI에서 데이터를 가져옴
+    const response = await fetch(blobUri);
+
+    // Blob으로 변환
+    const blob = await response.blob();
+
+    return blob;
+  } catch (error) {
+    console.error("Error converting Blob URI to Blob:", error);
+    throw error;
+  }
+}
+
 export async function addProduct(product: ProductType) {
-  console.log(product);
   const storage = getStorage();
   // await addDoc(collection(db, "products")
   // await setDoc(doc(db, "products", product.name)
+  console.log(product.image);
   try {
     await setDoc(doc(db, "products", product.id), {
       id: product.id,
@@ -208,6 +232,7 @@ export async function addProduct(product: ProductType) {
       name: product.name,
       price: product.price,
       stock: product.stock,
+      // image: product.image,
       description: product.description,
       artist: product.artist,
       label: product.label,
@@ -215,19 +240,25 @@ export async function addProduct(product: ProductType) {
       format: product.format,
       createdAt: product.createdAt,
     });
-    // await setDoc(productRef, product);
     const images: string[] = [];
 
-    await product.image.map((image: string, index: string) => {
+    // storage에 이미지 업로드하기
+    product.image.map(async (image: string, index: number) => {
       const imageRef = ref(storage, `products/${product.id}/image${index}`);
-      console.log(image, typeof image);
-      uploadString(imageRef, image, "data_url").then(async (snapshot: any) => {
+      const blob = await blobUriToBlob(image);
+
+      try {
+        const snapshot = await uploadBytes(imageRef, blob);
         const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log(downloadURL);
         images.push(downloadURL);
+
         await updateDoc(doc(db, "products", product.id), {
           image: images,
         });
-      });
+      } catch (e) {
+        console.log(e);
+      }
     });
   } catch (e) {
     console.log(e);
@@ -235,22 +266,13 @@ export async function addProduct(product: ProductType) {
 }
 
 export async function getPrevImagesURL(id: string, images: string[]) {
-  // productRef.id으로 해야되는디
   const storage = getStorage();
   let prevImages: string[] = [];
-  // let dataUrlList: string[] = [];
   for (let i = 0; i < images.length; i++) {
     const imageRef = ref(storage, `products/${id}/image${i}`);
     const result = await getBlob(imageRef);
     const blob_url = URL.createObjectURL(result);
-    URL.revokeObjectURL(blob_url);
-
-    // let fileReader = new FileReader();
-    // fileReader.onload = () => {
-    //   dataUrlList.push(fileReader.result as string);
-    // };
-    // prevImages.push(blob_url);
-    // fileReader.readAsDataURL(result);
+    prevImages.push(blob_url);
   }
   return prevImages;
 }

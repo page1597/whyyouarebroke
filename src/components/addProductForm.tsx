@@ -50,6 +50,23 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
   // 등록시간 기준
   const uploadedDate = +new Date();
 
+  // 이전 이미지 가져오기
+  async function getPrevImages() {
+    console.log("원래 있던 이미지", products?.image);
+    if (products?.image) {
+      const result = await getPrevImagesURL(products.id, products?.image);
+      setPreviewImages(result); // preview : blob
+    }
+  }
+  // 로딩 추가하기
+  useEffect(() => {
+    getPrevImages();
+  }, []);
+
+  useEffect(() => {
+    console.log(previewImages);
+  }, [previewImages]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,18 +85,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
     },
   });
 
-  async function getPrevImages() {
-    if (products) {
-      const result = await getPrevImagesURL(products.id, products?.image);
-      setPreviewImages(result); // preview : blob
-      // setSelectedImages(result[1]); // selected : data_url
-    }
-  }
-  // 로딩 추가하기
-  useEffect(() => {
-    getPrevImages();
-  }, []);
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const product: ProductType = {
       id: values.id,
@@ -96,12 +101,13 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       createdAt: values.createdAt,
     };
     addProduct(product).then(() => {
-      alert(product ? "상품을 수정했습니다." : "상품을 등록했습니다.");
+      console.log(product.image);
+      alert(products ? "상품을 수정했습니다." : "상품을 등록했습니다.");
       navigate("/");
     });
   }
 
-  const resizeFile = (file: Blob) =>
+  const resizeFile = (file: Blob): Promise<string> =>
     new Promise((resolve) => {
       Resizer.imageFileResizer(
         file,
@@ -111,50 +117,24 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
         100,
         0,
         (uri) => {
-          resolve(uri);
+          resolve(URL.createObjectURL(uri));
         },
-        "base64"
+        "blob"
       );
     });
-  let previewImageUrlList: any[] = [...previewImages];
-  // let dataUrlList: string[] = [...selectedImages];
+
   async function addImages(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     let images = e.target.files;
-
-    // 왜 갑자기 두개씩 선택이 안되는가
     if (images) {
-      console.log(images.length);
       // 성능 최적화를 위한 이미지 리사이징 기능
+      const resizedImages = await Promise.all<string>(Array.from(images).map(resizeFile));
 
-      for (let i = 0; i < images.length; i++) {
-        const resizedImage = await resizeFile(images[i]);
-
-        // dataUrlList.push(image);
-        // previewImageUrlList.push(resizedBlob);
-        previewImageUrlList.push(resizedImage);
-        // const previewImageUrl = URL.createObjectURL(images[i]); // 프리뷰를 위한 Url list
-        // previewImageUrlList.push(previewImageUrl);
-        // URL.revokeObjectURL(previewImageUrl); // 메모리 누수 방지
-
-        // let fileReader = new FileReader();
-        // fileReader.onload = () => {
-        //   dataUrlList.push(fileReader.result as string);
-        // };
-        // fileReader.readAsDataURL(images[i]);
-      }
-      console.log(previewImageUrlList);
-      // setPickedImages(resizedFileList);
-      // console.log(dataUrlList);
-      // console.log(previewImageUrlList); // blob:~
-      // setSelectedImages(previewImageUrlList);
-      setPreviewImages(previewImageUrlList);
+      // 기존 이미지와 새로 리사이징된 이미지를 합친 후 설정
+      setPreviewImages((prev) => [...prev, ...resizedImages]);
     }
   }
 
-  // useEffect(() => {
-  //   console.log(previewTestImages);
-  // }, [previewTestImages]);
   // X버튼 클릭 시 이미지 삭제
   function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
     e.preventDefault();
@@ -186,11 +166,11 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
             <FormField
               control={form.control}
               name="category"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <ComboboxDemo categories={sidebarNav} category={category} setCategory={setCategory} {...field} />
+                      <ComboboxDemo categories={sidebarNav} category={category} setCategory={setCategory} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />
