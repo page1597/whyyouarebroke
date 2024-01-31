@@ -25,6 +25,7 @@ import {
   orderBy,
   limit,
   startAfter,
+  where,
 } from "firebase/firestore";
 import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 
@@ -105,7 +106,7 @@ export async function googleSignUp(navigate: NavigateFunction, type: string) {
     console.log(userCredential);
     signOut(firebaseAuth).then(() => navigate("/login")); // 동작 어색함..
   } catch (e) {
-    console.log(e);
+    console.log("e", e);
   }
 }
 
@@ -149,11 +150,11 @@ export function onUserStateChange(callback: any) {
 
 // 모든 제품 가져오기
 // 정렬 기본값: 최신순
-export async function getProducts(pageParam: string) {
+export async function getProducts(pageParam: string, limitParam: number) {
   let products: DocumentData[] = [];
 
   if (pageParam) {
-    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), startAfter(pageParam), limit(12));
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), startAfter(pageParam), limit(limitParam));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
@@ -161,13 +162,38 @@ export async function getProducts(pageParam: string) {
     });
     return products;
   } else {
-    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(12));
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(limitParam));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       products.push(doc.data());
     });
     return products;
   }
+}
+
+export async function getCategoryProducts(category: string, orderby: string, pageParam: string | null) {
+  let products: DocumentData[] = [];
+  console.log("order by:", orderby);
+  if (pageParam) {
+    const q = query(
+      collection(db, "products"),
+      startAfter(pageParam),
+      where("category", "==", category),
+      orderBy(orderby, "desc")
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      products.push(doc.data());
+    });
+  } else {
+    const q = query(collection(db, "products"), where("category", "==", category), orderBy(orderby, "desc"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      products.push(doc.data());
+    });
+  }
+  console.log(products);
+  return products;
 }
 
 export async function addProduct(product: ProductType) {

@@ -1,3 +1,5 @@
+import Products from "@/components/products";
+
 export default function JPopCityPopAsia() {
-  return <>jpop city pop ASIA</>;
+  return <Products category="j-pop/city pop/asia" />;
 }

@@ -11,7 +11,7 @@ export default function Products() {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     "products",
-    ({ pageParam }) => getProducts(pageParam),
+    ({ pageParam }) => getProducts(pageParam, 12),
     {
       getNextPageParam: (querySnapshot) => {
         // 다음 페이지 번호 가져오는
@@ -26,7 +26,7 @@ export default function Products() {
     }
   );
   const [inViewRef, inView] = useInView({
-    triggerOnce: false,
+    triggerOnce: true,
   });
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -58,6 +58,7 @@ export default function Products() {
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       </button>
+      {/* 마진 설정하기 */}
       <div>
         {data?.pages.map((page, index) => (
           <div key={index}>

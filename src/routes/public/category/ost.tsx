@@ -1,3 +1,5 @@
-export default function OST() {
-  return <>ost</>;
+import Products from "@/components/products";
+
+export default function Ost() {
+  return <Products category="ost" />;
 }
