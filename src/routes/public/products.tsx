@@ -15,14 +15,14 @@ export default function Products() {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
   const [productsList, setProductsList] = useState<categoryProductType[]>();
-
+  const orderby = "createdAt"; // 정렬 최신순
   async function getProducts() {
-    const rockpopetc = await getCategoryProducts("rock/pop/etc", null);
-    const jazz = await getCategoryProducts("jazz", null);
-    const ost = await getCategoryProducts("ost", null);
-    const kpop = await getCategoryProducts("k-pop", null);
-    const jpopCityPopAsia = await getCategoryProducts("j-pop/city pop/asia", null);
-    const merchandise = await getCategoryProducts("merchandise", null);
+    const rockpopetc = await getCategoryProducts("rock/pop/etc", orderby, null);
+    const jazz = await getCategoryProducts("jazz", orderby, null);
+    const ost = await getCategoryProducts("ost", orderby, null);
+    const kpop = await getCategoryProducts("k-pop", orderby, null);
+    const jpopCityPopAsia = await getCategoryProducts("j-pop/city pop/asia", orderby, null);
+    const merchandise = await getCategoryProducts("merchandise", orderby, null);
 
     setProductsList([
       {
