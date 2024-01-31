@@ -27,16 +27,7 @@ import {
   startAfter,
   where,
 } from "firebase/firestore";
-import {
-  deleteObject,
-  getBlob,
-  getBytes,
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadString,
-} from "firebase/storage";
+import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -47,38 +38,46 @@ const firebaseConfig = {
   appId: "1:15783501222:web:0c81c141fefd0bf5ecc367",
   measurementId: "G-FD0CJWB3K4",
 };
+
 const app = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth();
 export const db = getFirestore(app);
+
 //Email 회원가입
 export async function signUp(user: UserSignUpType, navigate: NavigateFunction) {
   try {
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, user.email, user.password!);
+
     try {
       const updated = await updateProfile(userCredential.user, { displayName: user.name });
       console.log(updated);
+
       try {
         const uid = userCredential.user.uid;
-        const userRef = doc(db, "users", uid); // 파이어베이스 자동생성 유저 고유 아이디
+        const userRef = doc(db, "users", uid);
         await setDoc(userRef, {
           email: user.email,
           type: user.type,
           name: user.name,
         });
-      } catch (e) {
-        console.log(e);
+      } catch (editProduct) {
+        console.error("사용자 데이터 저장 에러:", e);
       }
 
       alert("회원가입 되었습니다.");
       console.log(userCredential);
-      signOut(firebaseAuth).then(() => navigate("/login")); // 동작 어색함..
+
+      // 로그아웃 후 로그인 페이지로 이동
+      await signOut(firebaseAuth);
+      navigate("/login");
     } catch (e) {
-      console.log(e);
+      console.error("프로필 업데이트 에러:", e);
     }
   } catch (e) {
-    console.log(e);
+    console.error("회원가입 에러:", e);
   }
 }
+
 //Email 로그인
 export async function logIn(email: string, password: string, navigate: NavigateFunction) {
   try {
@@ -89,33 +88,39 @@ export async function logIn(email: string, password: string, navigate: NavigateF
     alert("로그인 되었습니다.");
 
     return userCredential;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.error("로그인 에러:", error);
     alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-    return e;
+    return error;
   }
 }
 
 export async function googleSignUp(navigate: NavigateFunction, type: string) {
-  const provider = new GoogleAuthProvider(); // provider 구글 설정
+  const provider = new GoogleAuthProvider();
+
   try {
     const userCredential = await signInWithPopup(firebaseAuth, provider);
+
     try {
       const uid = userCredential.user.uid;
-      const userRef = doc(db, "users", uid); // 파이어베이스 자동생성 유저 고유 아이디
+      const userRef = doc(db, "users", uid);
       await setDoc(userRef, {
         email: userCredential.user.email,
         type: type,
         name: userCredential.user.displayName,
       });
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error("사용자 데이터 저장 에러:", error);
     }
+
     alert("회원가입 되었습니다.");
     console.log(userCredential);
-    signOut(firebaseAuth).then(() => navigate("/login")); // 동작 어색함..
-  } catch (e) {
-    console.log("e", e);
+
+    // 로그아웃 후 로그인 페이지로 이동
+    await signOut(firebaseAuth);
+    navigate("/login");
+  } catch (error) {
+    console.error("구글 회원가입 에러:", error);
   }
 }
 
@@ -136,15 +141,15 @@ export async function googleLogIn(navigate: NavigateFunction) {
 
 export async function logOut(navigate: NavigateFunction) {
   try {
-    const response = await signOut(firebaseAuth);
+    await signOut(firebaseAuth);
     alert("로그아웃 되었습니다.");
     console.log("로그아웃 되었습니다.");
-    console.log(response);
     navigate("/");
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.error("로그아웃 에러:", error);
   }
 }
+
 export async function getUser(uid: string): Promise<DocumentData | undefined> {
   const result = await getDoc(doc(db, "users", uid));
   console.log(result.data());
@@ -160,47 +165,48 @@ export function onUserStateChange(callback: any) {
 // 모든 제품 가져오기
 // 정렬 기본값: 최신순
 export async function getProducts(pageParam: string, limitParam: number) {
-  let products: DocumentData[] = [];
+  const baseQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
 
+  let finalQuery = baseQuery;
   if (pageParam) {
-    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), startAfter(pageParam), limit(limitParam));
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-      products.push(doc.data());
-    });
-    return products;
+    finalQuery = query(baseQuery, startAfter(pageParam), limit(limitParam));
   } else {
-    const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(limitParam));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      products.push(doc.data());
-    });
-    return products;
+    finalQuery = limitParam ? query(baseQuery, limit(limitParam)) : baseQuery;
   }
+
+  const querySnapshot = await getDocs(finalQuery);
+  const products: DocumentData[] = [];
+
+  querySnapshot.forEach((doc) => {
+    products.push(doc.data());
+  });
+
+  return products;
 }
 
-export async function getCategoryProducts(category: string, orderby: string, pageParam: string | null) {
-  let products: DocumentData[] = [];
-  console.log("order by:", orderby);
+export async function getCategoryProducts(
+  category: string,
+  orderby: string,
+  pageParam: string | null,
+  limitParam: number | null
+) {
+  const baseQuery = query(collection(db, "products"), where("category", "==", category), orderBy(orderby, "desc"));
+  let finalQuery = baseQuery;
+
   if (pageParam) {
-    const q = query(
-      collection(db, "products"),
-      startAfter(pageParam),
-      where("category", "==", category),
-      orderBy(orderby, "desc")
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      products.push(doc.data());
-    });
+    const paginatedQuery = query(baseQuery, startAfter(pageParam));
+    finalQuery = limitParam ? query(paginatedQuery, limit(limitParam)) : paginatedQuery;
   } else {
-    const q = query(collection(db, "products"), where("category", "==", category), orderBy(orderby, "desc"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      products.push(doc.data());
-    });
+    finalQuery = limitParam ? query(baseQuery, limit(limitParam)) : baseQuery;
   }
+
+  const querySnapshot = await getDocs(finalQuery);
+  const products: DocumentData[] = [];
+
+  querySnapshot.forEach((doc) => {
+    products.push(doc.data());
+  });
+
   console.log(products);
   return products;
 }
@@ -222,17 +228,15 @@ async function blobUriToBlob(blobUri: string) {
 
 export async function addProduct(product: ProductType) {
   const storage = getStorage();
-  // await addDoc(collection(db, "products")
-  // await setDoc(doc(db, "products", product.name)
-  console.log(product.image);
+  const productRef = doc(db, "products", product.id);
+
   try {
-    await setDoc(doc(db, "products", product.id), {
+    await setDoc(productRef, {
       id: product.id,
       category: product.category,
       name: product.name,
       price: product.price,
       stock: product.stock,
-      // image: product.image,
       description: product.description,
       artist: product.artist,
       label: product.label,
@@ -240,55 +244,54 @@ export async function addProduct(product: ProductType) {
       format: product.format,
       createdAt: product.createdAt,
     });
+
     const images: string[] = [];
 
-    // storage에 이미지 업로드하기
-    product.image.map(async (image: string, index: number) => {
-      const imageRef = ref(storage, `products/${product.id}/image${index}`);
-      const blob = await blobUriToBlob(image);
+    // 스토리지에 이미지 업로드
+    await Promise.all(
+      product.image.map(async (image: string, index: number) => {
+        const imageRef = ref(storage, `products/${product.id}/image${index}`);
+        const blob = await blobUriToBlob(image);
 
-      try {
-        const snapshot = await uploadBytes(imageRef, blob);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        console.log(downloadURL);
-        images.push(downloadURL);
-
-        await updateDoc(doc(db, "products", product.id), {
-          image: images,
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    });
-  } catch (e) {
-    console.log(e);
+        try {
+          const snapshot = await uploadBytes(imageRef, blob);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          console.log(downloadURL);
+          images.push(downloadURL);
+        } catch (e) {
+          console.error(`Error uploading image ${index}:`, e);
+        }
+      })
+    );
+    // docs에 이미지 url 업로드
+    await updateDoc(productRef, { image: images });
+  } catch (error) {
+    console.error("Error adding product:", error);
   }
 }
 
-export async function getPrevImagesURL(id: string, images: string[]) {
+export async function getPrevImagesURL(id: string, images: string[]): Promise<string[]> {
   const storage = getStorage();
-  let prevImages: string[] = [];
+  const prevImages: string[] = [];
+
   for (let i = 0; i < images.length; i++) {
     const imageRef = ref(storage, `products/${id}/image${i}`);
     const result = await getBlob(imageRef);
-    const blob_url = URL.createObjectURL(result);
-    prevImages.push(blob_url);
+    const blobURL = URL.createObjectURL(result);
+    prevImages.push(blobURL);
   }
+
   return prevImages;
 }
 
 export async function deleteProduct(id: string) {
   const storage = getStorage();
-  const productRef = ref(storage, `products/${id}`);
-  // doc(db, "products", product.id)
+  const productStorageRef = ref(storage, `products/${id}`);
+
   try {
     await deleteDoc(doc(db, "products", id)); // 고유 아이디
-  } catch (e) {
-    console.log("e1:", e);
-    try {
-      await deleteObject(productRef);
-    } catch (e) {
-      console.log("e2", e);
-    }
+    await deleteObject(productStorageRef);
+  } catch (error) {
+    console.error("Error deleting product:", error);
   }
 }
