@@ -58,43 +58,37 @@ export default function Products() {
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       </button>
-      {/* 마진 설정하기 */}
-      <div>
+
+      <div className="mt-8">
         {data?.pages.map((page, index) => (
           <div key={index}>
             {page ? (
-              <div className="grid grid-cols-2 md:grid-cols-4">
-                {page?.map((value: DocumentData, index: number) => {
-                  return (
-                    <div
-                      className="flex flex-col justify-center items-center cursor-pointer"
-                      key={index}
-                      onClick={() => navigate("/product", { state: value as DocumentData })}
-                    >
-                      {value.image ? (
-                        <img src={value["image"][0]} width={60} height={60} className="h-60 w-60" alt={value.name} />
-                      ) : (
-                        <div className="w-60 h-60 bg-zinc-100" />
-                      )}
-                      <div className="text-sm">{value["name"]}</div>
-                      <div className="text-sm font-bold text-zinc-500">{value["price"]}원</div>
-                      {/* 일단 맨 처음 있는 사진으로 하기(나중에 썸네일 설정 가능하게 바꾸기) */}
-                      {/* {value["image"].map((src: string, index: number) => {
-                    return <img key={index} className="h-20 w-20" src={src}></img>;
-                  })} */}
-                      {/* </div> */}
-                    </div>
-                  );
-                })}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
+                {page?.map((product: DocumentData, index: number) => (
+                  <div
+                    className="flex flex-col justify-center cursor-pointer"
+                    key={index}
+                    onClick={() => navigate("/product", { state: product as DocumentData })}
+                  >
+                    {product.image ? (
+                      <img src={product["image"][0]} width={60} height={60} className="h-60 w-60" alt={product.name} />
+                    ) : (
+                      <div className="w-60 h-60 bg-zinc-100" />
+                    )}
+                    {/* 나중에 썸네일 설정 가능하게 하기 */}
+                    <div className="text-sm mt-2">{product["name"]}</div>
+                    <div className="text-sm mt-1 font-bold text-zinc-500">{product["price"]}원</div>
+                  </div>
+                ))}
               </div>
             ) : (
-              <>상품이 존재하지 않습니다.</>
+              <p>상품이 존재하지 않습니다.</p>
             )}
           </div>
         ))}
       </div>
+
       <div ref={inViewRef} className="h-42 w-full">
-        {/* loading indicator */}
         {isFetchingNextPage && <p>loading...</p>}
       </div>
     </>

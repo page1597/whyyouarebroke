@@ -1,3 +1,4 @@
+import ProductDetail from "@/components/productDetail";
 import ProductInfo from "@/components/productInfo";
 import RecommandProducts from "@/components/recommandProducts";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,6 @@ export default function Product() {
 
   return (
     <div className="flex flex-col ml-10">
-      구매자가 보는 상품 상세 페이지
       <ProductInfo product={product} isAdmin={false} />
       {/* 버튼 영역 */}
       <div className="w-full right-0 flex justify-end items-center gap-3 mt-5">
@@ -23,7 +23,9 @@ export default function Product() {
         </Button>
       </div>
       <hr />
-      <RecommandProducts />
+      <RecommandProducts category={state.category} productName={product.name} />
+      <hr className="mt-10" />
+      <ProductDetail product={product} />
     </div>
   );
 }

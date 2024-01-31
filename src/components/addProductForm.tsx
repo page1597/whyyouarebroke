@@ -74,7 +74,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
       category: products?.category || "",
       name: products?.name || "",
       price: products?.price || 0,
-      image: previewImages, // 추가되는 형식으로 바꾸기
+      image: previewImages,
       stock: products?.stock || 0,
       description: products?.description || "",
       artist: products?.artist || "",
@@ -149,7 +149,7 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
   }
 
   return (
-    <>
+    <div className="text-zinc-900">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* 소셜 로그인 - 구글 */}
@@ -159,235 +159,229 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
           </div>
           {/* md:hidden grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3 */}
           {/* (min-width: 768px)  */}
-          <div className="grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3 md:grid-cols-102 md:gap-4">
-            {/* md 이상의 뷰포트에서만 보임 */}
-
+          <div className="grid grid-cols-203 gap-5 border border-zinc-300 rounded p-8 mt-3 md:grid-cols-103 md:gap-4">
             <FormLabel>카테고리 *</FormLabel>
             <FormField
               control={form.control}
               name="category"
               render={() => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <ComboboxDemo categories={sidebarNav} category={category} setCategory={setCategory} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
+                  <FormControl>
+                    <ComboboxDemo categories={sidebarNav} category={category} setCategory={setCategory} />
+                  </FormControl>
+                  <div className="hidden md:flex">
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+            <div />
             <FormLabel>상품명 *</FormLabel>
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
+                  <FormControl>
+                    <Input {...field} onKeyDown={onKeyDown} />
+                  </FormControl>
+                  <div className="hidden md:flex">
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+            <div />
             <FormLabel>판매가 *</FormLabel>
             <FormField
               control={form.control}
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} type="number" onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage>숫자만 입력</FormMessage>
-                    </div>
-                  </div>
+                  <FormControl>
+                    <Input {...field} type="number" onKeyDown={onKeyDown} />
+                  </FormControl>
+                  {/* <div className="hidden md:flex">
+                    <FormMessage>숫자만 입력</FormMessage>
+                  </div> */}
                 </FormItem>
               )}
             />
+            <div />
             <FormLabel>재고수량 *</FormLabel>
             <FormField
               control={form.control}
               name="stock"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} type="number" onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage>숫자만 입력</FormMessage>
-                    </div>
-                  </div>
+                  <FormControl>
+                    <Input {...field} type="number" onKeyDown={onKeyDown} />
+                  </FormControl>
+                  {/* <div className="hidden md:flex">
+                    <FormMessage>숫자만 입력</FormMessage>
+                  </div> */}
                 </FormItem>
               )}
             />
+            <div />
             <FormLabel>상품이미지 *</FormLabel>
             <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <div className="flex">
-                        <div className="flex gap-2">
-                          {previewImages?.map((image, id) => (
-                            <div key={id} className="w-20 h-20 relative">
-                              <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
-                              <button onClick={(e) => deleteImage(e, id)} className="absolute right-0">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="#000000"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                                </svg>
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                        <Label htmlFor="input-file">
-                          <div className="flex justify-center items-center w-20 h-20 rounded border border-zinc-400 bg-zinc-100">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="#828282"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <line x1="12" y1="5" x2="12" y2="19" />
-                              <line x1="5" y1="12" x2="19" y2="12" />
-                            </svg>
-
-                            <input
-                              {...field}
-                              type="file"
-                              className="hidden"
-                              multiple
-                              id="input-file"
-                              onChange={addImages}
-                              onKeyDown={onKeyDown}
-                            />
+                  <FormControl>
+                    <div className="flex">
+                      <div className="flex gap-2">
+                        {previewImages?.map((image, id) => (
+                          <div key={id} className="w-20 h-20 relative">
+                            <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
+                            <button onClick={(e) => deleteImage(e, id)} className="absolute right-0">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="#000000"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                              </svg>
+                            </button>
                           </div>
-                        </Label>
+                        ))}
                       </div>
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
+                      <Label htmlFor="input-file">
+                        <div className="flex justify-center items-center w-20 h-20 rounded border border-zinc-400 bg-zinc-100">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#828282"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+
+                          <input
+                            {...field}
+                            type="file"
+                            className="hidden"
+                            multiple
+                            id="input-file"
+                            onChange={addImages}
+                            onKeyDown={onKeyDown}
+                          />
+                        </div>
+                      </Label>
                     </div>
+                  </FormControl>
+                  <div className="hidden md:flex">
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
-            <FormLabel>상품설명 *</FormLabel>
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <hr />
-            <hr />
-            <div>부가정보</div>
             <div />
+
+            <FormLabel>상품설명 *</FormLabel>
+            <div className="grid-cols-subgrid col-span-2">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <textarea
+                        {...field}
+                        className="text-zinc-800 text-sm pl-3 pt-2 border border-zinc-400 rounded w-full h-44 resize-none"
+                      />
+                    </FormControl>
+                    <div className="hidden md:flex">
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className=" mt-6 mb-3 text-base">부가정보</div>
+            <div />
+            <div />
+
             <FormLabel>Artist</FormLabel>
             <FormField
               control={form.control}
               name="artist"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <div className="hidden md:flex">
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+            <div />
             <FormLabel>Label</FormLabel>
             <FormField
               control={form.control}
               name="label"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
+                  <FormControl>
+                    <Input {...field} onKeyDown={onKeyDown} />
+                  </FormControl>
+                  <div className="hidden md:flex">
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+            <div />
             <FormLabel>Released</FormLabel>
             <FormField
               control={form.control}
               name="released"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
+                  <FormControl>
+                    <Input {...field} onKeyDown={onKeyDown} />
+                  </FormControl>
+                  <div className="hidden md:flex">
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+            <div />
             <FormLabel>Format</FormLabel>
             <FormField
               control={form.control}
               name="format"
               render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-202">
-                    <FormControl>
-                      <Input {...field} onKeyDown={onKeyDown} />
-                    </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
+                  <FormControl>
+                    <Input {...field} onKeyDown={onKeyDown} />
+                  </FormControl>
+                  <div className="hidden md:flex">
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+            <div />
           </div>
           <div className="flex w-full justify-center">
             <Button type="submit" className="mt-6 w-32">
@@ -396,6 +390,6 @@ export default function AddProductForm({ products, navigate }: { products?: Prod
           </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 }
