@@ -31,10 +31,6 @@ export const sidebarNav = [
     href: "/category/rock-pop-etc",
   },
   {
-    title: "RSD EXCLUSIVE",
-    href: "/category/rsd-exclusive",
-  },
-  {
     title: "JAZZ",
     href: "/category/jazz",
   },

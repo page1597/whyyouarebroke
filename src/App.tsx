@@ -1,4 +1,4 @@
-import { Suspense, lazy, useContext, useEffect, useState } from "react";
+import { Suspense, lazy, useContext } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import PrivateRoutes from "./routes/private/admin/index.tsx";
@@ -8,7 +8,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 export default function App() {
   const userInfo = useContext(AuthContext);
-  // const isAdmin = userInfo?.type === "관리자" ? true : false;
   const isAdmin = localStorage.getItem("user type") == "관리자";
 
   const queryClient = new QueryClient();
@@ -16,7 +15,6 @@ export default function App() {
   const Layout = lazy(() => import("./routes/index"));
   const Basket = lazy(() => import("./routes/public/basket"));
   const RockPopEtc = lazy(() => import("./routes/public/category/rockpopetc"));
-  const RSDExclusive = lazy(() => import("./routes/public/category/RSDExclusive"));
   const Jazz = lazy(() => import("./routes/public/category/jazz"));
   const OST = lazy(() => import("./routes/public/category/ost"));
   const KPop = lazy(() => import("./routes/public/category/kpop"));
@@ -57,10 +55,7 @@ export default function App() {
           path: "/category/rock-pop-etc",
           element: <RockPopEtc />,
         },
-        {
-          path: "/category/rsd-exclusive",
-          element: <RSDExclusive />,
-        },
+
         {
           path: "/category/jazz",
           element: <Jazz />,

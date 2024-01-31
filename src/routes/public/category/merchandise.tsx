@@ -1,3 +1,5 @@
+import Products from "@/components/products";
+
 export default function Merchandise() {
-  return <>merchandise</>;
+  return <Products category="merchandise" />;
 }
