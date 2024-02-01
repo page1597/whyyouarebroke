@@ -62,7 +62,7 @@ export default function Layout() {
     !userInfo ? { title: "회원가입", href: "/signup" } : { title: "", href: "" },
     !isAdmin ? { title: "마이페이지", href: "/mypage" } : { title: "주문조회", href: "/orders" },
     // isAdmin && { title: "주문조회", href: "/orders" },
-  ];
+  ].filter((item) => item.title !== "" && item.href !== "");
 
   return (
     <div className="w-full flex flex-col h-screen">

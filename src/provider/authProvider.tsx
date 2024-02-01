@@ -24,6 +24,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         localStorage.removeItem("user type"); // 로그아웃 상태
       }
+      localStorage.removeItem("basket");
     });
   }, []);
 
