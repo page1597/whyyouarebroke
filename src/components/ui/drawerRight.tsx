@@ -28,7 +28,11 @@ const DrawerRightContent = React.forwardRef<
     <DrawerRightOverlay />
     <DrawerPrimitive.Content
       ref={ref}
-      className={cn("bg-white flex flex-col h-full w-[300px] mt-24 fixed bottom-0 right-0")}
+      className={cn(
+        //w-[300px]
+        "bg-white flex flex-col h-full mt-24 fixed bottom-0 right-0 overflow-y-auto overflow-x-hidden",
+        className
+      )}
       {...props}
     >
       {children}

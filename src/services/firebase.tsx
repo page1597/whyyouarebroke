@@ -61,7 +61,7 @@ export async function signUp(user: UserSignUpType, navigate: NavigateFunction) {
           name: user.name,
         });
       } catch (editProduct) {
-        console.error("사용자 데이터 저장 에러:", e);
+        console.error("사용자 데이터 저장 에러:", editProduct);
       }
 
       alert("회원가입 되었습니다.");

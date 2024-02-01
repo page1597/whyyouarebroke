@@ -67,10 +67,10 @@ export default function Products({ category }: { category: string }) {
             <div key={index}>
               {page ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
-                  {page.map((value: DocumentData, index: number) => (
+                  {page.map((value: DocumentData) => (
                     <div
                       className="flex flex-col justify-center cursor-pointer"
-                      key={index}
+                      key={value.id}
                       onClick={() => navigate("/product", { state: value as DocumentData })}
                     >
                       {value.image ? (

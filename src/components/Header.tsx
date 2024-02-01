@@ -1,12 +1,21 @@
 import { HeaderNavItem } from "@/types";
 import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "@/services/firebase";
+import { BasketContext } from "@/context/basketContext";
+import { useContext } from "react";
 
 type HeaderNavProps = {
   items: HeaderNavItem[];
 };
 
 export function Header({ items }: HeaderNavProps) {
+  const contextValue = useContext(BasketContext);
+  if (!contextValue) {
+    throw new Error("BasketContext를 찾을 수 없습니다.");
+  }
+
+  const { basket } = contextValue;
+  console.log(basket);
   const navigate = useNavigate();
   return (
     <>
@@ -15,7 +24,15 @@ export function Header({ items }: HeaderNavProps) {
           ? items.map((item, index) => (
               <div key={index} className="text-white mx-2 text-sm">
                 {item.title !== "로그아웃" ? (
-                  <Link to={item.href}>{item.title}</Link>
+                  <Link to={item.href}>
+                    {item.title !== "장바구니" ? (
+                      item.title
+                    ) : (
+                      <>
+                        {item.title}({basket?.length})
+                      </>
+                    )}
+                  </Link>
                 ) : (
                   <button onClick={() => logOut(navigate)}>{item.title}</button>
                 )}
@@ -32,7 +49,15 @@ export function Header({ items }: HeaderNavProps) {
             ? items.map((item, index) => (
                 <div key={index} className="text-white mx-2 text-sm">
                   {item.title !== "로그아웃" ? (
-                    <Link to={item.href}>{item.title}</Link>
+                    <Link to={item.href}>
+                      {item.title !== "장바구니" ? (
+                        item.title
+                      ) : (
+                        <>
+                          {item.title}({basket?.length})
+                        </>
+                      )}
+                    </Link>
                   ) : (
                     <button onClick={() => logOut(navigate)}>{item.title}</button>
                   )}

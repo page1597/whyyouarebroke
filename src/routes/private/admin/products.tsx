@@ -64,10 +64,10 @@ export default function Products() {
           <div key={index}>
             {page ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
-                {page?.map((product: DocumentData, index: number) => (
+                {page?.map((product: DocumentData) => (
                   <div
                     className="flex flex-col justify-center cursor-pointer"
-                    key={index}
+                    key={product.id}
                     onClick={() => navigate("/product", { state: product as DocumentData })}
                   >
                     {product.image ? (
