@@ -13,23 +13,25 @@ export function Header({ items }: HeaderNavProps) {
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
+  console.log(items);
 
   const { basket } = contextValue;
-  console.log(basket);
+
   const navigate = useNavigate();
   return (
     <>
-      <div className="hidden md:flex bg-zinc-800 justify-end py-1.5 items-center px-3">
+      <div className="hidden md:flex bg-zinc-800 justify-end py-1.5 items-center px-3 gap-3">
         {items.length
           ? items.map((item, index) => (
-              <div key={index} className="text-white mx-2 text-sm">
+              <div key={index} className="text-white flex text-sm flex-row">
                 {item.title !== "로그아웃" ? (
                   <Link to={item.href}>
                     {item.title !== "장바구니" ? (
                       item.title
                     ) : (
                       <>
-                        {item.title}({basket?.length})
+                        {item.title}
+                        {basket && <>({basket.length})</>}
                       </>
                     )}
                   </Link>
@@ -44,17 +46,18 @@ export function Header({ items }: HeaderNavProps) {
 
       {/* 모바일 헤더(로고까지 포함) */}
       <div className="md:hidden">
-        <div className="flex bg-zinc-800 justify-center py-1.5 items-center px-3">
+        <div className="flex bg-zinc-800 justify-end py-1.5 items-center gap-3 px-3">
           {items.length
             ? items.map((item, index) => (
-                <div key={index} className="text-white mx-2 text-sm">
+                <div key={index} className="text-white text-sm">
                   {item.title !== "로그아웃" ? (
                     <Link to={item.href}>
                       {item.title !== "장바구니" ? (
                         item.title
                       ) : (
                         <>
-                          {item.title}({basket?.length})
+                          {item.title}
+                          {basket && <>({basket.length})</>}
                         </>
                       )}
                     </Link>

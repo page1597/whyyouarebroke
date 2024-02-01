@@ -59,31 +59,31 @@ export default function Products() {
                   더보기
                 </button>
               </div>
-              <Carousel opts={{ align: "start" }}>
+              <Carousel opts={{ align: "start" }} className=" w-11/12">
                 <CarouselContent className="-ml-2">
                   {/* -ml-2 md:-ml */}
                   {categoryProduct.products?.map((product: DocumentData) => (
                     <CarouselItem key={product.id} className="pl-1 basis-1/2 md:basis-1/4">
-                      <div className="p-1">
+                      <div className="p-1 flex justify-center">
                         <div>
                           {product.image ? (
                             <img
                               src={product["image"][0]}
-                              width={60}
-                              height={60}
-                              className="h-60 w-60"
+                              width={240}
+                              height={240}
+                              className="h-60 w-60 object-contain"
                               alt={product.name}
                             />
                           ) : (
                             <div className="w-60 h-60 bg-zinc-100" />
                           )}
-                        </div>
-                        <div className="flex flex-col mt-3">
-                          <div className="flex gap-2">
-                            <div>[{product.type}]</div>
-                            <div className="text-base">{product.name}</div>
+                          <div className="flex flex-col mt-3">
+                            <div className="flex gap-2">
+                              <div>[{product.type}]</div>
+                              <div className="text-base">{product.name}</div>
+                            </div>
+                            <div className="mt-1 font-bold text-zinc-500">{product.price}원</div>
                           </div>
-                          <div className="mt-1 font-bold text-zinc-500">{product.price}원</div>
                         </div>
                       </div>
                     </CarouselItem>

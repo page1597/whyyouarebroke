@@ -45,14 +45,15 @@ export default function Products() {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
+          width="44"
+          height="44"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#555555"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          className="md:w-14 md:h-14"
         >
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -66,18 +67,28 @@ export default function Products() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
                 {page?.map((product: DocumentData) => (
                   <div
-                    className="flex flex-col justify-center cursor-pointer"
+                    className="flex flex-col items-center cursor-pointer"
                     key={product.id}
                     onClick={() => navigate("/product", { state: product as DocumentData })}
                   >
-                    {product.image ? (
-                      <img src={product["image"][0]} width={60} height={60} className="h-60 w-60" alt={product.name} />
-                    ) : (
-                      <div className="w-60 h-60 bg-zinc-100" />
-                    )}
-                    {/* 나중에 썸네일 설정 가능하게 하기 */}
-                    <div className="text-sm mt-2">{product["name"]}</div>
-                    <div className="text-sm mt-1 font-bold text-zinc-500">{product["price"]}원</div>
+                    <div>
+                      {product.image ? (
+                        <img
+                          src={product["image"][0]}
+                          width={60}
+                          height={60}
+                          className="h-60 w-60 object-contain"
+                          alt={product.name}
+                        />
+                      ) : (
+                        <div className="w-60 h-60 bg-zinc-100" />
+                      )}
+                      {/* 나중에 썸네일 설정 가능하게 하기 */}
+                      <div className="flex flex-col">
+                        <div className="text-sm mt-2">{product["name"]}</div>
+                        <div className="text-sm mt-1 font-bold text-zinc-500">{product["price"]}원</div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

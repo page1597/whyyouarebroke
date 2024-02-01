@@ -69,17 +69,27 @@ export default function Products({ category }: { category: string }) {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
                   {page.map((value: DocumentData) => (
                     <div
-                      className="flex flex-col justify-center cursor-pointer"
+                      className="flex flex-col justify-center items-center cursor-pointer"
                       key={value.id}
                       onClick={() => navigate("/product", { state: value as DocumentData })}
                     >
-                      {value.image ? (
-                        <img src={value["image"][0]} width={60} height={60} className="h-60 w-60" alt={value.name} />
-                      ) : (
-                        <div className="w-60 h-60 bg-zinc-100" />
-                      )}
-                      <div className="text-sm mt-2">{value["name"]}</div>
-                      <div className="text-sm font-bold text-zinc-500 mt-1">{value["price"]}원</div>
+                      <div>
+                        {value.image ? (
+                          <img
+                            src={value["image"][0]}
+                            width={60}
+                            height={60}
+                            className="h-60 w-60 object-contain"
+                            alt={value.name}
+                          />
+                        ) : (
+                          <div className="w-60 h-60 bg-zinc-100" />
+                        )}
+                        <div>
+                          <div className="text-sm mt-2">{value["name"]}</div>
+                          <div className="text-sm font-bold text-zinc-500 mt-1">{value["price"]}원</div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

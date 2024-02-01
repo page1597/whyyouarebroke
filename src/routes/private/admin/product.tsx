@@ -12,7 +12,7 @@ export default function Product() {
   const product = state as ProductType;
 
   return (
-    <div className="flex flex-col ml-10">
+    <div className="flex flex-col">
       <ProductInfo product={product} isAdmin={true} />
       <div className="w-full right-0 flex justify-end items-center gap-3 mt-5">
         <Button
