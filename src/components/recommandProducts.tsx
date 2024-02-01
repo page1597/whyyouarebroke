@@ -21,8 +21,8 @@ export default function RecommandProducts({ category, productName }: { category:
       <div className="flex flex-row justify-center mt-10">
         {recommands ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {recommands.map((product: DocumentData, index: number) => (
-              <div className="flex flex-col justify-center cursor-pointer" key={index}>
+            {recommands.map((product: DocumentData) => (
+              <div onClick={() => {}} className="flex flex-col justify-center cursor-pointer" key={product.id}>
                 {product.image ? (
                   <img src={product["image"][0]} width={50} height={50} className="h-48 w-48" alt={product.name} />
                 ) : (

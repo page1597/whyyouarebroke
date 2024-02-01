@@ -62,8 +62,8 @@ export default function Products() {
               <Carousel opts={{ align: "start" }}>
                 <CarouselContent className="-ml-2">
                   {/* -ml-2 md:-ml */}
-                  {categoryProduct.products?.map((product: DocumentData, index: number) => (
-                    <CarouselItem key={index} className="pl-1 basis-1/2 md:basis-1/4">
+                  {categoryProduct.products?.map((product: DocumentData) => (
+                    <CarouselItem key={product.id} className="pl-1 basis-1/2 md:basis-1/4">
                       <div className="p-1">
                         <div>
                           {product.image ? (

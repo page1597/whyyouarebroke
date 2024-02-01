@@ -1,6 +1,20 @@
-import { ProductType } from "@/types";
+import { BasketProductType, ProductType } from "@/types";
+import NumberInput from "./ui/numberInput";
+import { useContext } from "react";
+import { BasketContext } from "@/context/basketContext";
 
-export default function ProductInfo({ product, isAdmin }: { product: ProductType; isAdmin: boolean }) {
+export default function ProductInfo({
+  product,
+  isAdmin,
+}: {
+  product: BasketProductType | ProductType; // 구매자페이지 | 판매자페이지(Admin)
+  isAdmin: boolean;
+}) {
+  // const contextValue = useContext(BasketContext);
+  // if (!contextValue) {
+  //   throw new Error("BasketContext를 찾을 수 없습니다.");
+  // }
+
   return (
     <div>
       <div className="text-xl text-zinc-800">
@@ -37,9 +51,13 @@ export default function ProductInfo({ product, isAdmin }: { product: ProductType
             <h5 className="text-zinc-900 text-base">Format</h5>
             <h5 className="text-zinc-500 text-base font-light">{product.format}</h5>
           </div>
+
           {!isAdmin ? (
-            <div className="bg-zinc-100 w-full p-5 mt-5 text-lg font-normal text-zinc-700">
+            <div className="flex justify-between bg-zinc-100 w-full p-5 mt-5 text-lg font-normal text-zinc-700">
               [{product.format}] {product.name}
+              {/* <div className="flex"> */}
+              <NumberInput product={"quantity" in product ? product : undefined} />
+              {/* </div> */}
             </div>
           ) : (
             <></>

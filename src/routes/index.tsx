@@ -98,7 +98,7 @@ export default function Layout() {
                 />
               </svg>
             </DrawerRightTrigger>
-            <DrawerRightContent>
+            <DrawerRightContent className="w-[300px]">
               <DrawerRightHeader>
                 <Input className="bg-zinc-600 text-white h-10" />
               </DrawerRightHeader>

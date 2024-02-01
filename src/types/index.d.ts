@@ -98,3 +98,10 @@ export type ProductType = {
   format: string?;
   createdAt: number;
 };
+
+export type BasketProductType = ProductType & {
+  quantity: number;
+};
+
+// 장바구니 속성 중 description 항목을 제외함
+export type BasketProductForStorage = Pick<BasketProductType, "id" | "name" | "price" | "quantity" | "image">;
