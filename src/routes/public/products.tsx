@@ -52,7 +52,9 @@ export default function Products() {
                 <h3 className="text-xl my-5">{categoryProduct.category.toUpperCase()}</h3>
                 <button
                   name="more"
-                  onClick={() => navigate(`/category/${replaceAll(categoryProduct.category, ["/", "-"], [" ", ""])}`)}
+                  onClick={() => {
+                    navigate(`/category/${replaceAll(categoryProduct.category, ["-", ""], ["/", "-"], [" ", ""])}`);
+                  }}
                 >
                   더보기
                 </button>
