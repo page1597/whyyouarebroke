@@ -1,10 +1,18 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/authContext";
 import { firebaseAuth, getUser } from "@/services/firebase";
 import { UserInfoType } from "@/types";
+import { BasketContext } from "@/context/basketContext";
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
+
+  const contextValue = useContext(BasketContext);
+  if (!contextValue) {
+    throw new Error("BasketContext를 찾을 수 없습니다.");
+  }
+
+  const { setBasket } = contextValue;
 
   useEffect(() => {
     return firebaseAuth.onAuthStateChanged(async (currentUser) => {
@@ -23,8 +31,9 @@ function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setUser(null);
         localStorage.removeItem("user type"); // 로그아웃 상태
+        localStorage.removeItem("basket");
+        setBasket(null);
       }
-      localStorage.removeItem("basket");
     });
   }, []);
 
