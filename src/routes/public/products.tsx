@@ -65,8 +65,10 @@ export default function Products() {
                   {categoryProduct.products?.map((product: DocumentData) => (
                     <CarouselItem key={product.id} className="pl-1 basis-1/2 md:basis-1/4">
                       <div className="p-1 flex justify-center">
-                        {/* onClick={() => navigate("/product", { state: value as DocumentData } */}
-                        <div className="cursor-pointer" onClick={() => navigate("/product", { state: product })}>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => navigate({ pathname: "/product", search: `?id=${product.id}` })}
+                        >
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img

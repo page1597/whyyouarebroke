@@ -5,28 +5,41 @@ import RecommandProducts from "@/components/recommandProducts";
 import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
 import { BasketContext } from "@/context/basketContext";
+import { getProduct } from "@/services/firebase";
 import { ProductType } from "@/types";
-import { DocumentData } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 // 구매자가 보는 상품 상세 페이지
 export default function Product() {
   //   const navigate = useNavigate();
-  const { state }: DocumentData = useLocation();
-  const product = state as ProductType;
+  const [searchParams] = useSearchParams();
+  const productId = searchParams.get("id");
+  const [product, setProduct] = useState<ProductType>();
+  console.log(productId);
+
+  async function getProductInfo(productId: string) {
+    const result = await getProduct(productId);
+    console.log(result);
+    setProduct(result);
+  }
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+    if (productId) {
+      getProductInfo(productId);
+    }
+    // if (productId) {
+    //   window.location.reload();
+    // }
+  }, [productId]);
 
   const contextValue = useContext(BasketContext);
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, [state]);
-  
   const { basket, setBasket } = contextValue;
 
-  const productQuantity = basket?.find((item) => item.id === product.id)?.quantity || 1;
-  let basketProduct = { ...(state as ProductType), quantity: productQuantity }; // 장바구니 형태의 product로 변경. (수량 항목 추가)
+  const productQuantity = basket?.find((item) => item.id === product?.id)?.quantity || 1;
+  let basketProduct = { ...product, quantity: productQuantity }; // 장바구니 형태의 product로 변경. (수량 항목 추가)
   //   const [quantity, setQuantity] = useState<number>(productQuantity);
   let isProductInBasket = false;
   if (Array.isArray(basket)) {
@@ -50,8 +63,7 @@ export default function Product() {
 
   return (
     <div className="flex flex-col">
-      <ProductInfo product={basketProduct} isAdmin={false} />
-      {/* 버튼 영역 */}
+      {product ? <ProductInfo product={basketProduct} isAdmin={false} /> : <></>}
       <div className="w-full md:right-0 flex justify-center md:justify-end items-center gap-3 mt-5">
         <DrawerRight direction="right">
           {!isAdded ? (
@@ -76,9 +88,9 @@ export default function Product() {
         <Button className="bg-zinc-400 w-28 hover:bg-zinc-500">구매하기</Button>
       </div>
       <hr className="mt-8" />
-      <RecommandProducts category={state.category} productName={basketProduct.name} />
+      {product ? <RecommandProducts category={product.category} productId={product.id} /> : <></>}
       <hr className="mt-10" />
-      <ProductDetail product={state} /> {/* 변경하기 */}
+      {/* <ProductDetail product={product!} />  */}
     </div>
   );
 }

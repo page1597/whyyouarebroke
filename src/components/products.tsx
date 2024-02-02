@@ -80,29 +80,29 @@ export default function Products({ category }: { category: string }) {
             <div key={index}>
               {page ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
-                  {page.map((value: DocumentData) => (
+                  {page.map((product: DocumentData) => (
                     <div
                       className="flex flex-col justify-center items-center cursor-pointer"
-                      key={value.id} // navigate("/product", { state: { scroll: "top", product }
-                      onClick={() => navigate("/product", { state: value as DocumentData })}
+                      key={product.id}
+                      onClick={() => navigate({ pathname: "/product", search: `?id=${product.id}` })}
                     >
                       <div>
-                        {value.image ? (
+                        {product.image ? (
                           <div className="relative overflow-hidden">
                             <img
-                              src={value["image"][0]}
+                              src={product["image"][0]}
                               width={60}
                               height={60}
                               className="h-60 w-60 object-contain transition-transform transform-gpu hover:scale-105"
-                              alt={value.name}
+                              alt={product.name}
                             />
                           </div>
                         ) : (
                           <div className="w-60 h-60 bg-zinc-100" />
                         )}
                         <div>
-                          <div className="text-sm mt-2">{value["name"]}</div>
-                          <div className="text-sm font-bold text-zinc-500 mt-1">{value["price"]}원</div>
+                          <div className="text-sm mt-2">{product["name"]}</div>
+                          <div className="text-sm font-bold text-zinc-500 mt-1">{product["price"]}원</div>
                         </div>
                       </div>
                     </div>
