@@ -2,6 +2,7 @@ import { getCategoryProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
+import { useNavigate } from "react-router-dom";
 
 export default function RecommandProducts({ category, productName }: { category: string; productName: string }) {
   const [recommands, setRecommands] = useState<DocumentData[] | undefined>(new Array(4));
@@ -19,6 +20,7 @@ export default function RecommandProducts({ category, productName }: { category:
   useEffect(() => {
     getRecommands();
   }, []);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -31,13 +33,18 @@ export default function RecommandProducts({ category, productName }: { category:
                 <CarouselItem key={product?.id} className="pl-1 basis-1/2 md:basis-1/4">
                   <div className="p-1 flex justify-center">
                     {product?.image ? (
-                      <img
-                        src={product["image"][0]}
-                        width={240}
-                        height={240}
-                        className="h-60 w-60 object-contain"
-                        alt={product?.name}
-                      />
+                      <div
+                        className="relative overflow-hidden"
+                        onClick={() => navigate("/product", { state: product })}
+                      >
+                        <img
+                          src={product["image"][0]}
+                          width={240}
+                          height={240}
+                          className="h-60 w-60 object-contain transition-transform transform-gpu hover:scale-105"
+                          alt={product?.name}
+                        />
+                      </div>
                     ) : (
                       <div className="w-60 h-60" />
                     )}

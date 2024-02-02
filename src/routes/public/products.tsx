@@ -65,15 +65,18 @@ export default function Products() {
                   {categoryProduct.products?.map((product: DocumentData) => (
                     <CarouselItem key={product.id} className="pl-1 basis-1/2 md:basis-1/4">
                       <div className="p-1 flex justify-center">
-                        <div>
+                        {/* onClick={() => navigate("/product", { state: value as DocumentData } */}
+                        <div className="cursor-pointer" onClick={() => navigate("/product", { state: product })}>
                           {product.image ? (
-                            <img
-                              src={product["image"][0]}
-                              width={240}
-                              height={240}
-                              className="h-60 w-60 object-contain"
-                              alt={product.name}
-                            />
+                            <div className="relative overflow-hidden">
+                              <img
+                                src={product["image"][0]}
+                                width={240}
+                                height={240}
+                                className="h-60 w-60 object-contain transition-transform transform-cpu hover:scale-105"
+                                alt={product.name}
+                              />
+                            </div>
                           ) : (
                             <div className="w-60 h-60 bg-zinc-100" />
                           )}

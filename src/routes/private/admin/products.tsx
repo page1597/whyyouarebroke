@@ -79,17 +79,19 @@ export default function Products() {
                   <div
                     className="flex flex-col items-center cursor-pointer"
                     key={product.id}
-                    onClick={() => navigate("/product", { state: product as DocumentData })}
+                    onClick={() => navigate("/product", { state: product })}
                   >
                     <div>
                       {product.image ? (
-                        <img
-                          src={product["image"][0]}
-                          width={60}
-                          height={60}
-                          className="h-60 w-60 object-contain"
-                          alt={product.name}
-                        />
+                        <div className="relative overflow-hidden">
+                          <img
+                            src={product["image"][0]}
+                            width={60}
+                            height={60}
+                            className="h-60 w-60 object-contain transition-transform transform-gpu hover:scale-105"
+                            alt={product.name}
+                          />
+                        </div>
                       ) : (
                         <div className="w-60 h-60 bg-zinc-100" />
                       )}

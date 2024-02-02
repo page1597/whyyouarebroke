@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { deleteProduct } from "@/services/firebase";
 import { ProductType } from "@/types";
 import { DocumentData } from "firebase/firestore";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Product() {
@@ -10,6 +11,10 @@ export default function Product() {
   const { state }: DocumentData = useLocation();
 
   const product = state as ProductType;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [state]);
 
   return (
     <div className="flex flex-col">
