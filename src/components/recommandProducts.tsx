@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 import { useNavigate } from "react-router-dom";
 
-export default function RecommandProducts({ category, productName }: { category: string; productName: string }) {
+export default function RecommandProducts({ category, productId }: { category: string; productId: string }) {
   const [recommands, setRecommands] = useState<DocumentData[] | undefined>(new Array(4));
 
   async function getRecommands() {
     // 추천상품 4개만 보여짐
     const result = await getCategoryProducts(category, "createdAt", 4, null);
-    const recommandList = result.filter((value: DocumentData) => value.name !== productName);
+    const recommandList = result.filter((value: DocumentData) => value.id !== productId);
     const filledRecommands = Array.from(
       { length: 4 - recommandList.length },
       () => undefined
@@ -35,7 +35,10 @@ export default function RecommandProducts({ category, productName }: { category:
                     {product?.image ? (
                       <div
                         className="relative overflow-hidden"
-                        onClick={() => navigate("/product", { state: product })}
+                        onClick={() => {
+                          navigate({ pathname: "/product", search: `?id=${product.id}` });
+                          window.location.reload(); // 이렇게 하는게 맞나?
+                        }}
                       >
                         <img
                           src={product["image"][0]}

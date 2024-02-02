@@ -50,7 +50,7 @@ export default function Products() {
 
       <button
         title="상품 등록"
-        className="fixed right-10 bottom-10 bg-zinc-200 rounded-full p-2"
+        className="fixed right-10 bottom-10 bg-zinc-200 rounded-full p-2 z-10"
         onClick={() => navigate("/add-product")}
       >
         <svg
@@ -79,7 +79,7 @@ export default function Products() {
                   <div
                     className="flex flex-col items-center cursor-pointer"
                     key={product.id}
-                    onClick={() => navigate("/product", { state: product })}
+                    onClick={() => navigate({ pathname: "/product", search: `?id=${product.id}` })}
                   >
                     <div>
                       {product.image ? (

@@ -211,6 +211,19 @@ export async function getCategoryProducts(
   return products;
 }
 
+export async function getProduct(productId: string) {
+  const q = query(collection(db, "products"), where("id", "==", productId));
+  const querySnapshot = await getDocs(q);
+
+  let product = null;
+  if (querySnapshot.docs.length > 0) {
+    const doc = querySnapshot.docs[0];
+    product = doc.data();
+  }
+
+  return product;
+}
+
 async function blobUriToBlob(blobUri: string) {
   try {
     // Blob URI에서 데이터를 가져옴
