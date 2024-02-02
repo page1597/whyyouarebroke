@@ -3,7 +3,7 @@ import { DocumentData } from "firebase/firestore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery, QueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, QueryClient, useMutation } from "@tanstack/react-query";
 
 export default function Products() {
   // 판매상품 리스트 목록

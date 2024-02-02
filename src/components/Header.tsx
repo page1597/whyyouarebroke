@@ -3,12 +3,29 @@ import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "@/services/firebase";
 import { BasketContext } from "@/context/basketContext";
 import { useContext } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 type HeaderNavProps = {
   items: HeaderNavItem[];
 };
 
 export function Header({ items }: HeaderNavProps) {
+  const navigate = useNavigate();
+
+  const { mutate, isPending, isError } = useMutation({
+    mutationKey: ["log out"], // Query Key
+    mutationFn: () => logOut(), // 비동기 작업을 수행하는 함수
+    onSuccess: () => {
+      console.log("로그아웃 성공");
+      alert("로그아웃 하였습니다.");
+      navigate("/");
+    },
+    onError: (error) => {
+      console.error("로그아웃 실패", error);
+      alert("로그아웃하지 못했습니다.");
+    },
+  });
+
   const contextValue = useContext(BasketContext);
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
@@ -16,7 +33,6 @@ export function Header({ items }: HeaderNavProps) {
 
   const { basket } = contextValue;
 
-  const navigate = useNavigate();
   return (
     <>
       <div className="hidden md:flex bg-zinc-800 justify-end py-1.5 items-center px-3 gap-3">
@@ -35,7 +51,9 @@ export function Header({ items }: HeaderNavProps) {
                     )}
                   </Link>
                 ) : (
-                  <button onClick={() => logOut(navigate)}>{item.title}</button>
+                  <button disabled={isPending} onClick={() => mutate()}>
+                    {item.title}
+                  </button>
                 )}
               </div>
             ))
@@ -61,7 +79,9 @@ export function Header({ items }: HeaderNavProps) {
                       )}
                     </Link>
                   ) : (
-                    <button onClick={() => logOut(navigate)}>{item.title}</button>
+                    <button disabled={isPending} onClick={() => mutate()}>
+                      {item.title}
+                    </button>
                   )}
                 </div>
               ))
