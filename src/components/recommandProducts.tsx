@@ -8,7 +8,7 @@ export default function RecommandProducts({ category, productName }: { category:
 
   async function getRecommands() {
     // 추천상품 4개만 보여짐
-    const result = await getCategoryProducts(category, "createdAt", null, 4);
+    const result = await getCategoryProducts(category, "createdAt", 4, null);
     const recommandList = result.filter((value: DocumentData) => value.name !== productName);
     const filledRecommands = Array.from(
       { length: 4 - recommandList.length },

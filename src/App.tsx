@@ -11,13 +11,7 @@ export default function App() {
   const userInfo = useContext(AuthContext);
   const isAdmin = localStorage.getItem("user type") == "관리자";
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity,
-      },
-    },
-  });
+  const queryClient = new QueryClient();
 
   const Layout = lazy(() => import("./routes/index"));
   const Basket = lazy(() => import("./routes/public/basket"));

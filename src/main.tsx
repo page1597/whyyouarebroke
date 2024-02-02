@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App.tsx";
 import AuthProvider from "./provider/authProvider.tsx";
 import BasketProvider from "./provider/basketProvider.tsx";
-// import { ReactQueryDevtools } from "react-query-devtools";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
