@@ -26,6 +26,7 @@ import {
   limit,
   startAfter,
   where,
+  endBefore,
 } from "firebase/firestore";
 import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -164,14 +165,14 @@ export function onUserStateChange(callback: any) {
 
 // 모든 제품 가져오기
 // 정렬 기본값: 최신순
-export async function getProducts(pageParam: string, limitParam: number) {
+export async function getProducts(limitParam: number, pageParam: number | null) {
   const baseQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
-
   let finalQuery = baseQuery;
   if (pageParam) {
     finalQuery = query(baseQuery, startAfter(pageParam), limit(limitParam));
   } else {
-    finalQuery = limitParam ? query(baseQuery, limit(limitParam)) : baseQuery;
+    // pageParam이 null인 경우에는 처음 로드할 때
+    finalQuery = query(baseQuery, limit(limitParam));
   }
 
   const querySnapshot = await getDocs(finalQuery);
@@ -187,12 +188,11 @@ export async function getProducts(pageParam: string, limitParam: number) {
 export async function getCategoryProducts(
   category: string,
   orderby: string,
-  pageParam: string | null,
-  limitParam: number | null
+  limitParam: number | null,
+  pageParam: string | null
 ) {
   const baseQuery = query(collection(db, "products"), where("category", "==", category), orderBy(orderby, "desc"));
   let finalQuery = baseQuery;
-
   if (pageParam) {
     const paginatedQuery = query(baseQuery, startAfter(pageParam));
     finalQuery = limitParam ? query(paginatedQuery, limit(limitParam)) : paginatedQuery;

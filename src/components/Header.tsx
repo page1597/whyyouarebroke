@@ -13,7 +13,6 @@ export function Header({ items }: HeaderNavProps) {
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
-  console.log(items);
 
   const { basket } = contextValue;
 

@@ -2,36 +2,48 @@ import { getCategoryProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export default function Products({ category }: { category: string }) {
   const navigate = useNavigate();
   const [orderby, setOrderby] = useState<string>("createdAt");
   const [inViewRef, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
   });
 
-  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status, refetch } = useInfiniteQuery(
-    {
-      queryKey: ["products", category, orderby],
-      queryFn: ({ pageParam }) => getCategoryProducts(category, orderby, pageParam, null),
-      initialPageParam: 0,
-      getNextPageParam: (querySnapshot: DocumentData) => {
-        if (querySnapshot.length < 12) {
-          return null;
-        } else {
-          return querySnapshot[querySnapshot.length - 1].createdAt;
-        }
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } = useInfiniteQuery({
+    queryKey: ["products", category, orderby],
+    queryFn: ({ pageParam }) => getCategoryProducts(category, orderby, null, pageParam),
+    initialPageParam: null,
+    getNextPageParam: (querySnapshot: DocumentData) => {
+      if (querySnapshot.length < 12) {
+        return null;
+      } else {
+        return querySnapshot[querySnapshot.length - 1].createdAt;
+      }
+    },
+  });
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
       },
+    },
+  });
+
+  async function prefetchNextPage() {
+    if (hasNextPage && !isFetchingNextPage) {
+      await queryClient.prefetchInfiniteQuery({ queryKey: ["products"], queryFn: fetchNextPage, pages: 3 });
     }
-  );
+  }
 
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+    if (inView) {
+      prefetchNextPage();
     }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage, orderby]);
+  }, [inView, orderby]);
 
   const changeOrderby = (order: string) => {
     setOrderby(order);

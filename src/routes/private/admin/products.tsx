@@ -8,27 +8,41 @@ import { useInfiniteQuery, QueryClient } from "@tanstack/react-query";
 export default function Products() {
   // 판매상품 리스트 목록
   const navigate = useNavigate();
-
-  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = useInfiniteQuery({
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ["products"],
-    queryFn: ({ pageParam }) => getProducts(pageParam, 12),
-    initialPageParam: 0,
-    getNextPageParam: (querySnapshot: DocumentData) => {
+    queryFn: ({ pageParam }) => getProducts(12, pageParam),
+    initialPageParam: null,
+    getNextPageParam: (querySnapshot) => {
       if (querySnapshot.length < 12) {
         return null;
-      } else {
-        return querySnapshot[querySnapshot.length - 1].createdAt;
       }
+      return querySnapshot[querySnapshot.length - 1].createdAt;
     },
   });
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
+      },
+    },
+  });
+
+  async function prefetchNextPage() {
+    console.log("hasNextPage", hasNextPage, "isFetchingNextPage", isFetchingNextPage);
+    if (hasNextPage && !isFetchingNextPage) {
+      await queryClient.prefetchInfiniteQuery({ queryKey: ["products"], queryFn: fetchNextPage, pages: 3 });
+    }
+  }
+
   const [inViewRef, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
   });
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+    if (inView) {
+      prefetchNextPage();
     }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [inView]);
 
   return (
     <>
