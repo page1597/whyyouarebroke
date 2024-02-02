@@ -2,7 +2,7 @@ import { getCategoryProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export default function Products({ category }: { category: string }) {
@@ -12,11 +12,12 @@ export default function Products({ category }: { category: string }) {
     triggerOnce: true,
   });
 
-  const { status, data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery(
-    ["products", category, orderby],
-    ({ pageParam }) => getCategoryProducts(category, orderby, pageParam, null),
+  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status, refetch } = useInfiniteQuery(
     {
-      getNextPageParam: (querySnapshot) => {
+      queryKey: ["products", category, orderby],
+      queryFn: ({ pageParam }) => getCategoryProducts(category, orderby, pageParam, null),
+      initialPageParam: 0,
+      getNextPageParam: (querySnapshot: DocumentData) => {
         if (querySnapshot.length < 12) {
           return null;
         } else {

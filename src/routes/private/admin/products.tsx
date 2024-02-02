@@ -3,28 +3,24 @@ import { DocumentData } from "firebase/firestore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, QueryClient } from "@tanstack/react-query";
 
 export default function Products() {
   // 판매상품 리스트 목록
   const navigate = useNavigate();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
-    "products",
-    ({ pageParam }) => getProducts(pageParam, 12),
-    {
-      getNextPageParam: (querySnapshot) => {
-        // 다음 페이지 번호 가져오는
-        console.log(querySnapshot.length, querySnapshot);
-        if (querySnapshot.length < 12) {
-          console.log("더이상 불러올게 없음");
-          return null; // pageParam을 리턴
-        } else {
-          return querySnapshot[querySnapshot.length - 1].createdAt; // pageParam을 리턴
-        }
-      },
-    }
-  );
+  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = useInfiniteQuery({
+    queryKey: ["products"],
+    queryFn: ({ pageParam }) => getProducts(pageParam, 12),
+    initialPageParam: 0,
+    getNextPageParam: (querySnapshot: DocumentData) => {
+      if (querySnapshot.length < 12) {
+        return null;
+      } else {
+        return querySnapshot[querySnapshot.length - 1].createdAt;
+      }
+    },
+  });
   const [inViewRef, inView] = useInView({
     triggerOnce: true,
   });
@@ -83,7 +79,6 @@ export default function Products() {
                       ) : (
                         <div className="w-60 h-60 bg-zinc-100" />
                       )}
-                      {/* 나중에 썸네일 설정 가능하게 하기 */}
                       <div className="flex flex-col">
                         <div className="text-sm mt-2">{product["name"]}</div>
                         <div className="text-sm mt-1 font-bold text-zinc-500">{product["price"]}원</div>
