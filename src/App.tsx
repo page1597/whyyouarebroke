@@ -6,7 +6,8 @@ import PublicRoutes from "./routes/public/index.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
+("use client");
+import { ErrorBoundary } from "react-error-boundary";
 export default function App() {
   const userInfo = useContext(AuthContext);
   const isAdmin = localStorage.getItem("user type") == "관리자";
@@ -21,16 +22,7 @@ export default function App() {
   const KPop = lazy(() => import("./routes/public/category/kpop"));
   const Merchandise = lazy(() => import("./routes/public/category/merchandise"));
   const JPopCityPopAsia = lazy(() => import("./routes/public/category/jpopCityPopAsia"));
-  // const ShowRoutes = isAdmin ? PrivateRoutes() : PublicRoutes(userInfo);
-  // const [showRoutes, setShowRoutes] = useState<any[]>();
-  // useEffect(() => {
-  //   if (isAdmin) {
-  //     setShowRoutes(PrivateRoutes());
-  //   } else {
-  //     setShowRoutes(PublicRoutes(userInfo));
-  //   }
-  // }, []);
-  // console.log(PrivateRoutes().children);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -40,14 +32,6 @@ export default function App() {
         </Suspense>
       ),
       children: [
-        // {
-        //   path: "/login", // member/login
-        //   element: <LogIn />,
-        // },
-        // {
-        //   path: "/signup", // member/signup
-        //   element: <SignUp />,
-        // },
         {
           path: "/basket", // order/basket
           element: <Basket />,
@@ -84,7 +68,7 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ReactQueryDevtools initialIsOpen={false} />
       <RouterProvider router={router} />
     </QueryClientProvider>
   );
