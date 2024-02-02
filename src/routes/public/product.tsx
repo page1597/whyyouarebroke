@@ -7,7 +7,7 @@ import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/component
 import { BasketContext } from "@/context/basketContext";
 import { ProductType } from "@/types";
 import { DocumentData } from "firebase/firestore";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 // 구매자가 보는 상품 상세 페이지
 export default function Product() {
@@ -19,7 +19,10 @@ export default function Product() {
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [state]);
+  
   const { basket, setBasket } = contextValue;
 
   const productQuantity = basket?.find((item) => item.id === product.id)?.quantity || 1;
