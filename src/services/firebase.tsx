@@ -28,7 +28,7 @@ import {
   where,
   endBefore,
 } from "firebase/firestore";
-import { deleteObject, getBlob, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getBlob, getDownloadURL, getStorage, list, listAll, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -80,20 +80,20 @@ export async function signUp(user: UserSignUpType, navigate: NavigateFunction) {
 }
 
 //Email 로그인
-export async function logIn(email: string, password: string, navigate: NavigateFunction) {
-  try {
-    const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
-    console.log(userCredential);
+export async function logIn(email: string, password: string) {
+  // try {
+  const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+  console.log(userCredential);
 
-    navigate("/");
-    alert("로그인 되었습니다.");
+  // navigate("/");
+  // alert("로그인 되었습니다.");
 
-    return userCredential;
-  } catch (error) {
-    console.error("로그인 에러:", error);
-    alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-    return error;
-  }
+  return userCredential;
+  // } catch (error) {
+  //   console.error("로그인 에러:", error);
+  //   alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+  //   return error;
+  // }
 }
 
 export async function googleSignUp(navigate: NavigateFunction, type: string) {
@@ -140,15 +140,8 @@ export async function googleLogIn(navigate: NavigateFunction) {
   }
 }
 
-export async function logOut(navigate: NavigateFunction) {
-  try {
-    await signOut(firebaseAuth);
-    alert("로그아웃 되었습니다.");
-    console.log("로그아웃 되었습니다.");
-    navigate("/");
-  } catch (error) {
-    console.error("로그아웃 에러:", error);
-  }
+export async function logOut() {
+  await signOut(firebaseAuth);
 }
 
 export async function getUser(uid: string): Promise<DocumentData | undefined> {
@@ -243,44 +236,44 @@ export async function addProduct(product: ProductType) {
   const storage = getStorage();
   const productRef = doc(db, "products", product.id);
 
-  try {
-    await setDoc(productRef, {
-      id: product.id,
-      category: product.category,
-      name: product.name,
-      price: product.price,
-      stock: product.stock,
-      description: product.description,
-      artist: product.artist,
-      label: product.label,
-      released: product.released,
-      format: product.format,
-      createdAt: product.createdAt,
-    });
+  // try {
+  await setDoc(productRef, {
+    id: product.id,
+    category: product.category,
+    name: product.name,
+    price: product.price,
+    stock: product.stock,
+    description: product.description,
+    artist: product.artist,
+    label: product.label,
+    released: product.released,
+    format: product.format,
+    createdAt: product.createdAt,
+  });
 
-    const images: string[] = [];
+  const images: string[] = [];
 
-    // 스토리지에 이미지 업로드
-    await Promise.all(
-      product.image.map(async (image: string, index: number) => {
-        const imageRef = ref(storage, `products/${product.id}/image${index}`);
-        const blob = await blobUriToBlob(image);
+  // 스토리지에 이미지 업로드
+  await Promise.all(
+    product.image.map(async (image: string, index: number) => {
+      const imageRef = ref(storage, `products/${product.id}/image${index}`);
+      const blob = await blobUriToBlob(image);
 
-        try {
-          const snapshot = await uploadBytes(imageRef, blob);
-          const downloadURL = await getDownloadURL(snapshot.ref);
-          console.log(downloadURL);
-          images.push(downloadURL);
-        } catch (e) {
-          console.error(`Error uploading image ${index}:`, e);
-        }
-      })
-    );
-    // docs에 이미지 url 업로드
-    await updateDoc(productRef, { image: images });
-  } catch (error) {
-    console.error("Error adding product:", error);
-  }
+      try {
+        const snapshot = await uploadBytes(imageRef, blob);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log(downloadURL);
+        images.push(downloadURL);
+      } catch (e) {
+        console.error(`${index}번째 이미지 업로드 실패:`, e);
+      }
+    })
+  );
+  // docs에 이미지 url 업로드
+  await updateDoc(productRef, { image: images });
+  // } catch (error) {
+  //   console.error("Error adding product:", error);
+  // }
 }
 
 export async function getPrevImagesURL(id: string, images: string[]): Promise<string[]> {
@@ -299,12 +292,25 @@ export async function getPrevImagesURL(id: string, images: string[]): Promise<st
 
 export async function deleteProduct(id: string) {
   const storage = getStorage();
-  const productStorageRef = ref(storage, `products/${id}`);
 
+  // 상품 데이터 삭제
   try {
-    await deleteDoc(doc(db, "products", id)); // 고유 아이디
-    await deleteObject(productStorageRef);
+    await deleteDoc(doc(db, "products", id));
   } catch (error) {
     console.error("Error deleting product:", error);
+    return;
+  }
+
+  // 이미지 삭제
+  const productStorageRef = ref(storage, `products/${id}`);
+  try {
+    // 폴더 내 파일 목록 가져오기
+    const listResult = await list(productStorageRef);
+    const promises = listResult.items.map(async (item) => {
+      await deleteObject(item);
+    });
+    await Promise.all(promises);
+  } catch (error) {
+    console.error("Error deleting product images:", error);
   }
 }

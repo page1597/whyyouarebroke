@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid"; // 고윳값 생성
 import { ComboboxDemo } from "./ui/comboBox";
 import { sidebarNav } from "@/routes";
 import Resizer from "react-image-file-resizer";
+import { useMutation } from "@tanstack/react-query";
 
 // const MAX_FILE_SIZE = 5000000;
 // const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -88,6 +89,20 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
     },
   });
 
+  const { mutate, isPending, isError } = useMutation({
+    mutationKey: ["upload product"],
+    mutationFn: (product: ProductType) => addProduct(product),
+    onSuccess: () => {
+      console.log("상품 등록 성공");
+      alert(isEdit ? "상품 정보가 수정되었습니다." : "상품이 등록되었습니다.");
+      navigate("/");
+    },
+    onError: (error) => {
+      console.log("상품 등록 실패", error);
+      alert(isEdit ? "상품을 수정하지 못했습니다." : "상품을 등록하지 못했습니다.");
+    },
+  });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const product: ProductType = {
       id: values.id,
@@ -103,11 +118,12 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
       format: values.format || null,
       createdAt: values.createdAt,
     };
-    addProduct(product).then(() => {
-      console.log(product.image);
-      alert(isEdit ? "상품을 수정했습니다." : "상품을 등록했습니다.");
-      navigate("/");
-    });
+    // addProduct(product).then(() => {
+    //   console.log(product.image);
+    //   alert(isEdit ? "상품을 수정했습니다." : "상품을 등록했습니다.");
+    //   navigate("/");
+    // });
+    mutate(product);
   }
 
   const resizeFile = (file: Blob): Promise<string> =>
@@ -162,7 +178,7 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
           <form onSubmit={form.handleSubmit(onSubmit)}>
             {/* 소셜 로그인 - 구글 */}
             <div className="flex mt-10 flex-row justify-between items-end">
-              <div>상품정보</div>
+              <div>상품 정보</div>
               <div className="text-xs text-zinc-600">* 필수입력사항</div>
             </div>
             {/* md:hidden grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3 */}
@@ -232,7 +248,7 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
                 )}
               />
               <div />
-              <FormLabel>상품이미지 *</FormLabel>
+              <FormLabel>상품 이미지 *</FormLabel>
               <FormField
                 control={form.control}
                 name="image"
@@ -392,8 +408,9 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
               <div />
             </div>
             <div className="flex w-full justify-center">
-              <Button type="submit" className="mt-6 w-32">
-                상품등록
+              <Button type="submit" className="mt-6 w-32" disabled={isPending}>
+                {/* {!isPending ? <>상품등록</> : <>상품등록중</>} */}
+                상품 등록
               </Button>
             </div>
           </form>

@@ -2,6 +2,7 @@ import ProductInfo from "@/components/productInfo";
 import { Button } from "@/components/ui/button";
 import { deleteProduct, getProduct } from "@/services/firebase";
 import { ProductType } from "@/types";
+import { useMutation } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -27,6 +28,20 @@ export default function Product() {
     }
   }, []);
 
+  const { mutate, isPending, isError } = useMutation({
+    mutationKey: ["delete product"],
+    mutationFn: async (productId: string) => await deleteProduct(productId),
+    onSuccess: () => {
+      console.log("상품 삭제 성공");
+      alert("상품이 삭제되었습니다.");
+      navigate("/");
+    },
+    onError: (error) => {
+      console.log("상품 삭제 실패", error);
+      alert("상품을 삭제하지 못했습니다.");
+    },
+  });
+
   return (
     <div className="flex flex-col">
       {product ? (
@@ -34,10 +49,9 @@ export default function Product() {
           <ProductInfo product={product} isAdmin={true} />
           <div className="w-full right-0 flex justify-end items-center gap-3 mt-5">
             <Button
-              onClick={async () => {
-                await deleteProduct(product.id);
-                alert("상품이 삭제되었습니다.");
-                navigate("/");
+              onClick={() => {
+                console.log(product.id);
+                mutate(product.id);
               }}
               className="bg-zinc-500 w-28 hover:bg-zinc-600"
             >
