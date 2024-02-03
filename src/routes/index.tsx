@@ -111,7 +111,9 @@ export default function Layout() {
           </div>
           {/* <div className="md:flex-grow h-full px-6"> */}
           <div className="md:flex-grow md:px-0 h-full px-6">
-            <Outlet />
+            <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
+              <Outlet />
+            </ErrorBoundary>
           </div>
         </div>
       </div>
