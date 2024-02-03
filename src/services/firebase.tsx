@@ -158,8 +158,8 @@ export function onUserStateChange(callback: any) {
 
 // 모든 제품 가져오기
 // 정렬 기본값: 최신순
-export async function getProducts(limitParam: number, pageParam: number | null) {
-  const baseQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
+export async function getProducts(orderby: string, limitParam: number, pageParam: number | null) {
+  const baseQuery = query(collection(db, "products"), orderBy(orderby, "desc"));
   let finalQuery = baseQuery;
   if (pageParam) {
     finalQuery = query(baseQuery, startAfter(pageParam), limit(limitParam));
