@@ -3,14 +3,14 @@ import { BasketProductForStorage, BasketProductType } from "@/types";
 import { BasketContext } from "@/context/basketContext";
 
 export type BasketContextProps = {
-  basket: BasketProductType[] | null;
-  setBasket: Dispatch<SetStateAction<BasketProductType[] | null>>;
+  basket: BasketProductType[];
+  setBasket: Dispatch<SetStateAction<BasketProductType[]>>;
 };
 
 function BasketProvider({ children }: { children: ReactNode }) {
-  const [basket, setBasket] = useState<BasketProductType[] | null>(() => {
+  const [basket, setBasket] = useState<BasketProductType[]>(() => {
     const storedBasket = localStorage.getItem("basket");
-    return storedBasket ? JSON.parse(storedBasket) : null;
+    return storedBasket ? JSON.parse(storedBasket) : [];
   });
 
   const contextValue: BasketContextProps = {

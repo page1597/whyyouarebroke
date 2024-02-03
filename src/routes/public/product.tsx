@@ -6,47 +6,62 @@ import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
 import { BasketContext } from "@/context/basketContext";
 import { getProduct } from "@/services/firebase";
-import { ProductType } from "@/types";
+import { BasketProductType, ProductType } from "@/types";
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
 // 구매자가 보는 상품 상세 페이지
 export default function Product() {
-  //   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("id");
-  const [product, setProduct] = useState<ProductType>();
-  console.log(productId);
+  const [product, setProduct] = useState<ProductType | undefined>();
 
-  async function getProductInfo(productId: string) {
-    const result = await getProduct(productId);
-    console.log(result);
-    setProduct(result);
+  if (productId == null || productId == "") {
+    throw Error("해당 상품이 존재하지 않습니다.");
   }
   useEffect(() => {
     window.scrollTo({ top: 0 });
     if (productId) {
       getProductInfo(productId);
     }
-    // if (productId) {
-    //   window.location.reload();
-    // }
   }, [productId]);
+
+  async function getProductInfo(productId: string) {
+    const result = await getProduct(productId);
+    console.log(result);
+    setProduct(result as ProductType);
+  }
 
   const contextValue = useContext(BasketContext);
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
   const { basket, setBasket } = contextValue;
+  // const productQuantity = basket?.find((item) => item.id === product?.id)?.quantity || 1;
+  const [quantity, setQuantity] = useState(1); // quantity (수량)
+  const basketProduct: BasketProductType = {
+    ...(product as ProductType),
+    quantity: quantity, // 장바구니 형태의 product로 변경. (수량 항목 추가)
+  };
 
-  const productQuantity = basket?.find((item) => item.id === product?.id)?.quantity || 1;
-  let basketProduct = { ...product, quantity: productQuantity }; // 장바구니 형태의 product로 변경. (수량 항목 추가)
-  //   const [quantity, setQuantity] = useState<number>(productQuantity);
-  let isProductInBasket = false;
-  if (Array.isArray(basket)) {
-    // basket이 배열인 경우에만
-    isProductInBasket = basket.some((product) => basketProduct.id === product.id);
-  }
-  const [isAdded, setIsAdded] = useState(isProductInBasket);
+  const [isAdded, setIsAdded] = useState(false);
+
+  useEffect(() => {
+    console.log("quantity is changed");
+    // product가 바뀐건 맞는데, 같은 값의 quantity가 바뀌었을때를 어떻게 처리하지
+    const isProductInBasket = basket.some((product) => basketProduct.id === product.id);
+
+    setIsAdded(isProductInBasket);
+  }, [product, quantity]);
+
+  useEffect(() => {
+    console.log("changed");
+    setIsAdded(false);
+  }, [quantity]);
+
+  useEffect(() => {
+    console.log("isAdded", isAdded);
+  }, [isAdded]);
 
   // 장바구니에 추가
   function addProductToBasket() {
@@ -63,7 +78,16 @@ export default function Product() {
 
   return (
     <div className="flex flex-col">
-      {product ? <ProductInfo product={basketProduct} isAdmin={false} /> : <></>}
+      {product ? (
+        <ProductInfo
+          product={basketProduct as ProductType}
+          isAdmin={false}
+          quantity={quantity}
+          setQuantity={setQuantity}
+        />
+      ) : (
+        <></>
+      )}
       <div className="w-full md:right-0 flex justify-center md:justify-end items-center gap-3 mt-5">
         <DrawerRight direction="right">
           {!isAdded ? (
@@ -81,7 +105,7 @@ export default function Product() {
             </DrawerRightTrigger>
           )}
           <DrawerRightContent className="w-[350px]">
-            <DrawerBasket setIsAdded={setIsAdded} />
+            <DrawerBasket setIsAdded={setIsAdded} productId={productId} />
           </DrawerRightContent>
         </DrawerRight>
 
@@ -90,7 +114,7 @@ export default function Product() {
       <hr className="mt-8" />
       {product ? <RecommandProducts category={product.category} productId={product.id} /> : <></>}
       <hr className="mt-10" />
-      {/* <ProductDetail product={product!} />  */}
+      {product ? <ProductDetail product={product} /> : <></>}
     </div>
   );
 }
