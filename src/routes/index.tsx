@@ -26,6 +26,8 @@ import { AuthContext } from "@/context/authContext";
 import { HeaderNavItem } from "@/types";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
+import SearchFilterProducts from "@/components/searchFilterProducts";
+import { SearchXIcon } from "lucide-react";
 
 export const sidebarNav = [
   {
@@ -71,6 +73,7 @@ export default function Layout() {
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
       <div className="w-full flex flex-col h-screen">
         <Header items={headerNav} />
+
         {/* 반응형 구현 */}
         <div className="md:px-12 md:py-8 md:flex md:flex-row md:flex-grow md:h-full">
           <div className="hidden md:inline-block">
@@ -85,6 +88,7 @@ export default function Layout() {
             <Link to={"/"}>
               <img src={logo} width={70} height={70} alt={"logo"} />
             </Link>
+            {/* <div></div> */}
             <DrawerRight direction="right">
               <DrawerRightTrigger name="search">
                 <svg
@@ -103,9 +107,7 @@ export default function Layout() {
                 </svg>
               </DrawerRightTrigger>
               <DrawerRightContent className="w-[300px]">
-                <DrawerRightHeader>
-                  <Input className="bg-zinc-600 text-white h-10" />
-                </DrawerRightHeader>
+                <SearchFilterProducts />
               </DrawerRightContent>
             </DrawerRight>
           </div>

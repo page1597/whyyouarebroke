@@ -27,6 +27,8 @@ import {
   startAfter,
   where,
   endBefore,
+  startAt,
+  endAt,
 } from "firebase/firestore";
 import { deleteObject, getBlob, getDownloadURL, getStorage, list, listAll, ref, uploadBytes } from "firebase/storage";
 
@@ -155,53 +157,113 @@ export function onUserStateChange(callback: any) {
     callback(user);
   });
 }
+export async function getProducts(
+  category: string | null,
+  orderby: string | null,
+  limitParam: number | null,
+  pageParam: number | null,
+  searchValue: string | null
+) {
+  let finalQuery = query(collection(db, "products"));
 
-// 모든 제품 가져오기
-// 정렬 기본값: 최신순
-export async function getProducts(orderby: string, limitParam: number, pageParam: number | null) {
-  const baseQuery = query(collection(db, "products"), orderBy(orderby, "desc"));
-  let finalQuery = baseQuery;
-  if (pageParam) {
-    finalQuery = query(baseQuery, startAfter(pageParam), limit(limitParam));
-  } else {
-    // pageParam이 null인 경우에는 처음 로드할 때
-    finalQuery = query(baseQuery, limit(limitParam));
+  console.log(category, orderby, limitParam, pageParam, searchValue);
+
+  if (category) {
+    finalQuery = query(finalQuery, where("category", "==", category));
   }
+  if (orderby) {
+    finalQuery = query(finalQuery, orderBy(orderby, "desc"));
+  }
+  if (pageParam) {
+    finalQuery = query(finalQuery, startAfter(pageParam));
+  }
+  if (limitParam) {
+    finalQuery = query(finalQuery, limit(limitParam));
+  }
+  if (searchValue) {
+    const searchArray = Array.from(searchValue);
+    finalQuery = query(finalQuery, where("nameArray", "array-contains-any", searchArray));
+  }
+
+  console.log(finalQuery);
 
   const querySnapshot = await getDocs(finalQuery);
   const products: DocumentData[] = [];
 
   querySnapshot.forEach((doc) => {
-    products.push(doc.data());
+    products.push(doc.data() as DocumentData);
   });
 
+  console.log("products:", products);
   return products;
 }
+// 모든 제품 가져오기
+// 정렬 기본값: 최신순
+// export async function getProducts(
+//   orderby: string = "createdAt",
+//   limitParam: number = 12,
+//   pageParam: number | null = null,
+//   searchValue: string = ""
+// ) {
+//   const searchArray = Array.from(searchValue);
 
-export async function getCategoryProducts(
-  category: string,
-  orderby: string,
-  limitParam: number | null,
-  pageParam: string | null
-) {
-  const baseQuery = query(collection(db, "products"), where("category", "==", category), orderBy(orderby, "desc"));
-  let finalQuery = baseQuery;
-  if (pageParam) {
-    const paginatedQuery = query(baseQuery, startAfter(pageParam));
-    finalQuery = limitParam ? query(paginatedQuery, limit(limitParam)) : paginatedQuery;
-  } else {
-    finalQuery = limitParam ? query(baseQuery, limit(limitParam)) : baseQuery;
-  }
+//   const baseQuery = query(collection(db, "products"), orderBy(orderby, "desc"));
 
-  const querySnapshot = await getDocs(finalQuery);
-  const products: DocumentData[] = [];
+//   let finalQuery: any = baseQuery;
 
-  querySnapshot.forEach((doc) => {
-    products.push(doc.data());
-  });
+//   if (pageParam) {
+//     finalQuery = query(finalQuery, startAfter(pageParam), limit(limitParam));
+//   } else {
+//     // pageParam이 null인 경우에는 처음 로드할 때
+//     finalQuery = query(finalQuery, limit(limitParam));
+//   }
 
-  console.log(products);
-  return products;
+//   if (searchValue !== "") {
+//     finalQuery = query(finalQuery, where("nameArray", "array-contains-any", searchArray));
+//   }
+
+//   const querySnapshot = await getDocs(finalQuery);
+//   const products: DocumentData[] = [];
+
+//   querySnapshot.forEach((doc) => {
+//     products.push(doc.data() as DocumentData);
+//   });
+
+//   return products;
+// }
+// export async function getCategoryProducts(
+//   category: string,
+//   orderby: string,
+//   limitParam: number | null,
+//   pageParam: string | null
+// ) {
+//   const baseQuery = query(collection(db, "products"), where("category", "==", category), orderBy(orderby, "desc"));
+//   let finalQuery = baseQuery;
+//   if (pageParam) {
+//     const paginatedQuery = query(baseQuery, startAfter(pageParam));
+//     finalQuery = limitParam ? query(paginatedQuery, limit(limitParam)) : paginatedQuery;
+//   } else {
+//     finalQuery = limitParam ? query(baseQuery, limit(limitParam)) : baseQuery;
+//   }
+
+//   const querySnapshot = await getDocs(finalQuery);
+//   const products: DocumentData[] = [];
+
+//   querySnapshot.forEach((doc) => {
+//     products.push(doc.data());
+//   });
+
+//   console.log(products);
+//   return products;
+// }
+
+export async function getSearchProducts(searchValue: string) {
+  const searchArray = Array.from(searchValue);
+  const q = query(collection(db, "products"), where("nameArray", "array-contains-any", searchArray));
+
+  const querySnapshot = await getDocs(q);
+  const results = querySnapshot.docs.map((doc) => doc.data());
+  return results;
 }
 
 export async function getProduct(productId: string) {
@@ -241,6 +303,7 @@ export async function addProduct(product: ProductType) {
     id: product.id,
     category: product.category,
     name: product.name,
+    nameArray: Array.from(product.name),
     price: product.price,
     stock: product.stock,
     description: product.description,

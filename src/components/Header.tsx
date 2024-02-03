@@ -4,6 +4,8 @@ import { logOut } from "@/services/firebase";
 import { BasketContext } from "@/context/basketContext";
 import { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import SearchFilterProducts from "./searchFilterProducts";
 
 type HeaderNavProps = {
   items: HeaderNavItem[];
@@ -58,7 +60,17 @@ export function Header({ items }: HeaderNavProps) {
               </div>
             ))
           : null}
-        <input className="w-42 rounded-2xl text-sm px-2 py-1 border-none placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" />
+        {/* <Sheet>
+          <SheetTrigger>
+            <input className="w-42 rounded-2xl text-sm px-2 py-1 border-none placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" />
+          </SheetTrigger>
+          <SheetContent side={"top"}>
+            <SheetHeader>
+              <SheetTitle>상품 검색</SheetTitle>
+            </SheetHeader>
+            <SearchFilterProducts />
+          </SheetContent>
+        </Sheet> */}
       </div>
 
       {/* 모바일 헤더(로고까지 포함) */}

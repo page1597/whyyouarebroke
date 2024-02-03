@@ -1,4 +1,4 @@
-import { getCategoryProducts } from "@/services/firebase";
+import { getProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -14,7 +14,7 @@ export default function Products({ category }: { category: string }) {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } = useInfiniteQuery({
     queryKey: ["products", category, orderby],
-    queryFn: ({ pageParam }) => getCategoryProducts(category, orderby, null, pageParam),
+    queryFn: ({ pageParam }) => getProducts(category, orderby, null, pageParam, null),
     initialPageParam: null,
     getNextPageParam: (querySnapshot: DocumentData) => {
       if (querySnapshot.length < 12) {

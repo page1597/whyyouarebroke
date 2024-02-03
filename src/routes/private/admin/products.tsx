@@ -1,9 +1,10 @@
 import { getProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery, QueryClient } from "@tanstack/react-query";
+import _ from "lodash";
 
 export default function Products() {
   // 판매상품 리스트 목록
@@ -12,10 +13,26 @@ export default function Products() {
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
+  const debounceDelay = 1000;
+
+  const debouncedSearch = useCallback(
+    _.debounce((value: string) => {
+      setDebouncedSearchValue(value);
+    }, debounceDelay),
+    []
+  );
+
+  function onSearch(e: ChangeEvent<HTMLInputElement>) {
+    const searchValue = e.target.value;
+    setSearchValue(searchValue);
+    debouncedSearch(searchValue);
+  }
 
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage, refetch } = useInfiniteQuery({
-    queryKey: ["products", orderby],
-    queryFn: ({ pageParam }) => getProducts(orderby, 12, pageParam),
+    queryKey: ["products", orderby, debouncedSearchValue],
+    queryFn: ({ pageParam }) => getProducts(null, orderby, 12, pageParam, debouncedSearchValue),
     initialPageParam: null,
     getNextPageParam: (querySnapshot) => {
       if (querySnapshot.length < 12) {
@@ -24,6 +41,12 @@ export default function Products() {
       return querySnapshot[querySnapshot.length - 1].createdAt;
     },
   });
+  useEffect(() => {
+    // 컴포넌트가 언마운트될 때 debounce 함수를 클리어
+    return () => {
+      debouncedSearch.cancel(); // debounce 함수 클리어
+    };
+  }, []);
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -53,10 +76,10 @@ export default function Products() {
 
   return (
     <>
-      {" "}
       <div className="flex flex-row justify-between items-end">
         <h3 className="text-xl">전체 상품</h3>
         <div className="flex gap-3">
+          <input className="hidden md:flex" placeholder="상품을 검색하세요" onChange={onSearch} />
           <button
             name="createdAt"
             value={orderby}

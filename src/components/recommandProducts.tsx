@@ -1,4 +1,4 @@
-import { getCategoryProducts } from "@/services/firebase";
+import { getProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
@@ -9,7 +9,7 @@ export default function RecommandProducts({ category, productId }: { category: s
 
   async function getRecommands() {
     // 추천상품 4개만 보여짐
-    const result = await getCategoryProducts(category, "createdAt", 4, null);
+    const result = await getProducts(category, "createdAt", 4, null, null);
     const recommandList = result.filter((value: DocumentData) => value.id !== productId);
     const filledRecommands = Array.from(
       { length: 4 - recommandList.length },
