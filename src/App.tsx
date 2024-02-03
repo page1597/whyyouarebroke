@@ -7,7 +7,7 @@ import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 ("use client");
-import { ErrorBoundary } from "react-error-boundary";
+
 export default function App() {
   const userInfo = useContext(AuthContext);
   const isAdmin = localStorage.getItem("user type") == "관리자";
