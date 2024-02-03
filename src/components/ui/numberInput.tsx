@@ -1,16 +1,22 @@
 import { BasketContext } from "@/context/basketContext";
 import { BasketProductType } from "@/types";
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 
-function NumberInput({ product }: { product?: BasketProductType }) {
+function NumberInput({
+  product,
+  quantity,
+  setQuantity,
+}: {
+  product?: BasketProductType;
+  quantity: number;
+  setQuantity: Dispatch<SetStateAction<number>>;
+}) {
   const contextValue = useContext(BasketContext);
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
 
-  const { basket, setBasket } = contextValue;
-  const productQuantity = basket?.find((item) => item.id === product?.id)?.quantity || 1;
-  const [value, setValue] = useState(productQuantity);
+  const { setBasket } = contextValue;
 
   useEffect(() => {
     setBasket((prevBasket) => {
@@ -19,28 +25,28 @@ function NumberInput({ product }: { product?: BasketProductType }) {
       }
       // 이전 상태가 배열이라면, 새로운 배열을 생성하여 quantity 속성을 업데이트
       return prevBasket.map((item: BasketProductType) =>
-        item.id == product?.id ? { ...item, quantity: value } : { ...item }
+        item.id == product?.id ? { ...item, quantity: quantity } : { ...item }
       );
     });
-  }, [value]);
+  }, [quantity, setBasket]);
 
   function onPlus() {
-    setValue(value + 1);
+    setQuantity(quantity + 1);
   }
 
   function onMinus() {
-    setValue(value > 1 ? value - 1 : 1);
+    setQuantity(quantity > 1 ? quantity - 1 : 1);
   }
   return (
     <div className="flex items-center">
-      <div>{product!.price * value}원</div>
+      <div>{product!.price * quantity}원</div>
       <button type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
         -
       </button>
       <input
         type="text"
-        value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
+        value={quantity}
+        onChange={(e) => setQuantity(Number(e.target.value))}
         className="text-sm w-12 h-7 border border-zinc-400 rounded text-center outline-none"
       />
       <button type="button" onClick={onPlus} className="px-2 rounded-r cursor-pointer">
