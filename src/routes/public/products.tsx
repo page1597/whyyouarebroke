@@ -1,4 +1,4 @@
-import { getCategoryProducts } from "@/services/firebase";
+import { getProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,9 +15,9 @@ export default function Products() {
   const [productsList, setProductsList] = useState<categoryProductType[]>();
   const orderby = "createdAt"; // 정렬 최신순
 
-  async function getProducts() {
+  async function getAllProducts() {
     const categories = ["rock/pop/etc", "jazz", "ost", "k-pop", "j-pop/city pop/asia", "merchandise"];
-    const productPromises = categories.map((category) => getCategoryProducts(category, orderby, null, null));
+    const productPromises = categories.map((category) => getProducts(category, orderby, null, null, null));
     const products = await Promise.all(productPromises);
 
     setProductsList(
@@ -29,7 +29,7 @@ export default function Products() {
   }
 
   useEffect(() => {
-    getProducts();
+    getAllProducts();
     setIsLoaded(true);
   }, []);
 

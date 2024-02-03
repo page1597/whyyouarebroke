@@ -1,7 +1,6 @@
 import { BasketContext } from "@/context/basketContext";
 import { BasketProductType } from "@/types";
 import { Dispatch, SetStateAction, useContext } from "react";
-import NumberInput from "./ui/numberInput";
 
 export default function DrawerBasket({
   setIsAdded,
