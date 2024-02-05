@@ -1,6 +1,6 @@
-import { BasketProductType, ProductType } from "@/types";
+import { ProductType } from "@/types";
 import NumberInput from "./ui/numberInput";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { BasketContext } from "@/context/basketContext";
 
 export default function ProductInfo({
@@ -18,7 +18,6 @@ export default function ProductInfo({
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
-  // const { basket, setBasket } = contextValue;
 
   return (
     <div className="flex justify-center flex-col items-center md:items-start">
@@ -71,7 +70,6 @@ export default function ProductInfo({
           {!isAdmin ? (
             <div className="flex justify-between bg-zinc-100 w-full p-5 mt-5 text-lg font-normal text-zinc-700">
               [{product.format}] {product.name}
-              {/* <div className="flex"> */}
               <NumberInput
                 product={"quantity" in product ? product : undefined}
                 quantity={quantity}

@@ -1,4 +1,4 @@
-import Products from "@/components/products";
+import Products from "@/components/productList";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 

@@ -6,10 +6,12 @@ import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
 import _ from "lodash";
-import { Slider } from "./ui/slider";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "./ui/button";
+import { PopoverClose } from "@radix-ui/react-popover";
+import { X } from "lucide-react";
 
-export default function Products({ category }: { category: string }) {
+export default function ProductList({ category }: { category?: string }) {
   const navigate = useNavigate();
   const [orderby, setOrderby] = useState<string>("createdAt");
 
@@ -18,10 +20,11 @@ export default function Products({ category }: { category: string }) {
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [priceRange, setPriceRange] = useState({
+    minPrice: 0,
+    maxPrice: 500000,
+  });
   const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
-  const [debouncedMinPrice, setDebouncedMinPrice] = useState<number>(0);
-  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState<number>(500000);
 
   const debounceDelay = 1000;
 
@@ -31,40 +34,23 @@ export default function Products({ category }: { category: string }) {
     }, debounceDelay),
     []
   );
-  const debouncedMinSearch = useCallback(
-    _.debounce((value: number) => {
-      setDebouncedMinPrice(value);
-    }, debounceDelay),
-    []
-  );
-  const debouncedMaxSearch = useCallback(
-    _.debounce((value: number) => {
-      setDebouncedMaxPrice(value);
-    }, debounceDelay),
-    []
-  );
 
   function onSearch(e: ChangeEvent<HTMLInputElement>) {
-    console.log("on search 실행");
     const searchValue = e.target.value;
-    setSearchValue(searchValue);
     debouncedSearch(searchValue);
   }
 
-  // function onSearchWithMinPrice(e: ChangeEvent<HTMLInputElement>) {
-  //   const value = e.target.value;
-  //   setMinPrice(parseInt(value));
-  //   debouncedMinSearch(parseInt(value));
-  // }
-  // function onSearchWithMaxPrice(e: ChangeEvent<HTMLInputElement>) {
-  //   const value = e.target.value;
-  //   setMaxPrice(parseInt(value));
-  //   debouncedMaxSearch(parseInt(value));
-  // }
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } = useInfiniteQuery({
-    queryKey: ["products", category, orderby, debouncedSearchValue],
-    queryFn: ({ pageParam }) => getProducts(category, orderby, null, pageParam, debouncedSearchValue),
+    queryKey: ["products", category, orderby, JSON.stringify(priceRange), debouncedSearchValue],
+    queryFn: ({ pageParam }) =>
+      getProducts(
+        category ? category : null,
+        orderby,
+        null,
+        pageParam,
+        debouncedSearchValue,
+        orderby !== "createdAt" ? priceRange : null
+      ),
     initialPageParam: null,
     getNextPageParam: (querySnapshot: DocumentData) => {
       if (querySnapshot.length < 12) {
@@ -101,28 +87,24 @@ export default function Products({ category }: { category: string }) {
     }
   }, [inView, orderby]);
 
-  const changeOrderby = (order: string) => {
+  function changeOrderby(order: string) {
     setOrderby(order);
     refetch();
-  };
+  }
+
+  function onSearchByPrice() {
+    setPriceRange({
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+    });
+    refetch();
+  }
 
   return (
     <>
       <div className="flex flex-row justify-between items-end">
-        <h3 className="text-2xl text-zinc-900">{category.toUpperCase()}</h3>
-        <div className="flex gap-3">
-          {/* <Slider
-            className="w-52"
-            defaultValue={[10000, 500000]}
-            max={500000}
-            step={1}
-            onValueChange={handleSliderChange}
-          /> */}
-          {/* <Input value={minPrice} type="number" className="w-24" onChange={onSearchWithMinPrice} />
-          원 ~
-          <Input value={maxPrice} className="w-24" type="number" onChange={onSearchWithMaxPrice} />
-          원 */}
-          <Input className="hidden md:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
+        <h3 className="text-2xl text-zinc-900">{category ? category.toUpperCase() : "전체 상품"}</h3>
+        <div className="flex gap-3 items-center">
           <button
             name="createdAt"
             value={orderby}
@@ -131,14 +113,46 @@ export default function Products({ category }: { category: string }) {
           >
             최신순
           </button>
-          <button
-            name="price"
-            value={orderby}
-            onClick={() => changeOrderby("price")}
-            className={`text-nowrap bg-transparent text-zinc-600 hover:bg-transparent text-sm ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
-          >
-            가격순
-          </button>
+          <Popover>
+            <PopoverTrigger
+              className="p-0 m-0 h-5 flex"
+              name="price"
+              value={orderby}
+              onClick={() => changeOrderby("price")}
+            >
+              <button
+                className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm text-nowrap ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
+              >
+                가격순
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="flex flex-col gap-3 w-60 text-sm">
+              <div className="flex justify-between">
+                <div>가격 범위 설정</div>
+                <PopoverClose>
+                  <X />
+                </PopoverClose>
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <Input
+                  className="w-20"
+                  value={String(minPrice)}
+                  onChange={(e) => setMinPrice(parseInt(e.target.value))}
+                />
+                원 ~
+                <Input
+                  className="w-20"
+                  value={String(maxPrice)}
+                  onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                />
+                원
+              </div>
+              <Button onClick={onSearchByPrice} className="bg-zinc-800 border">
+                적용하기
+              </Button>
+            </PopoverContent>
+          </Popover>
+          <Input className="hidden md:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
         </div>
       </div>
 
@@ -169,7 +183,9 @@ export default function Products({ category }: { category: string }) {
                           <div className="w-60 h-60 bg-zinc-100" />
                         )}
                         <div>
-                          <div className="text-sm mt-2">{product["name"]}</div>
+                          <div className="text-sm mt-2 h-5 overflow-hidden text-ellipsis">{product["name"]}</div>
+                          <div className="text-xs font-bold text-zinc-800">{product["artist"]}</div>
+
                           <div className="text-sm font-bold text-zinc-500 mt-1">{product["price"]}원</div>
                         </div>
                       </div>

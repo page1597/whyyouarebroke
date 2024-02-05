@@ -17,7 +17,7 @@ export default function Products() {
 
   async function getAllProducts() {
     const categories = ["rock/pop/etc", "hip hop/r&b", "jazz", "ost", "k-pop", "j-pop/city pop/asia", "merchandise"];
-    const productPromises = categories.map((category) => getProducts(category, orderby, null, null, null));
+    const productPromises = categories.map((category) => getProducts(category, orderby, null, null, null, null));
     const products = await Promise.all(productPromises);
 
     setProductsList(
@@ -84,7 +84,7 @@ export default function Products() {
                           )}
                           <div className="flex flex-col mt-3">
                             <div className="flex gap-2">
-                              <div>[{product.type}]</div>
+                              <div>[{product.format}]</div>
                               <div className="text-base">{product.name}</div>
                             </div>
                             <div className="mt-1 font-bold text-zinc-500">{product.price}원</div>
