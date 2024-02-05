@@ -157,43 +157,90 @@ export function onUserStateChange(callback: any) {
     callback(user);
   });
 }
+
+// 추천 상품 목록 가져오는 함수
+export async function getRandomProducts(productId: string, category: string, limitParam: number) {
+  const collectionRef = collection(db, "products");
+
+  // 같은 카테고리에 속하는 문서들을 필터링하여 가져옵니다.
+  const querySnapshot = await getDocs(
+    query(collectionRef, where("category", "==", category), where("id", "!=", productId))
+  );
+
+  // 가져온 문서들의 ID 목록을 생성합니다.
+  const docIds = querySnapshot.docs.map((doc) => doc.id);
+  let randomDocuments: DocumentData[] = [];
+
+  if (docIds.length <= 4) {
+    const q = query(collectionRef, where("id", "in", docIds));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      randomDocuments.push(doc.data());
+    });
+  } else {
+    // 랜덤하게 4개의 문서를 선택
+    while (true) {
+      if (randomDocuments.length === limitParam) break;
+      // 랜덤한 인덱스를 생성합니다.
+      const randomIndex = Math.floor(Math.random() * docIds.length);
+
+      // 해당 인덱스에 해당하는 문서를 가져옵니다.
+      const docRef = doc(collectionRef, docIds[randomIndex]);
+      const docSnapshot = await getDoc(docRef);
+
+      // 문서가 존재하면 데이터를 추출합니다.
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        const isIn = randomDocuments.some((document) => document.id === data.id);
+
+        if (!isIn) {
+          randomDocuments.push(data);
+        }
+      }
+    }
+  }
+  return randomDocuments;
+}
 export async function getProducts(
   category: string | null,
   orderby: string | null,
   limitParam: number | null,
   pageParam: number | null,
-  searchValue: string | null
-  // minPrice: number | null,
-  // maxPrice: number | null
+  searchValue: string | null,
+  priceRange: { minPrice: number; maxPrice: number } | null
 ) {
   let finalQuery = query(collection(db, "products"));
 
-  console.log(category, orderby, limitParam, pageParam, searchValue);
+  console.log(category, orderby, limitParam, pageParam, searchValue, priceRange);
 
   if (category) {
     finalQuery = query(finalQuery, where("category", "==", category));
   }
+
+  if (limitParam) {
+    finalQuery = query(finalQuery, limit(limitParam));
+  }
+  if (searchValue && searchValue?.length > 0) {
+    const searchArray = searchValue.toLocaleLowerCase().split(" ");
+    finalQuery = query(finalQuery, where("searchArray", "array-contains-any", searchArray));
+  }
+
+  if (priceRange) {
+    finalQuery = query(
+      finalQuery,
+      where("price", ">=", priceRange.minPrice),
+      where("price", "<=", priceRange.maxPrice)
+    );
+  }
+
   if (orderby) {
+    // createdAt
     finalQuery = query(finalQuery, orderBy(orderby, "desc"));
   }
   if (pageParam) {
     finalQuery = query(finalQuery, startAfter(pageParam));
   }
-  if (limitParam) {
-    finalQuery = query(finalQuery, limit(limitParam));
-  }
-  if (searchValue) {
-    const searchArray = searchValue.toLocaleLowerCase().split(" ");
-    finalQuery = query(finalQuery, where("searchArray", "array-contains-any", searchArray));
-  }
-  // if (minPrice) {
-  //   finalQuery = query(finalQuery, where("price", ">=", minPrice));
-  // }
-  // if (maxPrice) {
-  //   finalQuery = query(finalQuery, where("price", "<=", maxPrice));
-  // }
-
-  // console.log(finalQuery);
 
   const querySnapshot = await getDocs(finalQuery);
   const products: DocumentData[] = [];
@@ -202,7 +249,6 @@ export async function getProducts(
     products.push(doc.data() as DocumentData);
   });
 
-  console.log("products:", products);
   return products;
 }
 // 모든 제품 가져오기

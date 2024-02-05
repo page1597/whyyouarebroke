@@ -1,4 +1,4 @@
-import Products from "@/components/products";
+import Products from "@/components/productList";
 
 export default function HipHopRandB() {
   return <Products category="hip hop/r&b" />;

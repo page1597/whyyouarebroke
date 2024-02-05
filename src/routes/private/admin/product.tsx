@@ -4,13 +4,11 @@ import { Button } from "@/components/ui/button";
 import { deleteProduct, getProduct } from "@/services/firebase";
 import { ProductType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
-import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Product() {
   const navigate = useNavigate();
-  // const { state }: DocumentData = useLocation();
 
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("id");
@@ -29,7 +27,7 @@ export default function Product() {
     }
   }, []);
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["delete product"],
     mutationFn: async (productId: string) => await deleteProduct(productId),
     onSuccess: () => {

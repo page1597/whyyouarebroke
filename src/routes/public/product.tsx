@@ -16,6 +16,10 @@ export default function Product() {
   const productId = searchParams.get("id");
   const [product, setProduct] = useState<ProductType | undefined>();
 
+  useEffect(() => {
+    console.log("product:", product);
+  }, [product]);
+
   if (productId == null || productId == "") {
     throw Error("해당 상품이 존재하지 않습니다.");
   }

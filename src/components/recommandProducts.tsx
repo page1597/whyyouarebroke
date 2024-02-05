@@ -1,4 +1,4 @@
-import { getProducts } from "@/services/firebase";
+import { getRandomProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
@@ -6,27 +6,32 @@ import { useNavigate } from "react-router-dom";
 
 export default function RecommandProducts({ category, productId }: { category: string; productId: string }) {
   const [recommands, setRecommands] = useState<DocumentData[]>(new Array(4));
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // 추천상품 4개만 보여짐
   async function getRecommands() {
-    // 추천상품 4개만 보여짐
-    const result = await getProducts(category, "createdAt", 4, null, null);
-    const recommandList = result.filter((value: DocumentData) => value.id !== productId);
-    const filledRecommands = Array.from(
-      { length: 4 - recommandList.length },
-      () => undefined
-    ) as unknown as DocumentData[];
-    setRecommands([...recommandList, ...filledRecommands]);
+    try {
+      setIsLoading(true);
+      const result = await getRandomProducts(productId, category, 4);
+      console.log(result);
+      setRecommands(result);
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
   useEffect(() => {
+    console.log("RecommandProducts useEffect");
     getRecommands();
   }, []);
+
   const navigate = useNavigate();
 
   return (
     <div>
       <div className="text-zinc-700 ml-8 mt-6">추천 상품</div>
       <div className="flex flex-row justify-center mt-10">
-        {recommands[0] != undefined ? (
+        {!isLoading && recommands[0] != undefined ? (
           <Carousel opts={{ align: "start" }} className=" w-11/12">
             <CarouselContent className="-ml-2">
               {recommands.map((product: DocumentData) => (
@@ -49,7 +54,7 @@ export default function RecommandProducts({ category, productId }: { category: s
                         />
                       </div>
                     ) : (
-                      <div className="w-60 h-60" />
+                      <div className="w-60 h-60 bg-slate-300" />
                     )}
                     {/* <div className="text-sm">{product["name"]}</div>
                     <div className="text-sm font-bold text-zinc-500">{product["price"]}원</div> */}
