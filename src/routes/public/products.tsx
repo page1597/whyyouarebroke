@@ -16,7 +16,7 @@ export default function Products() {
   const orderby = "createdAt"; // 정렬 최신순
 
   async function getAllProducts() {
-    const categories = ["rock/pop/etc", "jazz", "ost", "k-pop", "j-pop/city pop/asia", "merchandise"];
+    const categories = ["rock/pop/etc", "hip hop/r&b", "jazz", "ost", "k-pop", "j-pop/city pop/asia", "merchandise"];
     const productPromises = categories.map((category) => getProducts(category, orderby, null, null, null));
     const products = await Promise.all(productPromises);
 

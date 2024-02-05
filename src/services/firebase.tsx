@@ -163,6 +163,8 @@ export async function getProducts(
   limitParam: number | null,
   pageParam: number | null,
   searchValue: string | null
+  // minPrice: number | null,
+  // maxPrice: number | null
 ) {
   let finalQuery = query(collection(db, "products"));
 
@@ -181,11 +183,17 @@ export async function getProducts(
     finalQuery = query(finalQuery, limit(limitParam));
   }
   if (searchValue) {
-    const searchArray = Array.from(searchValue);
-    finalQuery = query(finalQuery, where("nameArray", "array-contains-any", searchArray));
+    const searchArray = searchValue.toLocaleLowerCase().split(" ");
+    finalQuery = query(finalQuery, where("searchArray", "array-contains-any", searchArray));
   }
+  // if (minPrice) {
+  //   finalQuery = query(finalQuery, where("price", ">=", minPrice));
+  // }
+  // if (maxPrice) {
+  //   finalQuery = query(finalQuery, where("price", "<=", maxPrice));
+  // }
 
-  console.log(finalQuery);
+  // console.log(finalQuery);
 
   const querySnapshot = await getDocs(finalQuery);
   const products: DocumentData[] = [];
@@ -259,7 +267,7 @@ export async function getProducts(
 
 export async function getSearchProducts(searchValue: string) {
   const searchArray = Array.from(searchValue);
-  const q = query(collection(db, "products"), where("nameArray", "array-contains-any", searchArray));
+  const q = query(collection(db, "products"), where("searchArray", "array-contains-any", searchArray));
 
   const querySnapshot = await getDocs(q);
   const results = querySnapshot.docs.map((doc) => doc.data());
@@ -298,12 +306,20 @@ export async function addProduct(product: ProductType) {
   const storage = getStorage();
   const productRef = doc(db, "products", product.id);
 
+  // const searchArray = [...Array.from(product.name), ...Array.from(product.artist)];
+  const subStringLength = 3; // 나누고자 하는 서브스트링의 길이
+
+  // const searchArray = [];
+  // for (let i = 0; i < product.name.length; i += subStringLength) {
+  //   const subString = product.name.substring(i, i + subStringLength);
+  //   searchArray.push(subString);
+  // }
   // try {
   await setDoc(productRef, {
     id: product.id,
     category: product.category,
     name: product.name,
-    nameArray: Array.from(product.name),
+    searchArray: product.name.toLocaleLowerCase().split(" "),
     price: product.price,
     stock: product.stock,
     description: product.description,

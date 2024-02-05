@@ -92,7 +92,7 @@ export type ProductType = {
   stock: number;
   image: any;
   description: string;
-  artist: string?;
+  artist: string;
   label: string?;
   released: string?;
   format: string?;

@@ -49,9 +49,10 @@ export default function Product() {
   useEffect(() => {
     console.log("quantity is changed");
     // product가 바뀐건 맞는데, 같은 값의 quantity가 바뀌었을때를 어떻게 처리하지
-    const isProductInBasket = basket.some((product) => basketProduct.id === product.id);
-
-    setIsAdded(isProductInBasket);
+    if (basket) {
+      const isProductInBasket = basket.some((product) => basketProduct.id === product.id);
+      setIsAdded(isProductInBasket);
+    }
   }, [product, quantity]);
 
   useEffect(() => {

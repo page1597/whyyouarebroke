@@ -11,8 +11,8 @@ export default function ProductInfo({
 }: {
   product: ProductType; // 구매자페이지 | 판매자페이지(Admin)
   isAdmin: boolean;
-  quantity: number;
-  setQuantity: Dispatch<SetStateAction<number>>;
+  quantity?: number;
+  setQuantity?: Dispatch<SetStateAction<number>>;
 }) {
   const contextValue = useContext(BasketContext);
   if (!contextValue) {
@@ -22,8 +22,11 @@ export default function ProductInfo({
 
   return (
     <div className="flex justify-center flex-col items-center md:items-start">
-      <div className="text-xl text-zinc-800 mt-6">
-        [{product.format}] {product.name}
+      <div className="flex justify-between w-full items-center mt-6 text-zinc-800">
+        <div className="text-xl">
+          [{product.format}] {product.name}
+        </div>
+        <div className="text-sm text-zinc-600">카테고리: {product.category}</div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-502 w-full mt-6">
         <div className="flex justify-center md:justify-start ">
@@ -52,7 +55,7 @@ export default function ProductInfo({
           <hr />
           <div className="grid md:grid-cols-202 mt-3 ml-4 gap-1">
             <h4 className="text-zinc-600 text-base font-bold">판매가</h4>
-            <h4 className="text-zinc-600 text-base font-bold">{product.price}</h4>
+            <h4 className="text-zinc-600 text-base font-bold">{product.price}원</h4>
             <h5 className="text-zinc-900 text-base mt-2">재고</h5>
             <h5 className="text-zinc-500 text-base mt-2">{product.stock}</h5>
             <h5 className="text-zinc-900 text-base">Artist</h5>
@@ -69,7 +72,11 @@ export default function ProductInfo({
             <div className="flex justify-between bg-zinc-100 w-full p-5 mt-5 text-lg font-normal text-zinc-700">
               [{product.format}] {product.name}
               {/* <div className="flex"> */}
-              <NumberInput product={"quantity" in product ? product : undefined} quantity={quantity} setQuantity={setQuantity} />
+              <NumberInput
+                product={"quantity" in product ? product : undefined}
+                quantity={quantity}
+                setQuantity={setQuantity}
+              />
               {/* </div> */}
             </div>
           ) : (

@@ -1,20 +1,70 @@
 import { getProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { Input } from "./ui/input";
+import _ from "lodash";
+import { Slider } from "./ui/slider";
+import { Button } from "./ui/button";
 
 export default function Products({ category }: { category: string }) {
   const navigate = useNavigate();
   const [orderby, setOrderby] = useState<string>("createdAt");
+
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(500000);
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState<number>(0);
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState<number>(500000);
+
+  const debounceDelay = 1000;
+
+  const debouncedSearch = useCallback(
+    _.debounce((value: string) => {
+      setDebouncedSearchValue(value);
+    }, debounceDelay),
+    []
+  );
+  const debouncedMinSearch = useCallback(
+    _.debounce((value: number) => {
+      setDebouncedMinPrice(value);
+    }, debounceDelay),
+    []
+  );
+  const debouncedMaxSearch = useCallback(
+    _.debounce((value: number) => {
+      setDebouncedMaxPrice(value);
+    }, debounceDelay),
+    []
+  );
+
+  function onSearch(e: ChangeEvent<HTMLInputElement>) {
+    console.log("on search 실행");
+    const searchValue = e.target.value;
+    setSearchValue(searchValue);
+    debouncedSearch(searchValue);
+  }
+
+  // function onSearchWithMinPrice(e: ChangeEvent<HTMLInputElement>) {
+  //   const value = e.target.value;
+  //   setMinPrice(parseInt(value));
+  //   debouncedMinSearch(parseInt(value));
+  // }
+  // function onSearchWithMaxPrice(e: ChangeEvent<HTMLInputElement>) {
+  //   const value = e.target.value;
+  //   setMaxPrice(parseInt(value));
+  //   debouncedMaxSearch(parseInt(value));
+  // }
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } = useInfiniteQuery({
-    queryKey: ["products", category, orderby],
-    queryFn: ({ pageParam }) => getProducts(category, orderby, null, pageParam, null),
+    queryKey: ["products", category, orderby, debouncedSearchValue],
+    queryFn: ({ pageParam }) => getProducts(category, orderby, null, pageParam, debouncedSearchValue),
     initialPageParam: null,
     getNextPageParam: (querySnapshot: DocumentData) => {
       if (querySnapshot.length < 12) {
@@ -24,6 +74,12 @@ export default function Products({ category }: { category: string }) {
       }
     },
   });
+  useEffect(() => {
+    // 컴포넌트가 언마운트될 때 debounce 함수를 클리어
+    return () => {
+      debouncedSearch.cancel(); // debounce 함수 클리어
+    };
+  }, []);
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -55,11 +111,23 @@ export default function Products({ category }: { category: string }) {
       <div className="flex flex-row justify-between items-end">
         <h3 className="text-2xl text-zinc-900">{category.toUpperCase()}</h3>
         <div className="flex gap-3">
+          {/* <Slider
+            className="w-52"
+            defaultValue={[10000, 500000]}
+            max={500000}
+            step={1}
+            onValueChange={handleSliderChange}
+          /> */}
+          {/* <Input value={minPrice} type="number" className="w-24" onChange={onSearchWithMinPrice} />
+          원 ~
+          <Input value={maxPrice} className="w-24" type="number" onChange={onSearchWithMaxPrice} />
+          원 */}
+          <Input className="hidden md:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
           <button
             name="createdAt"
             value={orderby}
             onClick={() => changeOrderby("createdAt")}
-            className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm ${orderby === "createdAt" ? "font-bold" : "font-medium"}`}
+            className={`text-nowrap bg-transparent text-zinc-600 hover:bg-transparent text-sm ${orderby === "createdAt" ? "font-bold" : "font-medium"}`}
           >
             최신순
           </button>
@@ -67,7 +135,7 @@ export default function Products({ category }: { category: string }) {
             name="price"
             value={orderby}
             onClick={() => changeOrderby("price")}
-            className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
+            className={`text-nowrap bg-transparent text-zinc-600 hover:bg-transparent text-sm ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
           >
             가격순
           </button>

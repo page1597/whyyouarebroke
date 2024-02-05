@@ -1,10 +1,11 @@
 import { getProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, SetStateAction, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery, QueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import { Input } from "@/components/ui/input";
 
 export default function Products() {
   // 판매상품 리스트 목록
@@ -79,12 +80,13 @@ export default function Products() {
       <div className="flex flex-row justify-between items-end">
         <h3 className="text-xl">전체 상품</h3>
         <div className="flex gap-3">
-          <input className="hidden md:flex" placeholder="상품을 검색하세요" onChange={onSearch} />
+          {/* 카테고리 선택: <ComboboxDemo categories={sidebarNav} category={category} setCategory={setCategory} /> */}
+          <Input className="hidden md:flex" placeholder="상품을 검색하세요" onChange={onSearch} />
           <button
             name="createdAt"
             value={orderby}
             onClick={() => changeOrderby("createdAt")}
-            className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm ${orderby === "createdAt" ? "font-bold" : "font-medium"}`}
+            className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm text-nowrap ${orderby === "createdAt" ? "font-bold" : "font-medium"}`}
           >
             최신순
           </button>
@@ -92,7 +94,7 @@ export default function Products() {
             name="price"
             value={orderby}
             onClick={() => changeOrderby("price")}
-            className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
+            className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm text-nowrap ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
           >
             가격순
           </button>
@@ -145,7 +147,9 @@ export default function Products() {
                         <div className="w-60 h-60 bg-zinc-100" />
                       )}
                       <div className="flex flex-col">
-                        <div className="text-sm mt-2">{product["name"]}</div>
+                        <div className="text-sm mt-2">
+                          [{product["format"]}] {product["name"]}
+                        </div>
                         <div className="text-sm mt-1 font-bold text-zinc-500">{product["price"]}원</div>
                       </div>
                     </div>

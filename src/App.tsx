@@ -17,6 +17,7 @@ export default function App() {
   const Layout = lazy(() => import("./routes/index"));
   const Basket = lazy(() => import("./routes/public/basket"));
   const RockPopEtc = lazy(() => import("./routes/public/category/rockpopetc"));
+  const HipHopRandB = lazy(() => import("./routes/public/category/hiphopR&B"));
   const Jazz = lazy(() => import("./routes/public/category/jazz"));
   const OST = lazy(() => import("./routes/public/category/ost"));
   const KPop = lazy(() => import("./routes/public/category/kpop"));
@@ -39,6 +40,10 @@ export default function App() {
         {
           path: "/category/rock-pop-etc",
           element: <RockPopEtc />,
+        },
+        {
+          path: "/category/hiphop-r&b",
+          element: <HipHopRandB />,
         },
 
         {

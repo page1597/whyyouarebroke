@@ -5,7 +5,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { useNavigate } from "react-router-dom";
 
 export default function RecommandProducts({ category, productId }: { category: string; productId: string }) {
-  const [recommands, setRecommands] = useState<DocumentData[] | undefined>(new Array(4));
+  const [recommands, setRecommands] = useState<DocumentData[]>(new Array(4));
 
   async function getRecommands() {
     // 추천상품 4개만 보여짐
@@ -26,7 +26,7 @@ export default function RecommandProducts({ category, productId }: { category: s
     <div>
       <div className="text-zinc-700 ml-8 mt-6">추천 상품</div>
       <div className="flex flex-row justify-center mt-10">
-        {recommands ? (
+        {recommands[0] != undefined ? (
           <Carousel opts={{ align: "start" }} className=" w-11/12">
             <CarouselContent className="-ml-2">
               {recommands.map((product: DocumentData) => (

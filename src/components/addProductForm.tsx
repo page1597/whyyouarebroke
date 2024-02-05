@@ -112,7 +112,7 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
       image: previewImages,
       stock: values.stock,
       description: values.description,
-      artist: values.artist || null,
+      artist: values.artist,
       label: values.label || null,
       released: values.released || null,
       format: values.format || null,
