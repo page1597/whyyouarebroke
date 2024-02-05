@@ -35,6 +35,10 @@ export const sidebarNav = [
     href: "/category/rock-pop-etc",
   },
   {
+    title: "HIP HOP/R&B",
+    href: "/category/hiphop-r&b",
+  },
+  {
     title: "JAZZ",
     href: "/category/jazz",
   },

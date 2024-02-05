@@ -1,3 +1,4 @@
+import ProductDetail from "@/components/productDetail";
 import ProductInfo from "@/components/productInfo";
 import { Button } from "@/components/ui/button";
 import { deleteProduct, getProduct } from "@/services/firebase";
@@ -64,6 +65,7 @@ export default function Product() {
               상품 정보 수정
             </Button>
           </div>
+          <ProductDetail product={product} />
         </>
       ) : (
         <>상품이 존재하지 않습니다.</>
