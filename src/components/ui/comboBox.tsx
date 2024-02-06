@@ -29,7 +29,7 @@ export function ComboboxDemo({
           role="combobox"
           size={"sm"}
           aria-expanded={open}
-          className="w-[200px]  justify-between border-zinc-400 rounded"
+          className="w-[200px] justify-between border-zinc-400 rounded"
         >
           {category ? category : "카테고리"}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

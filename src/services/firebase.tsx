@@ -221,7 +221,7 @@ export async function getProducts(
   if (limitParam) {
     finalQuery = query(finalQuery, limit(limitParam));
   }
-  if (searchValue && searchValue?.length > 0) {
+  if (searchValue) {
     const searchArray = searchValue.toLocaleLowerCase().split(" ");
     finalQuery = query(finalQuery, where("searchArray", "array-contains-any", searchArray));
   }
@@ -233,7 +233,6 @@ export async function getProducts(
       where("price", "<=", priceRange.maxPrice)
     );
   }
-
   if (orderby) {
     // createdAt
     finalQuery = query(finalQuery, orderBy(orderby, "desc"));
@@ -352,20 +351,16 @@ export async function addProduct(product: ProductType) {
   const storage = getStorage();
   const productRef = doc(db, "products", product.id);
 
-  // const searchArray = [...Array.from(product.name), ...Array.from(product.artist)];
-  const subStringLength = 3; // 나누고자 하는 서브스트링의 길이
+  const searchArray = [
+    ...product.name.toLocaleLowerCase().split(" "),
+    ...product.artist.toLocaleLowerCase().split(" "),
+  ];
 
-  // const searchArray = [];
-  // for (let i = 0; i < product.name.length; i += subStringLength) {
-  //   const subString = product.name.substring(i, i + subStringLength);
-  //   searchArray.push(subString);
-  // }
-  // try {
   await setDoc(productRef, {
     id: product.id,
     category: product.category,
     name: product.name,
-    searchArray: product.name.toLocaleLowerCase().split(" "),
+    searchArray: searchArray,
     price: product.price,
     stock: product.stock,
     description: product.description,

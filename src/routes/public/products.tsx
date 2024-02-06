@@ -18,6 +18,7 @@ export default function Products() {
   async function getAllProducts() {
     const categories = ["rock/pop/etc", "hip hop/r&b", "jazz", "ost", "k-pop", "j-pop/city pop/asia", "merchandise"];
     const productPromises = categories.map((category) => getProducts(category, orderby, null, null, null, null));
+    // limitParam: 12?
     const products = await Promise.all(productPromises);
 
     setProductsList(

@@ -93,7 +93,7 @@ export default function Layout() {
               <img src={logo} width={70} height={70} alt={"logo"} />
             </Link>
             {/* <div></div> */}
-            <DrawerRight direction="right">
+            {/* <DrawerRight direction="right">
               <DrawerRightTrigger name="search">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,8 @@ export default function Layout() {
               <DrawerRightContent className="w-[300px]">
                 <SearchFilterProducts />
               </DrawerRightContent>
-            </DrawerRight>
+            </DrawerRight> */}
+            <div className="w-8" />
           </div>
           {/* <div className="md:flex-grow h-full px-6"> */}
           <div className="md:flex-grow md:px-0 h-full px-6  overflow-x-clip">
