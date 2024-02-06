@@ -204,11 +204,11 @@ export async function getRandomProducts(productId: string, category: string, lim
 }
 export async function getProducts(
   category: string | null,
-  orderby: string | null,
-  limitParam: number | null,
-  pageParam: number | null,
   searchValue: string | null,
-  priceRange: { minPrice: number; maxPrice: number } | null
+  priceRange: { minPrice: number; maxPrice: number } | null,
+  orderby: string | null,
+  pageParam: number | null,
+  limitParam: number | null
 ) {
   let finalQuery = query(collection(db, "products"));
 
@@ -218,27 +218,27 @@ export async function getProducts(
     finalQuery = query(finalQuery, where("category", "==", category));
   }
 
-  if (limitParam) {
-    finalQuery = query(finalQuery, limit(limitParam));
-  }
   if (searchValue) {
     const searchArray = searchValue.toLocaleLowerCase().split(" ");
     finalQuery = query(finalQuery, where("searchArray", "array-contains-any", searchArray));
   }
-
-  if (priceRange) {
+  if (priceRange && priceRange.minPrice !== null && priceRange.maxPrice !== null) {
     finalQuery = query(
       finalQuery,
       where("price", ">=", priceRange.minPrice),
       where("price", "<=", priceRange.maxPrice)
     );
   }
+
   if (orderby) {
-    // createdAt
     finalQuery = query(finalQuery, orderBy(orderby, "desc"));
   }
+
   if (pageParam) {
     finalQuery = query(finalQuery, startAfter(pageParam));
+  }
+  if (limitParam) {
+    finalQuery = query(finalQuery, limit(limitParam));
   }
 
   const querySnapshot = await getDocs(finalQuery);
@@ -247,6 +247,8 @@ export async function getProducts(
   querySnapshot.forEach((doc) => {
     products.push(doc.data() as DocumentData);
   });
+
+  console.log(products);
 
   return products;
 }
