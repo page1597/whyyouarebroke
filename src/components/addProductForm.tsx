@@ -408,7 +408,7 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
               <div />
             </div>
             <div className="flex w-full justify-center">
-              <Button type="submit" className="mt-6 w-32" disabled={isPending}>
+              <Button type="submit" className="mt-6 mb-12 w-32" disabled={isPending}>
                 {/* {!isPending ? <>상품등록</> : <>상품등록중</>} */}
                 상품 등록
               </Button>

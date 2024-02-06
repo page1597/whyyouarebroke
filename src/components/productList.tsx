@@ -46,7 +46,7 @@ export default function ProductList({ category }: { category?: string }) {
       getProducts(
         category ? category : null,
         orderby,
-        null,
+        12,
         pageParam,
         debouncedSearchValue,
         orderby !== "createdAt" ? priceRange : null
