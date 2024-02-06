@@ -45,18 +45,22 @@ export default function ProductList({ category }: { category?: string }) {
     queryFn: ({ pageParam }) =>
       getProducts(
         category ? category : null,
-        orderby,
-        12,
-        pageParam,
         debouncedSearchValue,
-        orderby !== "createdAt" ? priceRange : null
+        orderby !== "createdAt" ? priceRange : null,
+        orderby,
+        pageParam,
+        12
       ),
     initialPageParam: null,
     getNextPageParam: (querySnapshot: DocumentData) => {
       if (querySnapshot.length < 12) {
         return null;
       } else {
-        return querySnapshot[querySnapshot.length - 1].createdAt;
+        if (orderby === "createdAt") {
+          return querySnapshot[querySnapshot.length - 1].createdAt;
+        } else if (orderby === "price") {
+          return querySnapshot[querySnapshot.length - 1].price;
+        }
       }
     },
   });
@@ -77,6 +81,7 @@ export default function ProductList({ category }: { category?: string }) {
 
   async function prefetchNextPage() {
     if (hasNextPage && !isFetchingNextPage) {
+      console.log("hasNextPage", hasNextPage, "isFetchingNextPage", isFetchingNextPage);
       await queryClient.prefetchInfiniteQuery({ queryKey: ["products"], queryFn: fetchNextPage, pages: 3 });
     }
   }
@@ -84,6 +89,7 @@ export default function ProductList({ category }: { category?: string }) {
   useEffect(() => {
     if (inView) {
       prefetchNextPage();
+      console.log("pre-fetch next page");
     }
   }, [inView, orderby]);
 
