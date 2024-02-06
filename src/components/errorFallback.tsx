@@ -10,7 +10,7 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
   return (
     <div className="flex flex-col w-full h-full justify-center items-center gap-3 text-zinc-900">
       <AlertCircle width={50} height={50} />
-      <h2 className="text-xl md:text-2xl">{error.message}</h2>
+      <h2 className="text-xl md:text-2xl text-center">{error.message}</h2>
       <hr />
       <div className="text-zinc-700">
         <Button className="bg-zinc-700 hover:bg-zinc-800" onClick={resetErrorBoundary}>
