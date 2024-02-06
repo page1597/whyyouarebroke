@@ -48,7 +48,7 @@ export default function Products() {
         <>
           {productsList?.map((categoryProduct: categoryProductType, index: number) => (
             <div key={index} className="mb-16">
-              <div className="flex justify-between items-end">
+              {/* <div className="flex justify-between items-end">
                 <h3 className="text-xl my-5">{categoryProduct.category.toUpperCase()}</h3>
                 <button
                   name="more"
@@ -58,13 +58,13 @@ export default function Products() {
                 >
                   더보기
                 </button>
-              </div>
-              <Carousel opts={{ align: "start" }} className=" w-11/12">
-                <CarouselContent className="-ml-2">
+              </div> */}
+              <Carousel opts={{ align: "start" }} className="w-11/12 ml-2 md:ml-5">
+                <CarouselContent className="ml-0 md:-ml-1">
                   {/* -ml-2 md:-ml */}
                   {categoryProduct.products?.map((product: DocumentData) => (
                     <CarouselItem key={product.id} className="pl-1 basis-1/2 md:basis-1/4">
-                      <div className="p-1 flex justify-center">
+                      <div className="p-2 flex justify-center">
                         <div
                           className="cursor-pointer"
                           onClick={() => navigate({ pathname: "/product", search: `?id=${product.id}` })}

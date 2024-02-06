@@ -116,7 +116,7 @@ export default function Layout() {
             </DrawerRight>
           </div>
           {/* <div className="md:flex-grow h-full px-6"> */}
-          <div className="md:flex-grow md:px-0 h-full px-6">
+          <div className="md:flex-grow md:px-0 h-full px-6  overflow-x-clip">
             <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
               <Outlet />
             </ErrorBoundary>
