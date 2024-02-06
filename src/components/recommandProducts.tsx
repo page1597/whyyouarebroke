@@ -32,10 +32,10 @@ export default function RecommandProducts({ category, productId }: { category: s
       <div className="text-zinc-700 ml-8 mt-6">추천 상품</div>
       <div className="flex flex-row justify-center mt-10">
         {!isLoading && recommands[0] != undefined ? (
-          <Carousel opts={{ align: "start" }} className=" w-11/12">
+          <Carousel opts={{ align: "start" }} className="w-11/12">
             <CarouselContent className="-ml-2">
               {recommands.map((product: DocumentData) => (
-                <CarouselItem key={product?.id} className="pl-1 basis-1/2 md:basis-1/4">
+                <CarouselItem key={product?.id} className="pl-1 basis-1/2 md:basis-1/4 cursor-pointer">
                   <div className="p-1 flex justify-center">
                     {product?.image ? (
                       <div
@@ -62,8 +62,10 @@ export default function RecommandProducts({ category, productId }: { category: s
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <div className="md:hidden">
+              <CarouselPrevious />
+              <CarouselNext />
+            </div>
           </Carousel>
         ) : (
           <p>추천 상품이 존재하지 않습니다.</p>
