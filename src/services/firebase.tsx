@@ -26,11 +26,8 @@ import {
   limit,
   startAfter,
   where,
-  endBefore,
-  startAt,
-  endAt,
 } from "firebase/firestore";
-import { deleteObject, getBlob, getDownloadURL, getStorage, list, listAll, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getBlob, getDownloadURL, getStorage, list, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -81,21 +78,11 @@ export async function signUp(user: UserSignUpType, navigate: NavigateFunction) {
   }
 }
 
-//Email 로그인
+// Email 로그인
 export async function logIn(email: string, password: string) {
-  // try {
   const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
   console.log(userCredential);
-
-  // navigate("/");
-  // alert("로그인 되었습니다.");
-
   return userCredential;
-  // } catch (error) {
-  //   console.error("로그인 에러:", error);
-  //   alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-  //   return error;
-  // }
 }
 
 export async function googleSignUp(navigate: NavigateFunction, type: string) {
@@ -103,7 +90,6 @@ export async function googleSignUp(navigate: NavigateFunction, type: string) {
 
   try {
     const userCredential = await signInWithPopup(firebaseAuth, provider);
-
     try {
       const uid = userCredential.user.uid;
       const userRef = doc(db, "users", uid);
@@ -217,7 +203,6 @@ export async function getProducts(
   if (category) {
     finalQuery = query(finalQuery, where("category", "==", category));
   }
-
   if (searchValue) {
     const searchArray = searchValue.toLocaleLowerCase().split(" ");
     finalQuery = query(finalQuery, where("searchArray", "array-contains-any", searchArray));
@@ -229,11 +214,9 @@ export async function getProducts(
       where("price", "<=", priceRange.maxPrice)
     );
   }
-
   if (orderby) {
     finalQuery = query(finalQuery, orderBy(orderby, "desc"));
   }
-
   if (pageParam) {
     finalQuery = query(finalQuery, startAfter(pageParam));
   }
@@ -252,66 +235,6 @@ export async function getProducts(
 
   return products;
 }
-// 모든 제품 가져오기
-// 정렬 기본값: 최신순
-// export async function getProducts(
-//   orderby: string = "createdAt",
-//   limitParam: number = 12,
-//   pageParam: number | null = null,
-//   searchValue: string = ""
-// ) {
-//   const searchArray = Array.from(searchValue);
-
-//   const baseQuery = query(collection(db, "products"), orderBy(orderby, "desc"));
-
-//   let finalQuery: any = baseQuery;
-
-//   if (pageParam) {
-//     finalQuery = query(finalQuery, startAfter(pageParam), limit(limitParam));
-//   } else {
-//     // pageParam이 null인 경우에는 처음 로드할 때
-//     finalQuery = query(finalQuery, limit(limitParam));
-//   }
-
-//   if (searchValue !== "") {
-//     finalQuery = query(finalQuery, where("nameArray", "array-contains-any", searchArray));
-//   }
-
-//   const querySnapshot = await getDocs(finalQuery);
-//   const products: DocumentData[] = [];
-
-//   querySnapshot.forEach((doc) => {
-//     products.push(doc.data() as DocumentData);
-//   });
-
-//   return products;
-// }
-// export async function getCategoryProducts(
-//   category: string,
-//   orderby: string,
-//   limitParam: number | null,
-//   pageParam: string | null
-// ) {
-//   const baseQuery = query(collection(db, "products"), where("category", "==", category), orderBy(orderby, "desc"));
-//   let finalQuery = baseQuery;
-//   if (pageParam) {
-//     const paginatedQuery = query(baseQuery, startAfter(pageParam));
-//     finalQuery = limitParam ? query(paginatedQuery, limit(limitParam)) : paginatedQuery;
-//   } else {
-//     finalQuery = limitParam ? query(baseQuery, limit(limitParam)) : baseQuery;
-//   }
-
-//   const querySnapshot = await getDocs(finalQuery);
-//   const products: DocumentData[] = [];
-
-//   querySnapshot.forEach((doc) => {
-//     products.push(doc.data());
-//   });
-
-//   console.log(products);
-//   return products;
-// }
-
 export async function getSearchProducts(searchValue: string) {
   const searchArray = Array.from(searchValue);
   const q = query(collection(db, "products"), where("searchArray", "array-contains-any", searchArray));
@@ -338,7 +261,6 @@ async function blobUriToBlob(blobUri: string) {
   try {
     // Blob URI에서 데이터를 가져옴
     const response = await fetch(blobUri);
-
     // Blob으로 변환
     const blob = await response.blob();
 
@@ -393,9 +315,6 @@ export async function addProduct(product: ProductType) {
   );
   // docs에 이미지 url 업로드
   await updateDoc(productRef, { image: images });
-  // } catch (error) {
-  //   console.error("Error adding product:", error);
-  // }
 }
 
 export async function getPrevImagesURL(id: string, images: string[]): Promise<string[]> {
@@ -408,7 +327,6 @@ export async function getPrevImagesURL(id: string, images: string[]): Promise<st
     const blobURL = URL.createObjectURL(result);
     prevImages.push(blobURL);
   }
-
   return prevImages;
 }
 
@@ -434,5 +352,18 @@ export async function deleteProduct(id: string) {
     await Promise.all(promises);
   } catch (error) {
     console.error("Error deleting product images:", error);
+  }
+}
+
+export async function updateProduct(productId: string, stock: number) {
+  // 이미지 수정 x
+  const productRef = doc(db, "products", productId);
+  console.log(productId, stock);
+  try {
+    await updateDoc(productRef, {
+      stock: stock,
+    });
+  } catch (e) {
+    console.log(e);
   }
 }

@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
-import { BasketProductForStorage, BasketProductType } from "@/types";
+import { BasketProductType } from "@/types";
 import { BasketContext } from "@/context/basketContext";
 
 export type BasketContextProps = {
@@ -22,11 +22,13 @@ function BasketProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("basket", JSON.stringify(basket?.map((item) => convertTypeForStorage(item)) ?? []));
   }, [basket]);
 
-  function convertTypeForStorage(product: BasketProductType): BasketProductForStorage {
-    const converted: BasketProductForStorage = {
+  function convertTypeForStorage(product: BasketProductType): BasketProductType {
+    const converted: BasketProductType = {
       id: product.id,
       name: product.name,
+      format: product.format,
       price: product.price,
+      stock: product.stock,
       image: product.image,
       quantity: product.quantity,
     };

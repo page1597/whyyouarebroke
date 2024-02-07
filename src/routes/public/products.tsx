@@ -49,7 +49,7 @@ export default function Products() {
         <>
           {productsList?.map((categoryProduct: categoryProductType, index: number) => (
             <div key={index} className="mb-16">
-              {/* <div className="flex justify-between items-end">
+              <div className="flex justify-between items-end">
                 <h3 className="text-xl my-5">{categoryProduct.category.toUpperCase()}</h3>
                 <button
                   name="more"
@@ -59,7 +59,7 @@ export default function Products() {
                 >
                   더보기
                 </button>
-              </div> */}
+              </div>
               <Carousel opts={{ align: "start" }} className="w-11/12 ml-2 md:ml-5">
                 <CarouselContent className="ml-0 md:-ml-1">
                   {/* -ml-2 md:-ml */}

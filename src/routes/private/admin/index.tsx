@@ -4,7 +4,7 @@ import { lazy } from "react";
 // 로그인 한 상태에서 판매자(관리자)가 볼 수 있는 화면
 export default function PrivateRoutes() {
   const Products = lazy(() => import("./products"));
-  const Orders = lazy(() => import("./orders"));
+  const Orders = lazy(() => import("./order"));
   const Product = lazy(() => import("./product"));
   const AddProduct = lazy(() => import("./addProduct"));
   const EditProduct = lazy(() => import("./editProduct"));

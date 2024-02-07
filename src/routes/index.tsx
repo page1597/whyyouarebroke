@@ -68,8 +68,9 @@ export default function Layout() {
   const headerNav: HeaderNavItem[] = [
     userInfo ? { title: "로그아웃", href: "/" } : { title: "로그인", href: "/login" },
     { title: "장바구니", href: "/basket" },
+    { title: "주문조회", href: "/order" },
     !userInfo ? { title: "회원가입", href: "/signup" } : { title: "", href: "" },
-    !isAdmin ? { title: "마이페이지", href: "/mypage" } : { title: "주문조회", href: "/orders" },
+    !isAdmin ? { title: "마이페이지", href: "/mypage" } : { title: "", href: "" },
     // isAdmin && { title: "주문조회", href: "/orders" },
   ].filter((item) => item.title !== "" && item.href !== "");
 

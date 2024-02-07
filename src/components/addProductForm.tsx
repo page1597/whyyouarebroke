@@ -10,7 +10,7 @@ import { ProductType } from "@/types";
 import { addProduct, getPrevImagesURL } from "@/services/firebase";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MouseEvent } from "react";
-import { v4 as uuidv4 } from "uuid"; // 고윳값 생성
+import { v4 as uuidv4 } from "uuid"; // 고유값 생성
 import { ComboboxDemo } from "./ui/comboBox";
 import { sidebarNav } from "@/routes";
 import Resizer from "react-image-file-resizer";
@@ -45,7 +45,6 @@ const formSchema = z.object({
 
 export default function AddProductForm({ product, navigate }: { product?: ProductType; navigate: NavigateFunction }) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
-  // const [selectedImages, setSelectedImages] = useState<string[]>([]); // real url data
   const [category, setCategory] = useState<string>(product ? product.category : "");
   const isEdit = product ? true : false;
   const uploadedDate = +new Date();
@@ -112,7 +111,7 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
       image: previewImages,
       stock: values.stock,
       description: values.description,
-      artist: values.artist,
+      artist: values.artist || null,
       label: values.label || null,
       released: values.released || null,
       format: values.format || null,
@@ -158,7 +157,6 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
   function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
     e.preventDefault();
     setPreviewImages(previewImages.filter((_, index) => index !== id));
-    // setSelectedImages(selectedImages.filter((_, index) => index !== id));
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
@@ -166,11 +164,6 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
       e.preventDefault();
     }
   }
-
-  // if (!product) {
-  //   return <p>로딩중..</p>;
-  // }
-
   return (
     <div className="text-zinc-900">
       <Form {...form}>
