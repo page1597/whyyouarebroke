@@ -1,7 +1,7 @@
 import { BasketContext } from "@/context/basketContext";
 import { BasketProductType } from "@/types";
 import { Dispatch, SetStateAction, useContext, useEffect } from "react";
-
+// 전역적으로 (localStorage) 수량이 변함.
 function NumberInput({
   product,
   quantity,
@@ -39,7 +39,7 @@ function NumberInput({
   }
   return (
     <div className="flex items-center">
-      <div>{product!.price * quantity}원</div>
+      {product ? <div>{product!.price * quantity}원</div> : <></>}
       <button type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
         -
       </button>
