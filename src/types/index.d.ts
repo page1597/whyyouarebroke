@@ -108,3 +108,15 @@ export type BasketProductType = Pick<
   BasketProduct,
   "id" | "name" | "price" | "format" | "stock" | "quantity" | "image"
 >;
+
+export type OrderInfoType = {
+  merchant_uid: string; // 주문번호
+  amount: number;
+  name: string;
+  products: BasketProductType[];
+  buyer_name: string;
+  buyer_tel: string;
+  buyer_email: string;
+  buyer_addr: string;
+  buyer_postcode: string;
+};

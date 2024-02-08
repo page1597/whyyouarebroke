@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { NavigateFunction } from "react-router-dom";
-import { ProductType, UserSignUpType } from "../types";
+import { BasketProductType, OrderInfoType, ProductType, UserSignUpType } from "../types";
 import {
   getFirestore,
   setDoc,
@@ -354,19 +354,18 @@ export async function deleteProduct(id: string) {
     console.error("Error deleting product images:", error);
   }
 }
-
+// 현재 재고 수량 업데이트로만 쓰임
 export async function updateProduct(productId: string, stock: number) {
   // 이미지 수정 x
   const productRef = doc(db, "products", productId);
   console.log(productId, stock);
-  try {
-    await updateDoc(productRef, {
-      stock: stock,
-    });
-    console.log("상품 재고 정상적으로 변경됨.");
-  } catch (e) {
-    console.log(e);
-    console.error("Error updating product stock:", e);
-    throw e;
-  }
+  await updateDoc(productRef, {
+    stock: stock,
+  });
+}
+
+// 주문 추가
+export async function addOrder(order: OrderInfoType) {
+  const productRef = doc(db, "orders", order.merchant_uid);
+  await setDoc(productRef, order);
 }

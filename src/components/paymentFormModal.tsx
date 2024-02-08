@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "@/components/ui/modal";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import { AuthContext } from "@/context/authContext";
 import { Button } from "./ui/button";
 import { getProduct, updateProduct } from "@/services/firebase";
 import { BasketContext } from "@/context/basketContext";
+import { useMutation } from "@tanstack/react-query";
 
 function PaymentFormModal({
   checkedProducts,
@@ -25,26 +26,37 @@ function PaymentFormModal({
   const userInfo = useContext(AuthContext);
   const [isAgreedTerm, setIsAgreedTerm] = useState(false);
 
-  let orderProducts: BasketProductType[] = checkedProducts;
+  // let orderProducts: BasketProductType[] = checkedProducts; // 원래는 체크한 것들만 orderProducts인데
+  const [orderProducts, setOrderProducts] = useState<BasketProductType[]>(checkedProducts);
   const shippingFee = 3000;
   const [totalPrice, setTotalPrice] = useState<number>();
+  const [isAllButton, setIsAllButton] = useState(false);
 
   const contextValue = useContext(BasketContext);
   if (!contextValue) {
     throw new Error("BasketContext를 찾을 수 없습니다.");
   }
+  const { setBasket } = contextValue;
 
-  const { basket, setBasket } = contextValue;
-  function isProductAvailable(product: BasketProductType) {
-    return product.stock - product.quantity >= 1;
-  }
-  async function openModal(e: React.MouseEvent<HTMLButtonElement>) {
-    // 함수명 변경하기 -> Submit의 의미로
+  useEffect(() => {
+    setOrderProducts(checkedProducts);
+  }, [checkedProducts]);
+
+  const { mutate } = useMutation({
+    mutationKey: ["update product"],
+    mutationFn: ({ type, DBStock, product }: { type: string; DBStock: number; product: BasketProductType }) =>
+      updateProduct(product.id, type == "add" ? DBStock + product.quantity : DBStock - product.quantity),
+    onSuccess: () => {
+      console.log("상품 수량 업데이트 성공");
+      // navigate("/");
+    },
+    onError: (error) => {
+      console.log("상품 수량 업데이트 실패", error);
+    },
+  });
+
+  async function openModal(orderProducts: BasketProductType[]) {
     // 실제 결제 진행 전 firebase DB에서 재고수량 미리 감소시키기
-    const name = e.currentTarget.name;
-    if (name === "all") {
-      orderProducts = basketProducts;
-    }
     if (orderProducts.length > 0) {
       // 상품 재고 수량 미리 업데이트
       // 1. 재고가 부족한 상품이 있는지 확인
@@ -53,7 +65,7 @@ function PaymentFormModal({
         const DBProduct = await getProduct(product.id);
         const DBStock = DBProduct?.stock;
 
-        if (DBStock - product.quantity < 1) {
+        if (DBStock - product.quantity < 0) {
           alert(`${product.name}의 상품 재고가 부족하여 구매가 불가능합니다.`);
           isOutOfStock = true;
           return; // 함수 종료
@@ -61,23 +73,28 @@ function PaymentFormModal({
       }
       // 2. 모든 제품의 재고가 충분한 경우에만 DB 업데이트 수행
       if (!isOutOfStock) {
-        const updatedBasket = orderProducts.map(async (product) => {
+        for (const product of orderProducts) {
           try {
             const DBProduct = await getProduct(product.id);
             const DBStock = DBProduct?.stock;
 
-            await updateProduct(product.id, DBStock - product.quantity);
-            return { ...product, stock: DBStock - product.quantity };
+            // await updateProduct(product.id, DBStock - product.quantity);
+            mutate({ type: "subtract", DBStock, product });
+            setBasket((prevBasket) => {
+              const updatedBasket = prevBasket.map((basketProduct) => {
+                if (basketProduct.id === product.id) {
+                  return { ...basketProduct, stock: DBStock - product.quantity };
+                }
+                return basketProduct;
+              });
+              return updatedBasket;
+            });
           } catch (e) {
             console.error("상품 재고 업데이트 실패:", e);
             return product;
           }
-        });
-        Promise.all(updatedBasket).then((newBasket) => {
-          setBasket(newBasket);
-        });
+        }
 
-        // 모달 열기 및 총 가격 설정
         setIsOpen(true);
         setTotalPrice(
           orderProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0)
@@ -89,29 +106,36 @@ function PaymentFormModal({
     }
   }
 
-  function closeModal() {
-    // alert 추가할까?
+  async function closeModal() {
     // alert("주문을 취소하시겠습니까?")
     // orderProducts는 항상 크기가 1이상이고, 재고가 부족한 경우가 없다.
-    const updatedBasket = orderProducts.map(async (product) => {
+    let orderProductList: BasketProductType[] = orderProducts;
+    if (isAllButton) {
+      orderProductList = basketProducts;
+    }
+    console.log(orderProductList);
+    for (const product of orderProductList) {
       try {
         const DBProduct = await getProduct(product.id);
         const DBStock = DBProduct?.stock;
-        console.log(DBStock);
 
-        // 실제 디비 업데이트
-        await updateProduct(product.id, DBStock + product.quantity);
-        return { ...product, stock: DBStock + product.quantity };
+        // 실제 DB 업데이트
+        // await updateProduct(product.id, DBStock + product.quantity);
+        mutate({ type: "add", DBStock, product });
+        setBasket((prevBasket) => {
+          const updatedBasket = prevBasket.map((basketProduct) => {
+            if (basketProduct.id === product.id) {
+              return { ...basketProduct, stock: DBStock + product.quantity };
+            }
+            return basketProduct;
+          });
+          return updatedBasket;
+        });
       } catch (e) {
         console.error("상품 재고 업데이트 실패:", e);
         return product;
       }
-    });
-    // 2. 장바구니 내 수량 감소
-    // 모든 업데이트가 완료되면 새로운 basket 상태를 설정
-    Promise.all(updatedBasket).then((newBasket) => {
-      setBasket(newBasket);
-    });
+    }
     setIsOpen(false);
   }
   const formSchema = z.object({
@@ -132,17 +156,31 @@ function PaymentFormModal({
       buyer_postcode: "",
     },
   });
+  useEffect(() => {
+    console.log(isAllButton);
+  }, [isAllButton]);
   return (
     <div>
       <div className="flex justify-center gap-5 mt-12">
         <Button
           name="selected"
-          onClick={openModal}
+          onClick={() => {
+            setIsAllButton(false);
+            openModal(orderProducts);
+          }}
           className="bg-white border text-zinc-800 border-zinc-800 hover:bg-zinc-100"
         >
           선택상품주문
         </Button>
-        <Button name="all" onClick={openModal} className="bg-zinc-700 hover:bg-zinc-800">
+        <Button
+          name="all"
+          onClick={() => {
+            setIsAllButton(true);
+            setOrderProducts(basketProducts);
+            openModal(basketProducts);
+          }}
+          className="bg-zinc-700 hover:bg-zinc-800"
+        >
           전체상품주문
         </Button>
       </div>

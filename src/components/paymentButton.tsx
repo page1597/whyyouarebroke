@@ -1,6 +1,8 @@
-import { BasketProductType } from "@/types";
+import { BasketProductType, OrderInfoType } from "@/types";
 import { Button } from "./ui/button";
 import { FieldValues } from "react-hook-form";
+import { addOrder } from "@/services/firebase";
+import { useMutation } from "@tanstack/react-query";
 
 declare global {
   interface Window {
@@ -17,6 +19,7 @@ export default function PaymentButton({
   orderProducts: BasketProductType[];
   isAgreedTerm: boolean;
 }) {
+  console.log(orderProducts);
   function onClickPayment() {
     if (!isAgreedTerm) {
       alert("쇼핑몰 이용약관을 동의해주세요.");
@@ -50,19 +53,39 @@ export default function PaymentButton({
     console.log(data);
 
     /* 4. 결제 창 호출하기 */
-    // IMP.request_pay(data, callback);
+    IMP.request_pay(data, (response: { success: any; merchant_uid: any; error_msg: any }) => {
+      const { success, merchant_uid, error_msg } = response;
+      console.log(success, merchant_uid);
+      if (success) {
+        alert("결제 성공");
+        mutate({
+          merchant_uid: data.merchant_uid,
+          amount: data.amount,
+          name: data.name,
+          products: orderProducts,
+          buyer_name: data.buyer_name,
+          buyer_tel: data.buyer_tel,
+          buyer_email: data.buyer_email,
+          buyer_addr: data.buyer_addr,
+          buyer_postcode: data.buyer_postcode,
+        });
+      } else {
+        alert(`결제 실패: ${error_msg}`);
+      }
+    });
   }
 
-  /* 3. 콜백 함수 정의하기 */
-  function callback(response: { success: any; merchant_uid: any; error_msg: any }) {
-    const { success, merchant_uid, error_msg } = response;
-
-    if (success) {
-      alert("결제 성공");
-    } else {
-      alert(`결제 실패: ${error_msg}`);
-    }
-  }
+  const { mutate } = useMutation({
+    mutationKey: ["add order"],
+    mutationFn: (order: OrderInfoType) => addOrder(order),
+    onSuccess: () => {
+      console.log("주문 성공");
+      // navigate("/");
+    },
+    onError: (error) => {
+      console.log("주문 실패", error);
+    },
+  });
 
   return (
     <Button className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
