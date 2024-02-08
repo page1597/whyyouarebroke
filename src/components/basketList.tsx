@@ -6,38 +6,40 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { BasketProductType } from "@/types";
 
 export default function BasketList({ basket }: { basket: BasketProductType[] }) {
-  function submitPayment(basket: BasketProductType[]) {
-    // const newStock = basket[0].stock - basket[0].quantity;
-    // updateProduct(basket[0].id, newStock); // 재고 감소
-    // // 결제가 이루어지기 전에 결제가 취소된다면 상품 재고를 복구
-  }
-
   const [basketProducts, setBasketProducts] = useState<BasketProductType[]>(basket); // 수량 변경 반영
   const [checkedProductIds, setCheckedProductIds] = useState<string[]>([]); // id 배열
-
   const [checkedProducts, setCheckedProducts] = useState<BasketProductType[]>([]); // 진짜로 결제하려고 선택한 애들
+
+  const shippingFee = 3000;
   const totalPrice = checkedProducts.reduce(
     (accumulator, product) => accumulator + product.price * product.quantity,
     0
   );
-  const shippingFee = 3000;
-  let basketWithTitle;
-  if (basket) {
-    basketWithTitle = basket.slice();
-  }
-
-  const title: BasketProductType = {
-    image: null,
-    name: "",
-    price: -1,
-    quantity: -1,
-    id: "",
-    format: null,
-    stock: 0,
-  };
-  basketWithTitle.unshift(title);
 
   useEffect(() => {
+    console.log("basket products:", basketProducts);
+  }, [basketProducts]);
+
+  let basketWithTitle;
+  if (basket) {
+    // 제목을 위한 작업
+    basketWithTitle = basket.slice();
+    if (basketWithTitle.length > 0) {
+      const title: BasketProductType = {
+        image: null,
+        name: "",
+        price: -1,
+        quantity: -1,
+        id: "",
+        format: null,
+        stock: 0,
+      };
+      basketWithTitle.unshift(title);
+    }
+  }
+
+  useEffect(() => {
+    // 상품 수량이 변경될 때나, 상품 체크/해제가 되었을 때 CheckedProducts 업데이트
     let checkedProductList: BasketProductType[] = [];
     checkedProductIds.forEach((id) => {
       const product = basketProducts.find((item) => item.id == id);
@@ -62,8 +64,10 @@ export default function BasketList({ basket }: { basket: BasketProductType[] }) 
       }
     } else {
       if (checked) {
+        // 체크한 상품의 아이디를 CheckedProductIds에 담음
         setCheckedProductIds((prevCheckedProductIds) => [...prevCheckedProductIds, newProductId]);
       } else {
+        // 체크 해체한 상품의 아이디를 CheckedProductIds에서 제거
         setCheckedProductIds((prevCheckedProductIds) => prevCheckedProductIds.filter((id) => id !== newProductId));
       }
     }

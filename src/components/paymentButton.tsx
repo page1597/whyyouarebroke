@@ -14,15 +14,17 @@ export default function PaymentButton({
   fieldValues,
   orderProducts,
   isAgreedTerm,
+  userId,
 }: {
   fieldValues: FieldValues;
   orderProducts: BasketProductType[];
   isAgreedTerm: boolean;
+  userId?: string | null;
 }) {
-  console.log(orderProducts);
   function onClickPayment() {
     if (!isAgreedTerm) {
       alert("쇼핑몰 이용약관을 동의해주세요.");
+      console.log(orderProducts);
       return;
     }
     /* 1. 가맹점 식별하기 */
@@ -43,8 +45,8 @@ export default function PaymentButton({
       pay_method: "card", // 결제수단
       merchant_uid: `${orderProducts[0].id}_${new Date().getTime()}`, // 주문번호
       amount: priceAmount, // 결제금액
-      name: `${orderProducts[0].name}...`, // 주문명
-      buyer_name: buyerInfo.buyer_tel, // 구매자 이름
+      name: `${orderProducts[0].name} 외 ${orderProducts.length - 1}건`, // 주문명
+      buyer_name: buyerInfo.buyer_name, // 구매자 이름
       buyer_tel: buyerInfo.buyer_tel, // 구매자 전화번호
       buyer_email: buyerInfo.buyer_email, // 구매자 이메일
       buyer_addr: buyerInfo.buyer_addr, // 구매자 주소
@@ -63,6 +65,8 @@ export default function PaymentButton({
           amount: data.amount,
           name: data.name,
           products: orderProducts,
+          orderedAt: +new Date(),
+          buyer_uid: userId || null,
           buyer_name: data.buyer_name,
           buyer_tel: data.buyer_tel,
           buyer_email: data.buyer_email,
@@ -71,6 +75,19 @@ export default function PaymentButton({
         });
       } else {
         alert(`결제 실패: ${error_msg}`);
+        mutate({
+          merchant_uid: data.merchant_uid,
+          amount: data.amount,
+          name: data.name,
+          products: orderProducts,
+          orderedAt: +new Date(),
+          buyer_uid: userId || null,
+          buyer_name: data.buyer_name,
+          buyer_tel: data.buyer_tel,
+          buyer_email: data.buyer_email,
+          buyer_addr: data.buyer_addr,
+          buyer_postcode: data.buyer_postcode,
+        });
       }
     });
   }

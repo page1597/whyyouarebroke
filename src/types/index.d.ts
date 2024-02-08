@@ -64,7 +64,7 @@ export type UserSubscriptionPlan = SubscriptionPlan &
 
 export type UserInfoType = {
   email: string?;
-  // id: string?;
+  id: string?;
   name: string?;
   type: string?;
   // nickname: string;
@@ -114,6 +114,8 @@ export type OrderInfoType = {
   amount: number;
   name: string;
   products: BasketProductType[];
+  orderedAt: number;
+  buyer_uid: string?;
   buyer_name: string;
   buyer_tel: string;
   buyer_email: string;

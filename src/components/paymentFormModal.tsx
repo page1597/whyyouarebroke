@@ -11,8 +11,8 @@ import { BasketProductType } from "@/types";
 import { AuthContext } from "@/context/authContext";
 import { Button } from "./ui/button";
 import { getProduct, updateProduct } from "@/services/firebase";
-import { BasketContext } from "@/context/basketContext";
 import { useMutation } from "@tanstack/react-query";
+import { updateBasketProductStock } from "@/services/basket";
 
 function PaymentFormModal({
   checkedProducts,
@@ -32,15 +32,13 @@ function PaymentFormModal({
   const [totalPrice, setTotalPrice] = useState<number>();
   const [isAllButton, setIsAllButton] = useState(false);
 
-  const contextValue = useContext(BasketContext);
-  if (!contextValue) {
-    throw new Error("BasketContext를 찾을 수 없습니다.");
-  }
-  const { setBasket } = contextValue;
-
   useEffect(() => {
     setOrderProducts(checkedProducts);
   }, [checkedProducts]);
+
+  useEffect(() => {
+    console.log("order products: ", orderProducts);
+  }, [orderProducts]);
 
   const { mutate } = useMutation({
     mutationKey: ["update product"],
@@ -48,7 +46,6 @@ function PaymentFormModal({
       updateProduct(product.id, type == "add" ? DBStock + product.quantity : DBStock - product.quantity),
     onSuccess: () => {
       console.log("상품 수량 업데이트 성공");
-      // navigate("/");
     },
     onError: (error) => {
       console.log("상품 수량 업데이트 실패", error);
@@ -77,18 +74,14 @@ function PaymentFormModal({
           try {
             const DBProduct = await getProduct(product.id);
             const DBStock = DBProduct?.stock;
-
-            // await updateProduct(product.id, DBStock - product.quantity);
+            // DB 수량 변경
             mutate({ type: "subtract", DBStock, product });
-            setBasket((prevBasket) => {
-              const updatedBasket = prevBasket.map((basketProduct) => {
-                if (basketProduct.id === product.id) {
-                  return { ...basketProduct, stock: DBStock - product.quantity };
-                }
-                return basketProduct;
-              });
-              return updatedBasket;
-            });
+            // 장바구니 수량도 변경
+            updateBasketProductStock(
+              userInfo?.id == undefined ? null : userInfo.id,
+              product,
+              DBStock - product.quantity
+            );
           } catch (e) {
             console.error("상품 재고 업데이트 실패:", e);
             return product;
@@ -120,17 +113,12 @@ function PaymentFormModal({
         const DBStock = DBProduct?.stock;
 
         // 실제 DB 업데이트
-        // await updateProduct(product.id, DBStock + product.quantity);
         mutate({ type: "add", DBStock, product });
-        setBasket((prevBasket) => {
-          const updatedBasket = prevBasket.map((basketProduct) => {
-            if (basketProduct.id === product.id) {
-              return { ...basketProduct, stock: DBStock + product.quantity };
-            }
-            return basketProduct;
-          });
-          return updatedBasket;
-        });
+        updateBasketProductStock(
+          userInfo?.id == undefined || userInfo?.id === null ? null : userInfo.id,
+          product,
+          DBStock + product.quantity
+        );
       } catch (e) {
         console.error("상품 재고 업데이트 실패:", e);
         return product;
@@ -304,7 +292,12 @@ function PaymentFormModal({
           </div>
           <div className="flex gap-4 w-full justify-center">
             <Modal.Close onClose={closeModal} />
-            <PaymentButton fieldValues={form.getValues()} orderProducts={orderProducts} isAgreedTerm={isAgreedTerm} />
+            <PaymentButton
+              fieldValues={form.getValues()}
+              orderProducts={orderProducts}
+              isAgreedTerm={isAgreedTerm}
+              userId={userInfo?.id === undefined || userInfo?.id === null ? null : userInfo.id}
+            />
           </div>
         </Modal.Footer>
       </Modal>

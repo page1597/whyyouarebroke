@@ -364,8 +364,45 @@ export async function updateProduct(productId: string, stock: number) {
   });
 }
 
+export async function updateUser(userId: string, basket: BasketProductType[]) {
+  // 왜 안되지
+  console.log("update user");
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, {
+    basket: basket,
+  });
+}
+
 // 주문 추가
 export async function addOrder(order: OrderInfoType) {
   const productRef = doc(db, "orders", order.merchant_uid);
   await setDoc(productRef, order);
+}
+
+export async function getOrders(
+  userId: string | undefined | null,
+  pageParam: number | null,
+  limitParam: number | null
+) {
+  console.log(userId);
+  let finalQuery = query(collection(db, "orders"));
+  if (userId !== undefined && userId !== null) {
+    finalQuery = query(finalQuery, where("buyer_uid", "==", userId));
+  } else {
+    console.log("user id is undefined");
+    finalQuery = query(finalQuery, where("buyer_uid", "==", "none")); // 아무 값도 안나오게
+  }
+  if (pageParam) {
+    finalQuery = query(finalQuery, startAfter(pageParam));
+  }
+  if (limitParam) {
+    finalQuery = query(finalQuery, limit(limitParam));
+  }
+  const querySnapshot = await getDocs(finalQuery);
+
+  const orders: DocumentData[] = [];
+  querySnapshot.forEach((doc) => {
+    orders.push(doc.data() as OrderInfoType);
+  });
+  return orders;
 }
