@@ -363,7 +363,10 @@ export async function updateProduct(productId: string, stock: number) {
     await updateDoc(productRef, {
       stock: stock,
     });
+    console.log("상품 재고 정상적으로 변경됨.");
   } catch (e) {
     console.log(e);
+    console.error("Error updating product stock:", e);
+    throw e;
   }
 }

@@ -21,8 +21,11 @@ export default function BasketList({ basket }: { basket: BasketProductType[] }) 
     0
   );
   const shippingFee = 3000;
+  let basketWithTitle;
+  if (basket) {
+    basketWithTitle = basket.slice();
+  }
 
-  const basketWithTitle = basket.slice();
   const title: BasketProductType = {
     image: null,
     name: "",

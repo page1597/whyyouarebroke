@@ -1,6 +1,6 @@
 import { BasketProductType } from "@/types";
 import { Button } from "./ui/button";
-import { FieldValues, UseFormReturn } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 
 declare global {
   interface Window {
@@ -10,20 +10,26 @@ declare global {
 
 export default function PaymentButton({
   fieldValues,
-  checkedProducts,
+  orderProducts,
+  isAgreedTerm,
 }: {
   fieldValues: FieldValues;
-  checkedProducts: BasketProductType[];
+  orderProducts: BasketProductType[];
+  isAgreedTerm: boolean;
 }) {
   function onClickPayment() {
+    if (!isAgreedTerm) {
+      alert("쇼핑몰 이용약관을 동의해주세요.");
+      return;
+    }
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init("imp24067853");
 
-    console.log(checkedProducts);
+    console.log(orderProducts);
     const buyerInfo = fieldValues;
     let priceAmount = 0;
-    checkedProducts.forEach((products) => {
+    orderProducts.forEach((products) => {
       priceAmount += products.quantity * products.price;
     });
     console.log(priceAmount);
@@ -32,9 +38,9 @@ export default function PaymentButton({
     const data = {
       pg: "html5_inicis", // PG사
       pay_method: "card", // 결제수단
-      merchant_uid: `${checkedProducts[0].id}_${new Date().getTime()}`, // 주문번호
+      merchant_uid: `${orderProducts[0].id}_${new Date().getTime()}`, // 주문번호
       amount: priceAmount, // 결제금액
-      name: `${checkedProducts[0].name}...`, // 주문명
+      name: `${orderProducts[0].name}...`, // 주문명
       buyer_name: buyerInfo.buyer_tel, // 구매자 이름
       buyer_tel: buyerInfo.buyer_tel, // 구매자 전화번호
       buyer_email: buyerInfo.buyer_email, // 구매자 이메일

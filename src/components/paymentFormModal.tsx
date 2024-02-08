@@ -10,6 +10,8 @@ import PaymentButton from "./paymentButton";
 import { BasketProductType } from "@/types";
 import { AuthContext } from "@/context/authContext";
 import { Button } from "./ui/button";
+import { getProduct, updateProduct } from "@/services/firebase";
+import { BasketContext } from "@/context/basketContext";
 
 function PaymentFormModal({
   checkedProducts,
@@ -21,25 +23,95 @@ function PaymentFormModal({
   // 모달창 직접 구현
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useContext(AuthContext);
+  const [isAgreedTerm, setIsAgreedTerm] = useState(false);
 
   let orderProducts: BasketProductType[] = checkedProducts;
   const shippingFee = 3000;
   const [totalPrice, setTotalPrice] = useState<number>();
 
-  function openModal(e: React.MouseEvent<HTMLButtonElement>) { // 함수명 변경하기 -> Submit의 의미로
+  const contextValue = useContext(BasketContext);
+  if (!contextValue) {
+    throw new Error("BasketContext를 찾을 수 없습니다.");
+  }
+
+  const { basket, setBasket } = contextValue;
+  function isProductAvailable(product: BasketProductType) {
+    return product.stock - product.quantity >= 1;
+  }
+  async function openModal(e: React.MouseEvent<HTMLButtonElement>) {
+    // 함수명 변경하기 -> Submit의 의미로
     // 실제 결제 진행 전 firebase DB에서 재고수량 미리 감소시키기
     const name = e.currentTarget.name;
     if (name === "all") {
       orderProducts = basketProducts;
     }
     if (orderProducts.length > 0) {
-      setIsOpen(true);
-      setTotalPrice(orderProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0));
+      // 상품 재고 수량 미리 업데이트
+      // 1. 재고가 부족한 상품이 있는지 확인
+      let isOutOfStock = false;
+      for (const product of orderProducts) {
+        const DBProduct = await getProduct(product.id);
+        const DBStock = DBProduct?.stock;
+
+        if (DBStock - product.quantity < 1) {
+          alert(`${product.name}의 상품 재고가 부족하여 구매가 불가능합니다.`);
+          isOutOfStock = true;
+          return; // 함수 종료
+        }
+      }
+      // 2. 모든 제품의 재고가 충분한 경우에만 DB 업데이트 수행
+      if (!isOutOfStock) {
+        const updatedBasket = orderProducts.map(async (product) => {
+          try {
+            const DBProduct = await getProduct(product.id);
+            const DBStock = DBProduct?.stock;
+
+            await updateProduct(product.id, DBStock - product.quantity);
+            return { ...product, stock: DBStock - product.quantity };
+          } catch (e) {
+            console.error("상품 재고 업데이트 실패:", e);
+            return product;
+          }
+        });
+        Promise.all(updatedBasket).then((newBasket) => {
+          setBasket(newBasket);
+        });
+
+        // 모달 열기 및 총 가격 설정
+        setIsOpen(true);
+        setTotalPrice(
+          orderProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0)
+        );
+      }
     } else {
       alert("주문하려는 상품을 선택해 주세요.");
+      return;
     }
   }
+
   function closeModal() {
+    // alert 추가할까?
+    // alert("주문을 취소하시겠습니까?")
+    // orderProducts는 항상 크기가 1이상이고, 재고가 부족한 경우가 없다.
+    const updatedBasket = orderProducts.map(async (product) => {
+      try {
+        const DBProduct = await getProduct(product.id);
+        const DBStock = DBProduct?.stock;
+        console.log(DBStock);
+
+        // 실제 디비 업데이트
+        await updateProduct(product.id, DBStock + product.quantity);
+        return { ...product, stock: DBStock + product.quantity };
+      } catch (e) {
+        console.error("상품 재고 업데이트 실패:", e);
+        return product;
+      }
+    });
+    // 2. 장바구니 내 수량 감소
+    // 모든 업데이트가 완료되면 새로운 basket 상태를 설정
+    Promise.all(updatedBasket).then((newBasket) => {
+      setBasket(newBasket);
+    });
     setIsOpen(false);
   }
   const formSchema = z.object({
@@ -189,12 +261,12 @@ function PaymentFormModal({
         </Modal.Body>
         <Modal.Footer>
           <div className="flex gap-2 items-center">
-            <Checkbox />
+            <Checkbox id="terms" onCheckedChange={(checked) => setIsAgreedTerm(checked == true ? true : false)} />
             <div>쇼핑몰 이용약관 동의</div>
           </div>
           <div className="flex gap-4 w-full justify-center">
             <Modal.Close onClose={closeModal} />
-            <PaymentButton fieldValues={form.getValues()} checkedProducts={checkedProducts} />
+            <PaymentButton fieldValues={form.getValues()} orderProducts={orderProducts} isAgreedTerm={isAgreedTerm} />
           </div>
         </Modal.Footer>
       </Modal>
