@@ -1,9 +1,10 @@
 import { AuthContext } from "@/context/authContext";
-import { getOrders } from "@/services/firebase";
-import { useInfiniteQuery, QueryClient } from "@tanstack/react-query";
+import { getOrders, updateOrder } from "@/services/firebase";
+import { useInfiniteQuery, QueryClient, useMutation } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
 import { useContext, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { Button } from "./ui/button";
 
 export default function OrderList() {
   // 이건 페이지네이션으로 구현해볼까
@@ -47,6 +48,27 @@ export default function OrderList() {
     }
   }
 
+  const { mutate } = useMutation({
+    mutationKey: ["cancelled order"],
+    mutationFn: (orderId: string) => updateOrder(orderId, "cancelled"),
+    onSuccess: () => {
+      console.log("주문 취소 성공");
+      alert("주문이 취소되었습니다.");
+      refetch();
+    },
+    onError: (error) => {
+      console.log("주문 취소 실패", error);
+    },
+  });
+
+  function onCancelled(orderId: string) {
+    var confirmation = confirm("주문을 취소하시겠습니까?");
+
+    if (confirmation) {
+      mutate(orderId);
+    }
+  }
+
   return (
     <div>
       {status === "success" ? (
@@ -54,29 +76,30 @@ export default function OrderList() {
           {data?.pages.map((page, index) => (
             <div key={index}>
               {page ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
+                <div className="flex flex-col gap-3">
                   {page.map((order: DocumentData) => (
                     <div
-                      className="flex flex-col justify-center items-center cursor-pointer"
+                      className="flex flex-col cursor-pointer"
                       key={order.merchant_uid}
                       //   onClick={() => navigate({ pathname: "/product", search: `?id=${product.id}` })}
                     >
-                      {order.name}
-                      {/* <div>
-                        {order.image ? (
-                          <div className="relative overflow-hidden">
-                            <img
-                              src={order["image"][0]}
-                              width={60}
-                              height={60}
-                              className="h-60 w-60 object-contain transition-transform transform-gpu hover:scale-105"
-                              alt={order.name}
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-60 h-60 bg-zinc-100" />
-                        )}
-                      </div> */}
+                      {/* {order.name}
+                      주문 상태: {order.status} */}
+                      <div className="flex flex-row gap-3 items-center">
+                        <div className="flex flex-col">
+                          <div>id: {order.merchant_uid}</div>
+                          <div>주문명: {order.name}</div>
+                          <div>주문 상태: {order.status}</div>
+                        </div>
+                        <Button
+                          disabled={order.status === "cancelled"}
+                          onClick={() => {
+                            onCancelled(order.merchant_uid);
+                          }}
+                        >
+                          주문 취소
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>

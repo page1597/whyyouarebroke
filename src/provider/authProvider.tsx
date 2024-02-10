@@ -3,6 +3,7 @@ import { AuthContext } from "../context/authContext";
 import { firebaseAuth, getUser } from "@/services/firebase";
 import { UserInfoType } from "@/types";
 import { copyBasketlocalToDB } from "@/services/basket";
+import { unsubscribe } from "diagnostics_channel";
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
@@ -10,10 +11,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     return firebaseAuth.onAuthStateChanged(async (currentUser) => {
       console.log("구독 시작: ", currentUser);
-      if (currentUser !== null && currentUser !== undefined) {
+      if (currentUser) {
         await getUser(currentUser.uid).then((user) => {
           if (user) {
             setUser({
+              // 비동기 동작..?
               id: currentUser.uid,
               type: user.type,
               name: user.name,
@@ -26,14 +28,14 @@ function AuthProvider({ children }: { children: ReactNode }) {
           // 로그인 -> 로그아웃 시 장바구니 비워야 함.
         });
       } else {
-        setUser(null);
+        setUser(null); // 로그아웃한 경우
         localStorage.removeItem("user type"); // 로그아웃 상태
         // localStorage.removeItem("basket");
       }
     });
   }, []);
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={user}>{user !== null && children}</AuthContext.Provider>;
 }
 
 export default AuthProvider;

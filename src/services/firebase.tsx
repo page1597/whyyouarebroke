@@ -375,8 +375,16 @@ export async function updateUser(userId: string, basket: BasketProductType[]) {
 
 // 주문 추가
 export async function addOrder(order: OrderInfoType) {
-  const productRef = doc(db, "orders", order.merchant_uid);
-  await setDoc(productRef, order);
+  const orderRef = doc(db, "orders", order.merchant_uid);
+  await setDoc(orderRef, order);
+}
+
+// 주문 상태 변경
+export async function updateOrder(orderId: string, status: string) {
+  const orderRef = doc(db, "orders", orderId);
+  await updateDoc(orderRef, {
+    status: status,
+  });
 }
 
 export async function getOrders(

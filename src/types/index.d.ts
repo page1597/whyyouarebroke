@@ -113,6 +113,7 @@ export type OrderInfoType = {
   merchant_uid: string; // 주문번호
   amount: number;
   name: string;
+  status: string;
   products: BasketProductType[];
   orderedAt: number;
   buyer_uid: string?;

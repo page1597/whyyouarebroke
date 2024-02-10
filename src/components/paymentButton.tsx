@@ -62,6 +62,7 @@ export default function PaymentButton({
         alert("결제 성공");
         mutate({
           merchant_uid: data.merchant_uid,
+          status: "received",
           amount: data.amount,
           name: data.name,
           products: orderProducts,
@@ -79,6 +80,7 @@ export default function PaymentButton({
           merchant_uid: data.merchant_uid,
           amount: data.amount,
           name: data.name,
+          status: "received",
           products: orderProducts,
           orderedAt: +new Date(),
           buyer_uid: userId || null,
