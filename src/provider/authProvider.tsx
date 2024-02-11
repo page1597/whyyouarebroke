@@ -3,39 +3,47 @@ import { AuthContext } from "../context/authContext";
 import { firebaseAuth, getUser } from "@/services/firebase";
 import { UserInfoType } from "@/types";
 import { copyBasketlocalToDB } from "@/services/basket";
-import { unsubscribe } from "diagnostics_channel";
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return firebaseAuth.onAuthStateChanged(async (currentUser) => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
       console.log("구독 시작: ", currentUser);
       if (currentUser) {
-        await getUser(currentUser.uid).then((user) => {
-          if (user) {
-            setUser({
-              // 비동기 동작..?
-              id: currentUser.uid,
-              type: user.type,
-              name: user.name,
-              email: user.email,
-            });
-            localStorage.setItem("user type", user.type); // 판매자이거나 구매자인 상태
-            copyBasketlocalToDB(currentUser.uid); // localStorage에 있던 장바구니를 DB로 옮김
-          }
-          // localStorage.removeItem("basket"); // 이거 언제 해줘야하지..? 로그아웃 될때.
-          // 로그인 -> 로그아웃 시 장바구니 비워야 함.
-        });
+        await getUser(currentUser.uid)
+          .then((userInfo) => {
+            if (userInfo) {
+              setUser({
+                id: currentUser.uid,
+                type: userInfo.type,
+                name: userInfo.name,
+                email: userInfo.email,
+              });
+              localStorage.setItem("user type", userInfo.type);
+              copyBasketlocalToDB(currentUser.uid);
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       } else {
-        setUser(null); // 로그아웃한 경우
-        localStorage.removeItem("user type"); // 로그아웃 상태
-        // localStorage.removeItem("basket");
+        setUser(null);
+        localStorage.removeItem("user type");
+        localStorage.removeItem("basket"); // 로그아웃 시 장바구니 초기화
+        setLoading(false);
       }
     });
+
+    return unsubscribe; // cleanup 함수에서 이벤트 구독 해제
   }, []);
 
-  return <AuthContext.Provider value={user}>{user !== null && children}</AuthContext.Provider>;
+  if (loading) {
+    return <p>로딩 중...</p>;
+  }
+
+  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 }
 
 export default AuthProvider;

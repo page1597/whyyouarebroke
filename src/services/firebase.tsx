@@ -138,6 +138,11 @@ export async function getUser(uid: string): Promise<DocumentData | undefined> {
   return result.data();
 }
 
+// export async function getUserBasket(uid: string) {
+//   const userData = await getUser(uid);
+//   return userData!["basket"];
+// }
+
 export function onUserStateChange(callback: any) {
   onAuthStateChanged(firebaseAuth, (user) => {
     callback(user);
@@ -198,7 +203,7 @@ export async function getProducts(
 ) {
   let finalQuery = query(collection(db, "products"));
 
-  console.log(category, orderby, limitParam, pageParam, searchValue, priceRange);
+  // console.log(category, orderby, limitParam, pageParam, searchValue, priceRange);
 
   if (category) {
     finalQuery = query(finalQuery, where("category", "==", category));
@@ -231,7 +236,7 @@ export async function getProducts(
     products.push(doc.data() as DocumentData);
   });
 
-  console.log(products);
+  // console.log(products);
 
   return products;
 }
@@ -364,12 +369,21 @@ export async function updateProduct(productId: string, stock: number) {
   });
 }
 
-export async function updateUser(userId: string, basket: BasketProductType[]) {
+export async function updateUserBasket(userId: string, newBasket: BasketProductType[]) {
   // 왜 안되지
+  // 합쳐야함.
   console.log("update user");
   const userRef = doc(db, "users", userId);
+
+  const userDoc = await getDoc(userRef);
+  // firebase DB에 있는 장바구니 항목들을 가져와서 merge.
+  const existingBasket = userDoc.exists() ? userDoc.data()?.basket || [] : [];
+
+  const mergedBasket = [...existingBasket, ...newBasket];
+  console.log("mergedBasket: ", mergedBasket);
+
   await updateDoc(userRef, {
-    basket: basket,
+    basket: mergedBasket,
   });
 }
 

@@ -87,6 +87,7 @@ export default function BasketProductComponent({
       )}
       {product.id != "" ? (
         <div>
+          {/* {product.quantity} */}
           {basketProducts.find((basketProducts) => basketProducts.id === product.id)!.quantity * product.price}원
         </div>
       ) : (
