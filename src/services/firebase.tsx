@@ -369,21 +369,12 @@ export async function updateProduct(productId: string, stock: number) {
   });
 }
 
-export async function updateUserBasket(userId: string, newBasket: BasketProductType[]) {
-  // 왜 안되지
-  // 합쳐야함.
+export async function updateUserBasket(userId: string, basket: BasketProductType[]) {
   console.log("update user");
   const userRef = doc(db, "users", userId);
 
-  const userDoc = await getDoc(userRef);
-  // firebase DB에 있는 장바구니 항목들을 가져와서 merge.
-  const existingBasket = userDoc.exists() ? userDoc.data()?.basket || [] : [];
-
-  const mergedBasket = [...existingBasket, ...newBasket];
-  console.log("mergedBasket: ", mergedBasket);
-
   await updateDoc(userRef, {
-    basket: mergedBasket,
+    basket: basket,
   });
 }
 

@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { AuthContext } from "../context/authContext";
 import { firebaseAuth, getUser } from "@/services/firebase";
 import { UserInfoType } from "@/types";
-import { copyBasketlocalToDB } from "@/services/basket";
+import { matchBasketlocalToDB } from "@/services/basket";
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
@@ -22,7 +22,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 email: userInfo.email,
               });
               localStorage.setItem("user type", userInfo.type);
-              copyBasketlocalToDB(currentUser.uid);
+              // copyBasketlocalToDB(currentUser.uid);
             }
           })
           .finally(() => {
@@ -31,13 +31,19 @@ function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setUser(null);
         localStorage.removeItem("user type");
-        localStorage.removeItem("basket"); // 로그아웃 시 장바구니 초기화
+        localStorage.removeItem("basket");
         setLoading(false);
       }
     });
 
-    return unsubscribe; // cleanup 함수에서 이벤트 구독 해제
+    return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      matchBasketlocalToDB(user.id!);
+    }
+  }, [user]);
 
   if (loading) {
     return <p>로딩 중...</p>;

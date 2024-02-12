@@ -1,26 +1,13 @@
 import { BasketProductType, ProductType } from "@/types";
 import { getUser, updateUserBasket } from "./firebase";
 
-// 로컬 스토리지, 로그인 했을 경우 Db도 같이
-export async function getBasket(userId: string | null) {
+// 로컬 스토리지 장바구니만 가져오기
+export function getBasket() {
   console.log("get basket");
   let localStorageBasket = localStorage.getItem("basket");
   console.log("localStorageBasket: ", localStorageBasket);
   let localBasket = localStorageBasket === null ? [] : JSON.parse(localStorageBasket);
-
-  if (userId) {
-    try {
-      const userData = await getUser(userId);
-      const mergedBasket = [...localBasket, ...userData?.basket];
-      console.log(mergedBasket);
-      return userData?.basket;
-    } catch (error) {
-      console.error("데이터베이스에서 장바구니 정보를 가져오는 중 오류가 발생했습니다:", error);
-      return localBasket;
-    }
-  } else {
-    return localBasket;
-  }
+  return localBasket;
 }
 
 // 장바구니에 들어있는 상품인지 확인
@@ -36,15 +23,25 @@ export function isInBasket(productId: string) {
   return false;
 }
 
-// 로그아웃 한 상태에서 담고 로그인 했을때 동작만을 생각한거잖아. 근데 다시 로그아웃 하고 로그인하면 없어져. 당욘
-// 로그아웃 -> 로그인 시 동작.
-// 그러면 로그인 했을때 디비에 장바구니가 있으면?? 디비에서 장바구니에 꺼내서 합쳐져야함.
-export async function copyBasketlocalToDB(userId: string) {
-  console.log("copyBasketlocalToDB");
-  let getBasket = localStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
-  let basket = getBasket === null ? [] : JSON.parse(getBasket); // 원래 장바구니 리스트
-  localStorage.removeItem("basket");
-  updateUserBasket(userId, basket);
+// 로컬과 firebase DB의 장바구니를 통일
+export async function matchBasketlocalToDB(userId: string) {
+  const getLocalBasket = localStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
+  const localBasket = getLocalBasket === null ? [] : JSON.parse(getLocalBasket); // 원래 장바구니 리스트
+
+  const userData = await getUser(userId);
+  console.log("userData?.basket", userData?.basket);
+  const DBBasket = userData?.basket === undefined ? [] : userData?.basket;
+
+  const mergedBasket = [...DBBasket, ...localBasket];
+
+  // 중복 제거
+  const uniqueBasket = mergedBasket.filter((product, index) => {
+    const ids = mergedBasket.map((item) => item.id);
+    return ids.indexOf(product.id) === index;
+  });
+
+  updateUserBasket(userId, uniqueBasket);
+  localStorage.setItem("basket", JSON.stringify(uniqueBasket));
 }
 
 // 장바구니에 추가
