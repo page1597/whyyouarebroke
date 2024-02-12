@@ -1,4 +1,3 @@
-import { SidebarNavItem } from "@/types";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -8,10 +7,7 @@ import {
   DrawerLeftClose,
   DrawerLeftTitle,
 } from "@/components/ui/drawerLeft";
-
-export interface DocsSidebarNavProps {
-  items: SidebarNavItem[];
-}
+import { DocsSidebarNavProps } from "@/types/navigation";
 
 export default function DocsSidebarNav({ items }: DocsSidebarNavProps) {
   const navigate = useNavigate();

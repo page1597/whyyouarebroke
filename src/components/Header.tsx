@@ -1,32 +1,9 @@
-import { HeaderNavItem } from "@/types";
-import { Link, useNavigate } from "react-router-dom";
-import { logOut } from "@/services/firebase";
-import { useContext } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import SearchFilterProducts from "./searchFilterProducts";
-
-type HeaderNavProps = {
-  items: HeaderNavItem[];
-};
+import { Link } from "react-router-dom";
+import { HeaderNavProps } from "@/types/navigation";
+import useLogOutMutation from "@/hooks/auth/useLogOutMutation";
 
 export function Header({ items }: HeaderNavProps) {
-  const navigate = useNavigate();
-
-  const { mutate, isPending, isError } = useMutation({
-    mutationKey: ["log out"], // Query Key
-    mutationFn: () => logOut(), // 비동기 작업을 수행하는 함수
-    onSuccess: () => {
-      console.log("로그아웃 성공");
-      alert("로그아웃 하였습니다.");
-      navigate("/");
-    },
-    onError: (error) => {
-      console.error("로그아웃 실패", error);
-      alert("로그아웃하지 못했습니다.");
-    },
-  });
-
+  const { logOut, isPending } = useLogOutMutation();
   return (
     <>
       <div className="hidden md:flex bg-zinc-800 justify-end py-1.5 items-center px-3 gap-3">
@@ -45,24 +22,13 @@ export function Header({ items }: HeaderNavProps) {
                     )}
                   </Link>
                 ) : (
-                  <button disabled={isPending} onClick={() => mutate()}>
+                  <button disabled={isPending} onClick={() => logOut()}>
                     {item.title}
                   </button>
                 )}
               </div>
             ))
           : null}
-        {/* <Sheet>
-          <SheetTrigger>
-            <input className="w-42 rounded-2xl text-sm px-2 py-1 border-none placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" />
-          </SheetTrigger>
-          <SheetContent side={"top"}>
-            <SheetHeader>
-              <SheetTitle>상품 검색</SheetTitle>
-            </SheetHeader>
-            <SearchFilterProducts />
-          </SheetContent>
-        </Sheet> */}
       </div>
 
       {/* 모바일 헤더(로고까지 포함) */}
@@ -83,7 +49,7 @@ export function Header({ items }: HeaderNavProps) {
                       )}
                     </Link>
                   ) : (
-                    <button disabled={isPending} onClick={() => mutate()}>
+                    <button disabled={isPending} onClick={() => logOut()}>
                       {item.title}
                     </button>
                   )}

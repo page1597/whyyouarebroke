@@ -5,9 +5,8 @@ import RecommandProducts from "@/components/recommandProducts";
 import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
 import { AuthContext } from "@/context/authContext";
-import { addToBasket, isInBasket } from "@/services/basket";
-import { getProduct } from "@/services/firebase";
-import { ProductType } from "@/types";
+import useGetProduct from "@/hooks/product/useGetProduct";
+import { addToBasket, isInBasket } from "@/services/local/basket";
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,34 +14,21 @@ import { useSearchParams } from "react-router-dom";
 export default function Product() {
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("id"); // param 으로 가져오는 product id
-  const [product, setProduct] = useState<ProductType | undefined>();
   const userId = useContext(AuthContext)?.id || null;
-
-  if (productId == null || productId == "") {
-    throw Error("해당 상품이 존재하지 않습니다.");
-  }
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-    if (productId) {
-      getProductInfo(productId);
-    }
-  }, [productId]);
-
-  async function getProductInfo(productId: string) {
-    const result = await getProduct(productId);
-    setProduct(result as ProductType);
-  }
+  const { loading, product } = useGetProduct(productId);
 
   const [quantity, setQuantity] = useState(1); // quantity (수량)
   const [isAdded, setIsAdded] = useState(false); // 장바구니에 추가된 상품인지 여부
 
+  // 해당 상품이 장바구니 안에 들어있는지 확인
   useEffect(() => {
     const checkIsInBasket = async () => {
-      const isIn = await isInBasket(productId);
-      console.log("is in?", isIn);
-      setIsAdded(isIn);
+      if (productId) {
+        const isIn = await isInBasket(productId);
+        console.log("is in?", isIn);
+        setIsAdded(isIn);
+      }
     };
-
     checkIsInBasket();
   }, [productId, quantity]);
 
@@ -53,14 +39,8 @@ export default function Product() {
 
   return (
     <div className="flex flex-col">
-      {product ? (
-        <ProductInfo
-          product={product}
-          // product={basketProduct as ProductType}
-          isAdmin={false}
-          quantity={quantity}
-          setQuantity={setQuantity}
-        />
+      {!loading && product ? (
+        <ProductInfo product={product} isAdmin={false} quantity={quantity} setQuantity={setQuantity} />
       ) : (
         <></>
       )}
@@ -84,7 +64,7 @@ export default function Product() {
             </DrawerRightTrigger>
           )}
           <DrawerRightContent className="w-[350px]">
-            <DrawerBasket setIsAdded={setIsAdded} productId={productId} />
+            {productId ? <DrawerBasket setIsAdded={setIsAdded} productId={productId} /> : <></>}
           </DrawerRightContent>
         </DrawerRight>
 
