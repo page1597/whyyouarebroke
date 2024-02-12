@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { NavigateFunction } from "react-router-dom";
-import { ProductType, UserSignUpType } from "../types";
+import { BasketProductType, OrderInfoType, ProductType, UserSignUpType } from "../types";
 import {
   getFirestore,
   setDoc,
@@ -138,6 +138,11 @@ export async function getUser(uid: string): Promise<DocumentData | undefined> {
   return result.data();
 }
 
+// export async function getUserBasket(uid: string) {
+//   const userData = await getUser(uid);
+//   return userData!["basket"];
+// }
+
 export function onUserStateChange(callback: any) {
   onAuthStateChanged(firebaseAuth, (user) => {
     callback(user);
@@ -198,7 +203,7 @@ export async function getProducts(
 ) {
   let finalQuery = query(collection(db, "products"));
 
-  console.log(category, orderby, limitParam, pageParam, searchValue, priceRange);
+  // console.log(category, orderby, limitParam, pageParam, searchValue, priceRange);
 
   if (category) {
     finalQuery = query(finalQuery, where("category", "==", category));
@@ -231,7 +236,7 @@ export async function getProducts(
     products.push(doc.data() as DocumentData);
   });
 
-  console.log(products);
+  // console.log(products);
 
   return products;
 }
@@ -354,16 +359,63 @@ export async function deleteProduct(id: string) {
     console.error("Error deleting product images:", error);
   }
 }
-
+// 현재 재고 수량 업데이트로만 쓰임
 export async function updateProduct(productId: string, stock: number) {
   // 이미지 수정 x
   const productRef = doc(db, "products", productId);
   console.log(productId, stock);
-  try {
-    await updateDoc(productRef, {
-      stock: stock,
-    });
-  } catch (e) {
-    console.log(e);
+  await updateDoc(productRef, {
+    stock: stock,
+  });
+}
+
+export async function updateUserBasket(userId: string, basket: BasketProductType[]) {
+  console.log("update user");
+  const userRef = doc(db, "users", userId);
+
+  await updateDoc(userRef, {
+    basket: basket,
+  });
+}
+
+// 주문 추가
+export async function addOrder(order: OrderInfoType) {
+  const orderRef = doc(db, "orders", order.merchant_uid);
+  await setDoc(orderRef, order);
+}
+
+// 주문 상태 변경
+export async function updateOrder(orderId: string, status: string) {
+  const orderRef = doc(db, "orders", orderId);
+  await updateDoc(orderRef, {
+    status: status,
+  });
+}
+
+export async function getOrders(
+  userId: string | undefined | null,
+  pageParam: number | null,
+  limitParam: number | null
+) {
+  console.log(userId);
+  let finalQuery = query(collection(db, "orders"));
+  if (userId !== undefined && userId !== null) {
+    finalQuery = query(finalQuery, where("buyer_uid", "==", userId));
+  } else {
+    console.log("user id is undefined");
+    finalQuery = query(finalQuery, where("buyer_uid", "==", "none")); // 아무 값도 안나오게
   }
+  if (pageParam) {
+    finalQuery = query(finalQuery, startAfter(pageParam));
+  }
+  if (limitParam) {
+    finalQuery = query(finalQuery, limit(limitParam));
+  }
+  const querySnapshot = await getDocs(finalQuery);
+
+  const orders: DocumentData[] = [];
+  querySnapshot.forEach((doc) => {
+    orders.push(doc.data() as OrderInfoType);
+  });
+  return orders;
 }

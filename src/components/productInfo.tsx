@@ -1,7 +1,6 @@
 import { ProductType } from "@/types";
 import NumberInput from "./ui/numberInput";
-import { Dispatch, SetStateAction, useContext } from "react";
-import { BasketContext } from "@/context/basketContext";
+import { Dispatch, SetStateAction } from "react";
 
 export default function ProductInfo({
   product,
@@ -14,11 +13,6 @@ export default function ProductInfo({
   quantity?: number;
   setQuantity?: Dispatch<SetStateAction<number>>;
 }) {
-  const contextValue = useContext(BasketContext);
-  if (!contextValue) {
-    throw new Error("BasketContext를 찾을 수 없습니다.");
-  }
-
   return (
     <div className="flex justify-center flex-col items-center md:items-start">
       <div className="flex justify-between w-full items-center mt-6 text-zinc-800">
@@ -67,15 +61,14 @@ export default function ProductInfo({
             <h5 className="text-zinc-500 text-base font-light">{product.format}</h5>
           </div>
 
-          {!isAdmin ? (
+          {!isAdmin && quantity && setQuantity ? (
             <div className="flex justify-between bg-zinc-100 w-full p-5 mt-5 text-lg font-normal text-zinc-700">
               [{product.format}] {product.name}
               <NumberInput
-                product={"quantity" in product ? product : undefined}
+                // product={"quantity" in product ? product : undefined}
                 quantity={quantity}
                 setQuantity={setQuantity}
               />
-              {/* </div> */}
             </div>
           ) : (
             <></>

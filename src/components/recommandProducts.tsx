@@ -12,7 +12,6 @@ export default function RecommandProducts({ category, productId }: { category: s
     try {
       setIsLoading(true);
       const result = await getRandomProducts(productId, category, 4);
-      console.log(result);
       setRecommands(result);
     } catch (error) {
       console.error("Error fetching recommendations:", error);
@@ -21,7 +20,6 @@ export default function RecommandProducts({ category, productId }: { category: s
     }
   }
   useEffect(() => {
-    console.log("RecommandProducts useEffect");
     getRecommands();
   }, []);
 
