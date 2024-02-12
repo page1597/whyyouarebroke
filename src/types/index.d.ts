@@ -64,7 +64,7 @@ export type UserSubscriptionPlan = SubscriptionPlan &
 
 export type UserInfoType = {
   email: string?;
-  // id: string?;
+  id: string?;
   name: string?;
   type: string?;
   // nickname: string;
@@ -108,3 +108,18 @@ export type BasketProductType = Pick<
   BasketProduct,
   "id" | "name" | "price" | "format" | "stock" | "quantity" | "image"
 >;
+
+export type OrderInfoType = {
+  merchant_uid: string; // 주문번호
+  amount: number;
+  name: string;
+  status: string;
+  products: BasketProductType[];
+  orderedAt: number;
+  buyer_uid: string?;
+  buyer_name: string;
+  buyer_tel: string;
+  buyer_email: string;
+  buyer_addr: string;
+  buyer_postcode: string;
+};

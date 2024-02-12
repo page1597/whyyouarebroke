@@ -1,5 +1,8 @@
 import { BasketProductType } from "@/types";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect } from "react";
+import { Button } from "./ui/button";
+import { removeFromBasket } from "@/services/basket";
+import { AuthContext } from "@/context/authContext";
 
 export default function BasketProductComponent({
   product,
@@ -10,6 +13,8 @@ export default function BasketProductComponent({
   basketProducts: BasketProductType[];
   setBasketProducts: Dispatch<SetStateAction<BasketProductType[]>>;
 }) {
+  const userInfo = useContext(AuthContext);
+
   function onPlus() {
     const updateProduct = basketProducts.map((basketProduct) => {
       if (basketProduct.id === product.id) {
@@ -82,6 +87,7 @@ export default function BasketProductComponent({
       )}
       {product.id != "" ? (
         <div>
+          {/* {product.quantity} */}
           {basketProducts.find((basketProducts) => basketProducts.id === product.id)!.quantity * product.price}원
         </div>
       ) : (

@@ -4,21 +4,19 @@ import ProductInfo from "@/components/productInfo";
 import RecommandProducts from "@/components/recommandProducts";
 import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
-import { BasketContext } from "@/context/basketContext";
+import { AuthContext } from "@/context/authContext";
+import { addToBasket, isInBasket } from "@/services/basket";
 import { getProduct } from "@/services/firebase";
-import { BasketProductType, ProductType } from "@/types";
+import { ProductType } from "@/types";
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // 구매자가 보는 상품 상세 페이지
 export default function Product() {
   const [searchParams] = useSearchParams();
-  const productId = searchParams.get("id");
+  const productId = searchParams.get("id"); // param 으로 가져오는 product id
   const [product, setProduct] = useState<ProductType | undefined>();
-
-  useEffect(() => {
-    console.log("product:", product);
-  }, [product]);
+  const userId = useContext(AuthContext)?.id || null;
 
   if (productId == null || productId == "") {
     throw Error("해당 상품이 존재하지 않습니다.");
@@ -32,60 +30,33 @@ export default function Product() {
 
   async function getProductInfo(productId: string) {
     const result = await getProduct(productId);
-    console.log(result);
     setProduct(result as ProductType);
   }
 
-  const contextValue = useContext(BasketContext);
-  if (!contextValue) {
-    throw new Error("BasketContext를 찾을 수 없습니다.");
-  }
-  const { basket, setBasket } = contextValue;
-  // const productQuantity = basket?.find((item) => item.id === product?.id)?.quantity || 1;
   const [quantity, setQuantity] = useState(1); // quantity (수량)
-  const basketProduct: BasketProductType = {
-    ...(product as ProductType),
-    quantity: quantity, // 장바구니 형태의 product로 변경. (수량 항목 추가)
-  };
-
-  const [isAdded, setIsAdded] = useState(false);
+  const [isAdded, setIsAdded] = useState(false); // 장바구니에 추가된 상품인지 여부
 
   useEffect(() => {
-    console.log("quantity is changed");
-    // product가 바뀐건 맞는데, 같은 값의 quantity가 바뀌었을때를 어떻게 처리하지
-    if (basket) {
-      const isProductInBasket = basket.some((product) => basketProduct.id === product.id);
-      setIsAdded(isProductInBasket);
-    }
-  }, [product, quantity]);
+    const checkIsInBasket = async () => {
+      const isIn = await isInBasket(productId);
+      console.log("is in?", isIn);
+      setIsAdded(isIn);
+    };
+
+    checkIsInBasket();
+  }, [productId, quantity]);
 
   useEffect(() => {
     console.log("changed");
     setIsAdded(false);
   }, [quantity]);
 
-  useEffect(() => {
-    console.log("isAdded", isAdded);
-  }, [isAdded]);
-
-  // 장바구니에 추가
-  function addProductToBasket() {
-    setBasket((prev) => {
-      if (prev && !prev.some((item) => basketProduct.id === item.id)) {
-        return [...prev, basketProduct];
-      } else if (!prev) {
-        return [basketProduct];
-      }
-      return prev;
-    });
-    setIsAdded(true);
-  }
-
   return (
     <div className="flex flex-col">
       {product ? (
         <ProductInfo
-          product={basketProduct as ProductType}
+          product={product}
+          // product={basketProduct as ProductType}
           isAdmin={false}
           quantity={quantity}
           setQuantity={setQuantity}
@@ -97,7 +68,10 @@ export default function Product() {
         <DrawerRight direction="right">
           {!isAdded ? (
             <Button
-              onClick={() => addProductToBasket()}
+              onClick={() => {
+                addToBasket(userId, product!, quantity);
+                setIsAdded(true);
+              }}
               className="bg-zinc-0 border border-zinc-500 text-zinc-900 w-28 hover:bg-zinc-100"
             >
               장바구니 추가

@@ -1,7 +1,6 @@
 import { HeaderNavItem } from "@/types";
 import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "@/services/firebase";
-import { BasketContext } from "@/context/basketContext";
 import { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -28,13 +27,6 @@ export function Header({ items }: HeaderNavProps) {
     },
   });
 
-  const contextValue = useContext(BasketContext);
-  if (!contextValue) {
-    throw new Error("BasketContext를 찾을 수 없습니다.");
-  }
-
-  const { basket } = contextValue;
-
   return (
     <>
       <div className="hidden md:flex bg-zinc-800 justify-end py-1.5 items-center px-3 gap-3">
@@ -48,7 +40,7 @@ export function Header({ items }: HeaderNavProps) {
                     ) : (
                       <>
                         {item.title}
-                        {basket && <>({basket.length})</>}
+                        {/* {basket && <>({basket.length})</>} */}
                       </>
                     )}
                   </Link>
@@ -86,7 +78,7 @@ export function Header({ items }: HeaderNavProps) {
                       ) : (
                         <>
                           {item.title}
-                          {basket && <>({basket.length})</>}
+                          {/* {basket && <>({basket.length})</>} */}
                         </>
                       )}
                     </Link>
