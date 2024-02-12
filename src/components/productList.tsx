@@ -35,7 +35,6 @@ export default function ProductList({ category }: { category?: string }) {
   useEffect(() => {
     if (inView) {
       prefetchNextPage();
-      console.log("pre-fetch next page");
     }
   }, [inView, orderby]);
 

@@ -20,9 +20,8 @@ export default function PaymentButton({
   isAgreedTerm: boolean;
   userId?: string | null;
 }) {
+  const { addOrder } = useAddOrderMutation();
   function onClickPayment() {
-    const { addOrder } = useAddOrderMutation();
-
     if (!isAgreedTerm) {
       alert("쇼핑몰 이용약관을 동의해주세요.");
       console.log(orderProducts);

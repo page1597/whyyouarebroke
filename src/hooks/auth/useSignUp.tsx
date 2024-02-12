@@ -31,9 +31,8 @@ export default function useSignUp() {
   }
 
   function onGoogleSignUp() {
-    fbGoogleSignUp(navigate, form.getValues("type")
+    fbGoogleSignUp(navigate, form.getValues("type"));
   }
-
 
   return { form, onSubmit, onGoogleSignUp };
 }
