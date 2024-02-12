@@ -37,10 +37,14 @@ export default function Product() {
   const [isAdded, setIsAdded] = useState(false); // 장바구니에 추가된 상품인지 여부
 
   useEffect(() => {
-    const isIn = isInBasket(productId);
-    setIsAdded(isIn);
-    console.log(isIn);
-  }, [productId]);
+    const checkIsInBasket = async () => {
+      const isIn = await isInBasket(productId);
+      console.log("is in?", isIn);
+      setIsAdded(isIn);
+    };
+
+    checkIsInBasket();
+  }, [productId, quantity]);
 
   useEffect(() => {
     console.log("changed");
