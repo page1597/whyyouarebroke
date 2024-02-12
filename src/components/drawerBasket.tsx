@@ -43,7 +43,7 @@ export default function DrawerBasket({
                 className="absolute top-0 right-0 text-lg"
                 onClick={() => {
                   removeFromBasket(userId, product.id);
-                  setIsRemoved(true);
+                  setIsRemoved(!isRemoved);
                   setIsAdded(productId !== product.id);
                 }}
               >
