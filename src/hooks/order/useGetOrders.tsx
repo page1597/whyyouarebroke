@@ -3,7 +3,7 @@ import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
 
 // useGetProductsWithSearch
-export default function useGetOrders(userId: string) {
+export default function useGetOrders(isAdmin: boolean, userId: string) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -15,7 +15,7 @@ export default function useGetOrders(userId: string) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } = useInfiniteQuery({
     queryKey: ["orders"],
     // 비회원인 경우? -> 일단 막아놓기
-    queryFn: ({ pageParam }) => fbGetOrders(userId, pageParam, 12),
+    queryFn: ({ pageParam }) => fbGetOrders(isAdmin, userId, pageParam, 12),
     initialPageParam: null,
     getNextPageParam: (querySnapshot: DocumentData) => {
       if (querySnapshot.length < 12) {

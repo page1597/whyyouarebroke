@@ -6,13 +6,15 @@ import { Button } from "./ui/button";
 import useGetOrders from "@/hooks/order/useGetOrders";
 import useCancelOrderMutation from "@/hooks/order/useCancelOrderMutation";
 import useCancelOrder from "@/hooks/order/useCancelOrder";
-// 이건 페이지네이션으로 구현해볼까
-export default function OrderList() {
+import SelectOrderState from "./selectOrderStatus";
+
+// 이건 페이지네이션으로 ?
+export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
   const userInfo = useContext(AuthContext);
-  const { data, status, isFetchingNextPage, prefetchNextPage, refetch } = useGetOrders(userInfo.id);
+  const { data, status, isFetchingNextPage, prefetchNextPage, refetch } = useGetOrders(isAdmin, userInfo.id);
 
   useEffect(() => {
     if (inView) {
@@ -21,7 +23,7 @@ export default function OrderList() {
   }, [inView]);
 
   const { cancelOrder } = useCancelOrderMutation(refetch);
-  const { onCancel } = useCancelOrder(cancelOrder);
+  const { onCancelOrder } = useCancelOrder(cancelOrder);
 
   return (
     <div>
@@ -45,14 +47,18 @@ export default function OrderList() {
                           <div>주문명: {order.name}</div>
                           <div>주문 상태: {order.status}</div>
                         </div>
-                        <Button
-                          disabled={order.status === "cancelled"}
-                          onClick={() => {
-                            onCancel(order.merchant_uid);
-                          }}
-                        >
-                          주문 취소
-                        </Button>
+                        {!isAdmin ? (
+                          <Button
+                            disabled={order.status === "주문 취소"}
+                            onClick={() => {
+                              onCancelOrder(order.merchant_uid);
+                            }}
+                          >
+                            주문 취소
+                          </Button>
+                        ) : (
+                          <SelectOrderState id={order.merchant_uid} />
+                        )}
                       </div>
                     </div>
                   ))}

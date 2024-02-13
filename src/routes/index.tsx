@@ -47,7 +47,7 @@ export default function Layout() {
   // 전역관리 유저타입 저장
   const headerNav: HeaderNavItem[] = [
     userInfo ? { title: "로그아웃", href: "/" } : { title: "로그인", href: "/login" },
-    { title: "장바구니", href: "/basket" },
+    !isAdmin ? { title: "장바구니", href: "/basket" } : { title: "", href: "" },
     { title: "주문조회", href: "/order" },
     !userInfo ? { title: "회원가입", href: "/signup" } : { title: "", href: "" },
     !isAdmin ? { title: "마이페이지", href: "/mypage" } : { title: "", href: "" },

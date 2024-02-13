@@ -7,7 +7,7 @@ import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useState } from "react";
 
-export function ComboboxDemo({
+export default function Combobox({
   categories,
   category,
   setCategory,
@@ -37,7 +37,6 @@ export function ComboboxDemo({
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          {/* <CommandEmpty>No framework found.</CommandEmpty> */}
           <CommandGroup>
             {categories.map((value) => (
               <CommandItem

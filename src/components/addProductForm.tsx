@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { ComboboxDemo } from "./ui/comboBox";
 import { sidebarNav } from "@/routes";
 import { onKeyDown } from "@/lib/utils";
 import { ProductType } from "@/types/product";
 import useUploadProductMutation from "@/hooks/product/useUploadProductMutation";
 import useUploadProduct from "@/hooks/product/useUploadProduct";
+import Combobox from "./ui/comboBox";
 
 export default function AddProductForm({ product }: { product?: ProductType }) {
   const isEdit = product ? true : false;
@@ -34,7 +34,7 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                 render={() => (
                   <FormItem>
                     <FormControl>
-                      <ComboboxDemo categories={sidebarNav} category={category} setCategory={setCategory} />
+                      <Combobox categories={sidebarNav} category={category} setCategory={setCategory} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />
