@@ -1,4 +1,4 @@
-import { BasketProductType } from "@/types";
+import { BasketProductType } from "@/types/product";
 import { Dispatch, SetStateAction } from "react";
 // 전역적으로 (localStorage) 수량이 변함.
 function NumberInput({

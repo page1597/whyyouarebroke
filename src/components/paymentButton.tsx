@@ -1,8 +1,7 @@
-import { BasketProductType, OrderInfoType } from "@/types";
 import { Button } from "./ui/button";
 import { FieldValues } from "react-hook-form";
-import { addOrder } from "@/services/firebase";
-import { useMutation } from "@tanstack/react-query";
+import { BasketProductType } from "@/types/product";
+import useAddOrderMutation from "@/hooks/order/useAddOrderMutation";
 
 declare global {
   interface Window {
@@ -21,19 +20,23 @@ export default function PaymentButton({
   isAgreedTerm: boolean;
   userId?: string | null;
 }) {
+  const { addOrder } = useAddOrderMutation();
   function onClickPayment() {
     if (!isAgreedTerm) {
       alert("쇼핑몰 이용약관을 동의해주세요.");
       console.log(orderProducts);
       return;
     }
+
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init("imp24067853");
 
     console.log(orderProducts);
+
     const buyerInfo = fieldValues;
     let priceAmount = 0;
+
     orderProducts.forEach((products) => {
       priceAmount += products.quantity * products.price;
     });
@@ -60,7 +63,7 @@ export default function PaymentButton({
       console.log(success, merchant_uid);
       if (success) {
         alert("결제 성공");
-        mutate({
+        addOrder({
           merchant_uid: data.merchant_uid,
           status: "received",
           amount: data.amount,
@@ -76,7 +79,7 @@ export default function PaymentButton({
         });
       } else {
         alert(`결제 실패: ${error_msg}`);
-        mutate({
+        addOrder({
           merchant_uid: data.merchant_uid,
           amount: data.amount,
           name: data.name,
@@ -93,19 +96,6 @@ export default function PaymentButton({
       }
     });
   }
-
-  const { mutate } = useMutation({
-    mutationKey: ["add order"],
-    mutationFn: (order: OrderInfoType) => addOrder(order),
-    onSuccess: () => {
-      console.log("주문 성공");
-      // navigate("/");
-    },
-    onError: (error) => {
-      console.log("주문 실패", error);
-    },
-  });
-
   return (
     <Button className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
       결제하기

@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { UserInfoType } from "@/types";
 import { lazy } from "react";
+import { UserInfoType } from "@/types/user";
 
 // 로그인 한 상태에서 구매자가 볼 수 있는 화면
 export default function PublicRoutes(userInfo: UserInfoType | null) {
