@@ -9,7 +9,7 @@ import { z } from "zod";
 import { addProductFormSchema } from "@/types/formSchemas/addProduct";
 import { resizeFile } from "@/lib/utils";
 
-export default function useUploadProduct(product?: ProductType, uploadProduct: any) {
+export default function useUploadProduct(uploadProduct: any, product?: ProductType) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
   const [category, setCategory] = useState<string>(product ? product.category : "");
   const uploadedDate = +new Date(); // 등록시간 기준

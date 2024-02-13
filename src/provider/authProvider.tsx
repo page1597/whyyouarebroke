@@ -9,7 +9,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // 이전에 호출되었는지 여부를 저장하는 useRef
+
   useEffect(() => {
+    // 첫 렌더링 시에는 실행하지 않음
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
       console.log("구독 시작: ", currentUser);
       if (currentUser) {
@@ -23,6 +26,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 email: userInfo.email,
               });
               localStorage.setItem("user type", userInfo.type);
+              sessionStorage.setItem("loggedIn", "yes");
               // copyBasketlocalToDB(currentUser.uid);
             }
           })
@@ -32,7 +36,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setUser(null);
         localStorage.removeItem("user type");
-        localStorage.removeItem("basket");
+        if (sessionStorage.getItem("loggedIn") == "yes") {
+          sessionStorage.removeItem("basket");
+          sessionStorage.removeItem("loggedIn");
+        }
         setLoading(false);
       }
     });

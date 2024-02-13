@@ -13,8 +13,8 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
   const isEdit = product ? true : false;
   const { uploadProduct, isPending } = useUploadProductMutation(isEdit);
   const { previewImages, category, setCategory, onSubmit, addImages, deleteImage, form } = useUploadProduct(
-    product,
-    uploadProduct
+    uploadProduct,
+    product
   );
 
   return (
