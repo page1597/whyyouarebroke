@@ -1,8 +1,6 @@
-import { getProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
 import _ from "lodash";
@@ -10,101 +8,35 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "./ui/button";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { X } from "lucide-react";
+import useDebouncedSearch from "@/hooks/product/useDebouncedSearch";
+import useGetProducts from "@/hooks/product/useGetProducts";
 
 export default function ProductList({ category }: { category?: string }) {
   const navigate = useNavigate();
-  const [orderby, setOrderby] = useState<string>("createdAt");
-
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(500000);
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
-  const [priceRange, setPriceRange] = useState({
-    minPrice: 0,
-    maxPrice: 500000,
-  });
-  const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
 
-  const debounceDelay = 1000;
-
-  const debouncedSearch = useCallback(
-    _.debounce((value: string) => {
-      setDebouncedSearchValue(value);
-    }, debounceDelay),
-    []
-  );
-
-  function onSearch(e: ChangeEvent<HTMLInputElement>) {
-    const searchValue = e.target.value;
-    debouncedSearch(searchValue);
-  }
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } = useInfiniteQuery({
-    queryKey: ["products", category, orderby, JSON.stringify(priceRange), debouncedSearchValue],
-    queryFn: ({ pageParam }) =>
-      getProducts(
-        category ? category : null,
-        debouncedSearchValue,
-        orderby !== "createdAt" ? priceRange : null,
-        orderby,
-        pageParam,
-        12
-      ),
-    initialPageParam: null,
-    getNextPageParam: (querySnapshot: DocumentData) => {
-      if (querySnapshot.length < 12) {
-        return null;
-      } else {
-        if (orderby === "createdAt") {
-          return querySnapshot[querySnapshot.length - 1].createdAt;
-        } else if (orderby === "price") {
-          return querySnapshot[querySnapshot.length - 1].price;
-        }
-      }
-    },
-  });
-  useEffect(() => {
-    // 컴포넌트가 언마운트될 때 debounce 함수를 클리어
-    return () => {
-      debouncedSearch.cancel(); // debounce 함수 클리어
-    };
-  }, []);
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity,
-      },
-    },
-  });
-
-  async function prefetchNextPage() {
-    if (hasNextPage && !isFetchingNextPage) {
-      console.log("hasNextPage", hasNextPage, "isFetchingNextPage", isFetchingNextPage);
-      await queryClient.prefetchInfiniteQuery({ queryKey: ["products"], queryFn: fetchNextPage, pages: 3 });
-    }
-  }
+  const { debouncedSearchValue, onSearch } = useDebouncedSearch();
+  const {
+    data,
+    orderby,
+    minPrice,
+    setMinPrice,
+    maxPrice,
+    setMaxPrice,
+    changeOrderby,
+    onSearchByPrice,
+    status,
+    isFetchingNextPage,
+    prefetchNextPage,
+  } = useGetProducts(category ?? null, debouncedSearchValue);
 
   useEffect(() => {
     if (inView) {
       prefetchNextPage();
-      console.log("pre-fetch next page");
     }
   }, [inView, orderby]);
-
-  function changeOrderby(order: string) {
-    setOrderby(order);
-    refetch();
-  }
-
-  function onSearchByPrice() {
-    setPriceRange({
-      minPrice: minPrice,
-      maxPrice: maxPrice,
-    });
-    refetch();
-  }
 
   return (
     <>
@@ -126,11 +58,11 @@ export default function ProductList({ category }: { category?: string }) {
               value={orderby}
               onClick={() => changeOrderby("price")}
             >
-              <button
+              <span
                 className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm text-nowrap ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
               >
                 가격순
-              </button>
+              </span>
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3 w-60 text-sm">
               <div className="flex justify-between">
@@ -161,7 +93,6 @@ export default function ProductList({ category }: { category?: string }) {
           <Input className="hidden md:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
         </div>
       </div>
-
       {status === "success" ? (
         <div className="mt-8">
           {data?.pages.map((page, index) => (

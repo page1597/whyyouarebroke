@@ -6,72 +6,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
-import { googleSignUp, signUp } from "@/services/firebase";
-import { NavigateFunction } from "react-router-dom";
-import { UserSignUpType } from "@/types";
 import GoogleSignUpButton from "./ui/googleSignupButton";
+import useSignUp from "@/hooks/auth/useSignUp";
 
-const passwordRegx = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?()_+~-]).{8,15}$/;
-const easyStringRegex =
-  /^(?!.*(123|abc|admin|password|qwerty|letmein|welcome|monkey|12345|123456|654321|11111|123123|admin123|password123|test|pass|login|letme|welcome1|admin1234|admin@123))/;
-
-// const strongPasswordRegex = new RegExp(`${easyStringRegex.source}${passwordRegx.source}`);
-
-const formSchema = z
-  .object({
-    type: z.string(),
-    password: z
-      .string()
-      .regex(passwordRegx, "영문 대소문자 / 숫자 / 특수문자 중 3가지 이상 조합 (8자~16자)으로 입력해주세요.")
-      .regex(easyStringRegex, "일련번호, 잘 알려진 단어, 키보드 상 나란히 있는 문자를 제외해주세요."),
-    confirmPassword: z.string(),
-    name: z
-      .string()
-      .min(2, {
-        message: "이름을 입력해주세요.",
-      })
-      .max(16, {
-        message: "이름을 16자 이하로 입력해주세요.",
-      }),
-    email: z.string().email({
-      message: "올바른 이메일 형식이 아닙니다.",
-    }),
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      console.log("비밀번호 다름");
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "비밀번호가 다릅니다.",
-        path: ["confirmPassword"],
-      });
-    }
-  });
-
-export default function SignUpForm({ navigate }: { navigate: NavigateFunction }) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      type: "일반 회원",
-      password: "",
-      confirmPassword: "",
-      name: "",
-      email: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // forbiddenWords.push(values.id);
-    console.log(values);
-    const user: UserSignUpType = {
-      type: values.type,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
-      name: values.name,
-      email: values.email,
-    };
-    signUp(user, navigate);
-  }
+export default function SignUpForm() {
+  const { form, onSubmit, onGoogleSignUp } = useSignUp();
 
   return (
     <>
@@ -79,7 +18,7 @@ export default function SignUpForm({ navigate }: { navigate: NavigateFunction })
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* 소셜 로그인 - 구글 */}
           <div className="text-zinc-700 mb-3">SNS 계정으로 회원가입</div>
-          <GoogleSignUpButton onClick={() => googleSignUp(navigate, form.getValues("type"))} />
+          <GoogleSignUpButton onClick={onGoogleSignUp} />
           <div className="flex mt-10 flex-row justify-between items-end">
             <div>기본정보</div>
             <div className="text-xs  text-zinc-600">* 필수입력사항</div>
@@ -126,7 +65,6 @@ export default function SignUpForm({ navigate }: { navigate: NavigateFunction })
                 </FormItem>
               )}
             />
-
             <FormLabel>비밀번호 *</FormLabel>
             <FormField
               control={form.control}
