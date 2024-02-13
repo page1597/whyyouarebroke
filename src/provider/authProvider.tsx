@@ -1,8 +1,9 @@
 import { ReactNode, useEffect, useState } from "react";
 import { AuthContext } from "../context/authContext";
-import { firebaseAuth, getUser } from "@/services/firebase";
-import { UserInfoType } from "@/types";
-import { matchBasketlocalToDB } from "@/services/basket";
+import { matchBasketlocalToDB } from "@/services/local/basket";
+import { UserInfoType } from "@/types/user";
+import { firebaseAuth } from "@/services/firebase";
+import { fbGetUser } from "@/services/firebase/user";
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
@@ -12,7 +13,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
       console.log("구독 시작: ", currentUser);
       if (currentUser) {
-        await getUser(currentUser.uid)
+        await fbGetUser(currentUser.uid)
           .then((userInfo) => {
             if (userInfo) {
               setUser({

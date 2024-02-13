@@ -1,4 +1,4 @@
-import { ProductType } from "@/types";
+import { ProductType } from "@/types/product";
 import NumberInput from "./ui/numberInput";
 import { Dispatch, SetStateAction } from "react";
 

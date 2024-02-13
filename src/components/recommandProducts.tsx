@@ -1,29 +1,11 @@
-import { getRandomProducts } from "@/services/firebase";
 import { DocumentData } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 import { useNavigate } from "react-router-dom";
+import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
 
 export default function RecommandProducts({ category, productId }: { category: string; productId: string }) {
-  const [recommands, setRecommands] = useState<DocumentData[]>(new Array(4));
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  // 추천상품 4개만 보여짐
-  async function getRecommands() {
-    try {
-      setIsLoading(true);
-      const result = await getRandomProducts(productId, category, 4);
-      setRecommands(result);
-    } catch (error) {
-      console.error("Error fetching recommendations:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  useEffect(() => {
-    getRecommands();
-  }, []);
-
   const navigate = useNavigate();
+  const { isLoading, recommands } = useGetRecommandProducts(productId, category, 4);
 
   return (
     <div>
