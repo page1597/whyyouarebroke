@@ -1,33 +1,13 @@
 // root of the project
-import { Header } from "@/components/header";
-// import {
-//   DrawerLeft,
-//   DrawerLeftTrigger,
-//   DrawerLeftContent,
-//   DrawerLeftHeader,
-//   DrawerLeftTitle,
-//   DrawerLeftFooter,
-//   DrawerLeftClose,
-// } from "@/components/ui/drawerLeft";
-import {
-  DrawerRight,
-  DrawerRightTrigger,
-  DrawerRightContent,
-  DrawerRightHeader,
-  // DrawerRightFooter,
-  // DrawerRightClose,
-} from "@/components/ui/drawerRight";
 import DocsSidebarNav from "@/components/sidebar";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logo from "src/assets/logo.png";
-import { Input } from "@/components/ui/formInput";
 import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
-import { HeaderNavItem } from "@/types";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
-import SearchFilterProducts from "@/components/searchFilterProducts";
-import { SearchXIcon } from "lucide-react";
+import { Header } from "@/components/Header";
+import { HeaderNavItem } from "@/types/navigation";
 
 export const sidebarNav = [
   {

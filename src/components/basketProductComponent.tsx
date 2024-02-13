@@ -1,8 +1,5 @@
-import { BasketProductType } from "@/types";
-import { Dispatch, SetStateAction, useContext, useEffect } from "react";
-import { Button } from "./ui/button";
-import { removeFromBasket } from "@/services/basket";
-import { AuthContext } from "@/context/authContext";
+import { BasketProductType } from "@/types/product";
+import { Dispatch, SetStateAction } from "react";
 
 export default function BasketProductComponent({
   product,
@@ -13,8 +10,6 @@ export default function BasketProductComponent({
   basketProducts: BasketProductType[];
   setBasketProducts: Dispatch<SetStateAction<BasketProductType[]>>;
 }) {
-  const userInfo = useContext(AuthContext);
-
   function onPlus() {
     const updateProduct = basketProducts.map((basketProduct) => {
       if (basketProduct.id === product.id) {
