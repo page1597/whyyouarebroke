@@ -1,181 +1,31 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { NavigateFunction } from "react-router-dom";
-import { ProductType } from "@/types";
-import { addProduct, getPrevImagesURL } from "@/services/firebase";
-import { ChangeEvent, useEffect, useState } from "react";
-import { MouseEvent } from "react";
-import { v4 as uuidv4 } from "uuid"; // 고유값 생성
 import { ComboboxDemo } from "./ui/comboBox";
 import { sidebarNav } from "@/routes";
-import Resizer from "react-image-file-resizer";
-import { useMutation } from "@tanstack/react-query";
+import { onKeyDown } from "@/lib/utils";
+import { ProductType } from "@/types/product";
+import useUploadProductMutation from "@/hooks/product/useUploadProductMutation";
+import useUploadProduct from "@/hooks/product/useUploadProduct";
 
-// const MAX_FILE_SIZE = 5000000;
-// const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const formSchema = z.object({
-  id: z.string(),
-  category: z.string(),
-  name: z.string(),
-  price: z.preprocess(Number, z.number()),
-  //   image: z
-  //     .any()
-  //     .refine((files) => {
-  //       return files?.[0]?.size <= MAX_FILE_SIZE;
-  //     }, `Max image size is 5MB.`)
-  //     .refine(
-  //       (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-  //       "Only .jpg, .jpeg, .png and .webp formats are supported."
-  //     ),
-  image: z.any(),
-  stock: z.preprocess(Number, z.number()),
-  description: z.string(),
-
-  artist: z.string().optional(),
-  label: z.string().optional(),
-  released: z.string().optional(),
-  format: z.string().optional(),
-  createdAt: z.number(),
-});
-
-export default function AddProductForm({ product, navigate }: { product?: ProductType; navigate: NavigateFunction }) {
-  const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
-  const [category, setCategory] = useState<string>(product ? product.category : "");
+export default function AddProductForm({ product }: { product?: ProductType }) {
   const isEdit = product ? true : false;
-  const uploadedDate = +new Date();
-  const uuid = uuidv4();
-  // 등록시간 기준
+  const { uploadProduct, isPending } = useUploadProductMutation(isEdit);
+  const { previewImages, category, setCategory, onSubmit, addImages, deleteImage, form } = useUploadProduct(
+    uploadProduct,
+    product
+  );
 
-  // 이전 이미지 가져오기
-  async function getPrevImages() {
-    console.log("원래 있던 이미지", product?.image);
-    if (product && product?.image) {
-      const result = await getPrevImagesURL(product.id, product?.image);
-      setPreviewImages(result); // preview : blob
-    }
-  }
-  // 로딩 추가하기
-  useEffect(() => {
-    if (product) {
-      getPrevImages();
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(previewImages);
-  }, [previewImages]);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      id: product?.id || uuid,
-      category: product?.category || "",
-      name: product?.name || "",
-      price: product?.price || 0,
-      image: previewImages,
-      stock: product?.stock || 0,
-      description: product?.description || "",
-      artist: product?.artist || "",
-      label: product?.label || "",
-      released: product?.released || "",
-      format: product?.format || "",
-      createdAt: product?.createdAt || uploadedDate,
-    },
-  });
-
-  const { mutate, isPending, isError } = useMutation({
-    mutationKey: ["upload product"],
-    mutationFn: (product: ProductType) => addProduct(product),
-    onSuccess: () => {
-      console.log("상품 등록 성공");
-      alert(isEdit ? "상품 정보가 수정되었습니다." : "상품이 등록되었습니다.");
-      navigate("/");
-    },
-    onError: (error) => {
-      console.log("상품 등록 실패", error);
-      alert(isEdit ? "상품을 수정하지 못했습니다." : "상품을 등록하지 못했습니다.");
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const product: ProductType = {
-      id: values.id,
-      category: category,
-      name: values.name,
-      price: values.price,
-      image: previewImages,
-      stock: values.stock,
-      description: values.description,
-      artist: values.artist || null,
-      label: values.label || null,
-      released: values.released || null,
-      format: values.format || null,
-      createdAt: values.createdAt,
-    };
-    // addProduct(product).then(() => {
-    //   console.log(product.image);
-    //   alert(isEdit ? "상품을 수정했습니다." : "상품을 등록했습니다.");
-    //   navigate("/");
-    // });
-    mutate(product);
-  }
-
-  const resizeFile = (file: Blob): Promise<string> =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        300,
-        300,
-        "WEBP",
-        100,
-        0,
-        (uri) => {
-          resolve(URL.createObjectURL(uri as Blob));
-        },
-        "blob"
-      );
-    });
-
-  async function addImages(e: ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
-    let images = e.target.files;
-    if (images) {
-      // 성능 최적화를 위한 이미지 리사이징 기능
-      const resizedImages = await Promise.all<string>(Array.from(images).map(resizeFile));
-
-      // 기존 이미지와 새로 리사이징된 이미지를 합친 후 설정
-      setPreviewImages((prev) => [...prev, ...resizedImages]);
-    }
-  }
-
-  // X버튼 클릭 시 이미지 삭제
-  function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
-    e.preventDefault();
-    setPreviewImages(previewImages.filter((_, index) => index !== id));
-  }
-
-  function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
-  }
   return (
     <div className="text-zinc-900">
       <Form {...form}>
         {
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            {/* 소셜 로그인 - 구글 */}
             <div className="flex mt-10 flex-row justify-between items-end">
               <div>상품 정보</div>
               <div className="text-xs text-zinc-600">* 필수입력사항</div>
             </div>
-            {/* md:hidden grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3 */}
-            {/* (min-width: 768px)  */}
             <div className="grid grid-cols-203 gap-5 border border-zinc-300 rounded p-8 mt-3 md:grid-cols-103 md:gap-4">
               <FormLabel>카테고리 *</FormLabel>
               <FormField
@@ -218,9 +68,6 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
                     <FormControl>
                       <Input {...field} type="number" onKeyDown={onKeyDown} />
                     </FormControl>
-                    {/* <div className="hidden md:flex">
-                    <FormMessage>숫자만 입력</FormMessage>
-                  </div> */}
                   </FormItem>
                 )}
               />
@@ -234,9 +81,6 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
                     <FormControl>
                       <Input {...field} type="number" onKeyDown={onKeyDown} />
                     </FormControl>
-                    {/* <div className="hidden md:flex">
-                    <FormMessage>숫자만 입력</FormMessage>
-                  </div> */}
                   </FormItem>
                 )}
               />
@@ -402,7 +246,6 @@ export default function AddProductForm({ product, navigate }: { product?: Produc
             </div>
             <div className="flex w-full justify-center">
               <Button type="submit" className="mt-6 mb-12 w-32" disabled={isPending}>
-                {/* {!isPending ? <>상품등록</> : <>상품등록중</>} */}
                 상품 등록
               </Button>
             </div>

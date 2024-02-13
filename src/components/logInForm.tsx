@@ -1,49 +1,15 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { googleLogIn, logIn } from "@/services/firebase";
 import { NavigateFunction } from "react-router-dom";
 import GoogleLoginButton from "./ui/googleLoginButton";
-import { useMutation } from "@tanstack/react-query";
+import { fbGoogleLogIn } from "@/services/firebase/user";
+import useLogInMutation from "@/hooks/auth/useLogInMutation";
+import useLogIn from "@/hooks/auth/useLogin";
 
-const formSchema = z.object({
-  email: z.string(),
-  password: z.string(),
-});
 export default function LogInForm({ navigate }: { navigate: NavigateFunction }) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const { mutate, isPending, isError } = useMutation({
-    mutationKey: ["log in"], // Query Key
-    mutationFn: ({ email, password }: { email: string; password: string }) => logIn(email, password), // 비동기 작업을 수행하는 함수
-    onSuccess: (data) => {
-      console.log("로그인 성공", data);
-      alert("로그인 되었습니다.");
-      navigate("/");
-    },
-    onError: (error) => {
-      console.error("로그인 실패", error);
-      alert("이메일과 비밀번호를 다시 한 번 확인해 주세요.");
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    mutate({
-      email: values.email,
-      password: values.password,
-    });
-  }
-
+  const { logIn, isPending } = useLogInMutation();
+  const { onSubmit, form } = useLogIn(logIn);
   return (
     <Form {...form}>
       <div className="flex flex-col justify-center items-center w-96">
@@ -84,7 +50,7 @@ export default function LogInForm({ navigate }: { navigate: NavigateFunction }) 
 
         <div className="w-full flex flex-col justify-center items-center mt-14">
           <div className="text-zinc-500 mb-5">소셜 로그인</div>
-          <GoogleLoginButton onClick={() => googleLogIn(navigate)} />
+          <GoogleLoginButton onClick={() => fbGoogleLogIn(navigate)} />
         </div>
       </div>
     </Form>
