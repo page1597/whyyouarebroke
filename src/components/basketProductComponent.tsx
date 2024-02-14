@@ -18,7 +18,7 @@ export default function BasketProductComponent({
       {product.id !== "" ? (
         <div className="grid grid-flow-col grid-cols-5 gap-2">
           <div className="flex justify-center">
-            <img src={product.image} width={100} height={100} />
+            <img src={product.image} width={96} height={96} />
           </div>
           <div className="flex items-center justify-center">
             [{product.format}] {product.name}

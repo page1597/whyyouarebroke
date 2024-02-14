@@ -8,7 +8,7 @@ export type OrderType = {
   status: string;
   products: BasketProductType[];
   orderedAt: number;
-  buyer_uid: string | undefined;
+  buyer_uid: string | null;
   buyer_name: string;
   buyer_tel: string;
   buyer_email: string;

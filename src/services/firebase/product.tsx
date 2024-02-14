@@ -216,7 +216,6 @@ export async function fbDeleteProduct(id: string) {
 export async function fbUpdateProduct(productId: string, stock: number) {
   // 이미지 수정 x
   const productRef = doc(db, "products", productId);
-  console.log(productId, stock);
   await updateDoc(productRef, {
     stock: stock,
   });

@@ -77,7 +77,7 @@ export function addToBasket(userId: string | null, product: ProductType, quantit
   }
 }
 
-export function updateBasketProductStock(userId: string | null, basketProduct: BasketProductType, stock: number) {
+export async function updateBasketProductStock(userId: string | null, basketProduct: BasketProductType, stock: number) {
   let getBasket = sessionStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
   let basket = getBasket === null ? [] : JSON.parse(getBasket); // 원래 장바구니 리스트
 

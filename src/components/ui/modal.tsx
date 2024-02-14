@@ -15,7 +15,7 @@ type ModalComponent = React.FC<ModalProps> & {
 };
 
 const Modal: ModalComponent = ({ children, isOpen }) => {
-  if (!isOpen) return null; // 모달이 닫혀있는 경우 아무것도 렌더링하지 않음
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">

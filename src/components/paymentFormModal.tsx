@@ -8,7 +8,6 @@ import { AuthContext } from "@/context/authContext";
 import { Button } from "./ui/button";
 import { BasketProductType } from "@/types/product";
 import useOrderModal from "@/hooks/order/useOrderModal";
-import useUpdateProductQuantityMutation from "@/hooks/product/useUpdateProductQuantityMutation";
 
 // 모달창 직접 구현
 function PaymentFormModal({
@@ -22,9 +21,11 @@ function PaymentFormModal({
   const [isAgreedTerm, setIsAgreedTerm] = useState(false);
   const shippingFee = 3000;
 
-  const { updateProductQuantity } = useUpdateProductQuantityMutation();
-  const { form, isOpen, orderProducts, orderSelectedProducts, orderAllProducts, totalPrice, cancelOrder } =
-    useOrderModal(userInfo, checkedProducts, basketProducts, updateProductQuantity);
+  const { form, isOpen, onClose, orderProducts, orderSelectedProducts, orderAllProducts, totalPrice } = useOrderModal(
+    userInfo,
+    checkedProducts,
+    basketProducts
+  );
 
   return (
     <div>
@@ -40,7 +41,7 @@ function PaymentFormModal({
           전체상품주문
         </Button>
       </div>
-      <Modal isOpen={isOpen} onClose={cancelOrder}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <div className="flex flex-row justify-between items-end">
           <div>결제 정보</div>
           <div className="text-xs text-zinc-600">* 필수입력사항</div>
@@ -159,11 +160,12 @@ function PaymentFormModal({
             <div>쇼핑몰 이용약관 동의</div>
           </div>
           <div className="flex gap-4 w-full justify-center">
-            <Modal.Close onClose={cancelOrder} /> {/* 주문 취소 버튼 */}
+            <Modal.Close onClose={onClose} /> {/* 모달 창 닫음 */}
             <PaymentButton
               fieldValues={form.getValues()}
               orderProducts={orderProducts}
               isAgreedTerm={isAgreedTerm}
+              setIsAgreedTerm={setIsAgreedTerm}
               userId={userInfo?.id === undefined || userInfo?.id === null ? null : userInfo.id}
             />
           </div>

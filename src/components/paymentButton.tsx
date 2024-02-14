@@ -1,9 +1,9 @@
 import { Button } from "./ui/button";
 import { FieldValues } from "react-hook-form";
 import { BasketProductType } from "@/types/product";
-import useAddOrderMutation from "@/hooks/order/useAddOrderMutation";
-import { generateOrderNumber } from "@/lib/utils";
-import { OrderStatusType } from "@/types/order";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import useOrderProcessing from "@/hooks/order/useOrderProcessing";
+import useOrder from "@/hooks/order/useOrder";
 
 declare global {
   interface Window {
@@ -15,89 +15,30 @@ export default function PaymentButton({
   fieldValues,
   orderProducts,
   isAgreedTerm,
+  setIsAgreedTerm,
   userId,
 }: {
   fieldValues: FieldValues;
   orderProducts: BasketProductType[];
   isAgreedTerm: boolean;
+  setIsAgreedTerm: Dispatch<SetStateAction<boolean>>;
   userId?: string | null;
 }) {
-  const { addOrder } = useAddOrderMutation();
-  function onClickPayment() {
-    if (!isAgreedTerm) {
-      alert("쇼핑몰 이용약관을 동의해주세요.");
-      console.log(orderProducts);
-      return;
-    }
+  const { checkIsOutOfStock, decreaseProductStock, increaseProductStock } = useOrderProcessing(userId);
+  const { onClickPayment } = useOrder(
+    userId,
+    fieldValues,
+    isAgreedTerm,
+    orderProducts,
+    checkIsOutOfStock,
+    decreaseProductStock,
+    increaseProductStock
+  );
 
-    /* 1. 가맹점 식별하기 */
-    const IMP = window.IMP;
-    IMP.init("imp24067853");
+  useEffect(() => {
+    setIsAgreedTerm(false);
+  }, []);
 
-    console.log(orderProducts);
-
-    const buyerInfo = fieldValues;
-    let priceAmount = 0;
-
-    orderProducts.forEach((products) => {
-      priceAmount += products.quantity * products.price;
-    });
-    console.log(priceAmount);
-
-    /* 2. 결제 데이터 정의하기 */
-    const data = {
-      pg: "html5_inicis", // PG사
-      pay_method: "card", // 결제수단
-      merchant_uid: `${generateOrderNumber(orderProducts[0].id)}`, // 주문번호
-      amount: priceAmount, // 결제금액
-      name: `${orderProducts[0].name} 외 ${orderProducts.length - 1}건`, // 주문명
-      buyer_name: buyerInfo.buyer_name, // 구매자 이름
-      buyer_tel: buyerInfo.buyer_tel, // 구매자 전화번호
-      buyer_email: buyerInfo.buyer_email, // 구매자 이메일
-      buyer_addr: buyerInfo.buyer_addr, // 구매자 주소
-      buyer_postcode: buyerInfo.buyer_postcode, // 구매자 우편번호
-    };
-    console.log(data);
-
-    /* 4. 결제 창 호출하기 */
-    IMP.request_pay(data, (response: { success: any; merchant_uid: any; error_msg: any }) => {
-      const { success, merchant_uid, error_msg } = response;
-      console.log(success, merchant_uid);
-      if (success) {
-        alert("결제 성공");
-        addOrder({
-          merchant_uid: data.merchant_uid,
-          status: OrderStatusType.PURCHASE_CONFIRMED,
-          amount: data.amount,
-          name: data.name,
-          products: orderProducts,
-          orderedAt: +new Date(),
-          buyer_uid: userId || null,
-          buyer_name: data.buyer_name,
-          buyer_tel: data.buyer_tel,
-          buyer_email: data.buyer_email,
-          buyer_addr: data.buyer_addr,
-          buyer_postcode: data.buyer_postcode,
-        });
-      } else {
-        alert(`결제 실패: ${error_msg}`);
-        addOrder({
-          merchant_uid: data.merchant_uid,
-          amount: data.amount,
-          name: data.name,
-          status: "received",
-          products: orderProducts,
-          orderedAt: +new Date(),
-          buyer_uid: userId || null,
-          buyer_name: data.buyer_name,
-          buyer_tel: data.buyer_tel,
-          buyer_email: data.buyer_email,
-          buyer_addr: data.buyer_addr,
-          buyer_postcode: data.buyer_postcode,
-        });
-      }
-    });
-  }
   return (
     <Button className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
       결제하기
