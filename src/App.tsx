@@ -39,10 +39,10 @@ export default function App() {
         //   path: "/basket", // order/basket
         //   element: <Basket />,
         // },
-        {
-          path: "/order", // order/basket
-          element: isAdmin ? <AdminOrder /> : <Order />,
-        },
+        // {
+        //   path: "/order", // order/basket
+        //   element: isAdmin ? <AdminOrder /> : <Order />,
+        // },
         {
           path: "/category/rock-pop-etc",
           element: <RockPopEtc />,

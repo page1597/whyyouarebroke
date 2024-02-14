@@ -13,10 +13,12 @@ export default function useBasketList(basket: BasketProductType[] | null) {
   useEffect(() => {
     // basket이 null이 아닌 경우에만 상태를 업데이트하도록 처리
     if (basket !== null) {
+      console.log(basket);
       setBasketProducts(basket);
 
       const withTitle = [{ image: null, name: "", price: -1, quantity: -1, id: "", format: null, stock: 0 }, ...basket];
       setBasketWithTitle(withTitle);
+      console.log(withTitle);
     }
   }, [basket]); // basket이 변경될 때마다 호출
 

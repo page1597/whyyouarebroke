@@ -20,6 +20,20 @@ export default function useOrderModal(
   const [isAllButton, setIsAllButton] = useState(false);
 
   useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (isOpen) {
+        e.preventDefault();
+        e.returnValue = "구매를 취소한 후 창을 닫아주세요.";
+      }
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  });
+
+  useEffect(() => {
     setOrderProducts(checkedProducts);
   }, [checkedProducts]);
 
@@ -80,7 +94,7 @@ export default function useOrderModal(
   }
 
   // 수정 필요. 함수 이름 변경 필요.
-  async function closeModal() {
+  async function cancelOrder() {
     // alert("주문을 취소하시겠습니까?")
     // orderProducts는 항상 크기가 1이상이고, 재고가 부족한 경우가 없다.
     let orderProductList: BasketProductType[] = orderProducts;
@@ -125,6 +139,6 @@ export default function useOrderModal(
     orderSelectedProducts,
     orderAllProducts,
     totalPrice,
-    closeModal,
+    cancelOrder,
   };
 }

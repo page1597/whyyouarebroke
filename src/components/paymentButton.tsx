@@ -2,6 +2,8 @@ import { Button } from "./ui/button";
 import { FieldValues } from "react-hook-form";
 import { BasketProductType } from "@/types/product";
 import useAddOrderMutation from "@/hooks/order/useAddOrderMutation";
+import { generateOrderNumber } from "@/lib/utils";
+import { OrderStatusType } from "@/types/order";
 
 declare global {
   interface Window {
@@ -46,7 +48,7 @@ export default function PaymentButton({
     const data = {
       pg: "html5_inicis", // PG사
       pay_method: "card", // 결제수단
-      merchant_uid: `${orderProducts[0].id}_${new Date().getTime()}`, // 주문번호
+      merchant_uid: `${generateOrderNumber(orderProducts[0].id)}`, // 주문번호
       amount: priceAmount, // 결제금액
       name: `${orderProducts[0].name} 외 ${orderProducts.length - 1}건`, // 주문명
       buyer_name: buyerInfo.buyer_name, // 구매자 이름
@@ -65,7 +67,7 @@ export default function PaymentButton({
         alert("결제 성공");
         addOrder({
           merchant_uid: data.merchant_uid,
-          status: "received",
+          status: OrderStatusType.PURCHASE_CONFIRMED,
           amount: data.amount,
           name: data.name,
           products: orderProducts,

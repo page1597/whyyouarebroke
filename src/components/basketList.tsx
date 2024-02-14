@@ -16,6 +16,8 @@ export default function BasketList({ basket }: { basket: BasketProductType[] | n
     onCheck,
   } = useBasketList(basket);
 
+  const labels = ["이미지", "상품명", "판매가", "수량", "합계"];
+
   return (
     <div className="flex flex-col mt-4">
       <hr />
@@ -34,6 +36,7 @@ export default function BasketList({ basket }: { basket: BasketProductType[] | n
               />
               <BasketProductComponent
                 product={product}
+                labels={labels}
                 basketProducts={basketProducts}
                 setBasketProducts={setBasketProducts}
               />

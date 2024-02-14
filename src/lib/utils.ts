@@ -34,3 +34,14 @@ export function replaceAll(original: string, ...replacements: [searchValue: stri
   });
   return replacedString;
 }
+
+export function generateOrderNumber(productId: string) {
+  // 상품 ID의 일부 (앞에서부터 4자리)
+
+  const productIdShortened = productId.substring(0, 4);
+  const currentDate = new Date();
+  // 현재 날짜 및 시간을 포함한 주문 번호 생성 (상품 ID 일부 + 날짜 및 시간의 밀리초로 변환한 값)
+  const orderNumber = `${productIdShortened}${+currentDate}`;
+
+  return orderNumber;
+}

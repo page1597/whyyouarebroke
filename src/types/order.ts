@@ -1,11 +1,11 @@
 import { BasketProductType } from "./product";
 
-export type OrderInfoType = {
+export type OrderType = {
   merchant_uid: string; // 주문번호
   amount: number;
   name: string;
   // status: string;
-  status: typeof OrderStatusType;
+  status: string;
   products: BasketProductType[];
   orderedAt: number;
   buyer_uid: string | undefined;
@@ -14,6 +14,15 @@ export type OrderInfoType = {
   buyer_email: string;
   buyer_addr: string;
   buyer_postcode: string;
+};
+
+// 한 상품에 대한 타입
+export type OrderProductType = {
+  merchant_uid: string;
+  product: BasketProductType;
+  orderedAt: number;
+  buyer_addr: string;
+  buyer_name: string;
 };
 
 export const OrderStatusType = {

@@ -6,8 +6,12 @@ export default function SelectOrderStatus({ id }: { id: string }) {
   const { selectedStatus, onValueChange, onCancel } = useSelectOrderStatus(id);
 
   return (
-    <Select onValueChange={onValueChange} value={selectedStatus}>
-      <SelectTrigger className="w-[180px]">
+    <Select
+      onValueChange={onValueChange}
+      value={selectedStatus}
+      disabled={selectedStatus == OrderStatusType.ORDER_CANCELLED}
+    >
+      <SelectTrigger>
         <SelectValue placeholder={selectedStatus} />
       </SelectTrigger>
       <SelectContent>

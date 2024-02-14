@@ -1,4 +1,4 @@
-import { OrderInfoType, OrderStatusType } from "@/types/order";
+import { OrderType, OrderStatusType } from "@/types/order";
 import {
   doc,
   setDoc,
@@ -15,7 +15,7 @@ import {
 import { db } from ".";
 
 // 주문 추가
-export async function fbAddOrder(order: OrderInfoType) {
+export async function fbAddOrder(order: OrderType) {
   const orderRef = doc(db, "orders", order.merchant_uid);
   await setDoc(orderRef, order);
 }
@@ -71,7 +71,7 @@ export async function fbGetOrders(
 
   const orders: DocumentData[] = [];
   querySnapshot.forEach((doc) => {
-    orders.push(doc.data() as OrderInfoType);
+    orders.push(doc.data() as OrderType);
   });
   return orders;
 }

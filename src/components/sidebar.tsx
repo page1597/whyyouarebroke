@@ -16,7 +16,10 @@ export default function DocsSidebarNav({ items }: DocsSidebarNavProps) {
       <div className="hidden md:inline-block w-40 h-full">
         {items.length
           ? items.map((item, index) => (
-              <div key={index} className={cn("pb-5 text-zinc-900 text-base font-bold")}>
+              <div
+                key={index}
+                className={cn("pb-5 text-zinc-900 text-base font-bold transition-all hover:translate-x-2")}
+              >
                 <Link to={item.href}>{item.title}</Link>
               </div>
             ))
@@ -44,7 +47,7 @@ export default function DocsSidebarNav({ items }: DocsSidebarNavProps) {
                   ? items.map((item, index) => (
                       <DrawerLeftClose
                         key={index}
-                        className={cn("pb-5 text-base font-bold")}
+                        className={cn("pb-5 text-base font-bold transition-all hover:translate-x-2")}
                         onClick={() => navigate(item.href)}
                       >
                         {item.title}

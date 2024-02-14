@@ -7,6 +7,7 @@ export default function Products() {
 
   return (
     <div className="ml-5 text-zinc-900">
+      {/* <div className="bg-zinc-300 w-screen h-12" /> */}
       {productList ? <ProductListWithCarousel productList={productList} /> : <p>상품이 존재하지 않습니다.</p>}
     </div>
   );
