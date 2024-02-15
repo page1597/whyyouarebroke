@@ -97,7 +97,11 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                           {previewImages?.map((image, id) => (
                             <div key={id} className="w-20 h-20 relative">
                               <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
-                              <button onClick={(e) => deleteImage(e, id)} className="absolute right-0">
+                              <button
+                                id="delete_image"
+                                onClick={(e) => deleteImage(e, id)}
+                                className="absolute right-0"
+                              >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   width="24"
@@ -245,7 +249,7 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
               <div />
             </div>
             <div className="flex w-full justify-center">
-              <Button type="submit" className="mt-6 mb-12 w-32" disabled={isPending}>
+              <Button id="upload_product" type="submit" className="mt-6 mb-12 w-32" disabled={isPending}>
                 상품 등록
               </Button>
             </div>

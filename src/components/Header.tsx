@@ -22,7 +22,7 @@ export function Header({ items }: HeaderNavProps) {
                     )}
                   </Link>
                 ) : (
-                  <button disabled={isPending} onClick={() => logOut()}>
+                  <button id="log_out" disabled={isPending} onClick={() => logOut()}>
                     {item.title}
                   </button>
                 )}
@@ -49,7 +49,7 @@ export function Header({ items }: HeaderNavProps) {
                       )}
                     </Link>
                   ) : (
-                    <button disabled={isPending} onClick={() => logOut()}>
+                    <button id="log_out" disabled={isPending} onClick={() => logOut()}>
                       {item.title}
                     </button>
                   )}

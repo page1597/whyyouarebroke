@@ -85,7 +85,7 @@ export default function ProductList({ category }: { category?: string }) {
                 />
                 원
               </div>
-              <Button onClick={onSearchByPrice} className="bg-zinc-800 border">
+              <Button id="apply" onClick={onSearchByPrice} className="bg-zinc-800 border">
                 적용하기
               </Button>
             </PopoverContent>

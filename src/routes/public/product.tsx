@@ -8,7 +8,7 @@ import { AuthContext } from "@/context/authContext";
 import useCheckIsInBasket from "@/hooks/basket/useCheckIsInBasket";
 import useGetProduct from "@/hooks/product/useGetProduct";
 import { addToBasket } from "@/services/local/basket";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // 구매자가 보는 상품 상세 페이지
@@ -30,6 +30,7 @@ export default function Product() {
         <DrawerRight direction="right">
           {!isAdded ? (
             <Button
+              id="add_basket"
               onClick={() => {
                 addToBasket(userId, product!, quantity);
                 setIsAdded(true);
@@ -39,7 +40,7 @@ export default function Product() {
               장바구니 추가
             </Button>
           ) : (
-            <DrawerRightTrigger>
+            <DrawerRightTrigger id="check_basket">
               <div className="inline-flex items-center justify-center whitespace-nowrap h-10 px-4 py-2 rounded text-sm font-medium ring-offset-background transition-colors bg-zinc-0 border border-zinc-400 text-zinc-700 w-28 hover:bg-zinc-100">
                 장바구니 보기
               </div>
@@ -50,7 +51,9 @@ export default function Product() {
           </DrawerRightContent>
         </DrawerRight>
 
-        <Button className="bg-zinc-400 w-28 hover:bg-zinc-500">구매하기</Button>
+        <Button id="purchase" className="bg-zinc-400 w-28 hover:bg-zinc-500">
+          구매하기
+        </Button>
       </div>
       <hr className="mt-8" />
       {product ? <RecommandProducts category={product.category} productId={product.id} /> : <></>}

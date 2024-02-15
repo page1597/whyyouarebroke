@@ -37,6 +37,7 @@ export default function DrawerBasket({
               <div>수량: {product.quantity}</div>
               <div>가격: {product.quantity * product.price}원</div>
               <button
+                id="delete_product"
                 name="상품 삭제"
                 className="absolute top-0 right-0 text-lg"
                 onClick={() => {

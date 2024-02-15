@@ -33,7 +33,7 @@ export default function QuantityInput({
   }
   return (
     <>
-      <button type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
+      <button id="minus" type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
         -
       </button>
       <input
@@ -50,7 +50,7 @@ export default function QuantityInput({
         }}
         className="text-sm w-12 h-7 border border-zinc-400 rounded text-center outline-none"
       />
-      <button type="button" onClick={onPlus} className="px-2 rounded-r cursor-pointer">
+      <button id="plus" type="button" onClick={onPlus} className="px-2 rounded-r cursor-pointer">
         +
       </button>
     </>

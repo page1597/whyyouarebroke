@@ -26,7 +26,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
   const { cancelOrder } = useCancelOrderMutation(refetch);
   const { onCancelOrder } = useCancelOrder(cancelOrder);
 
-  const labels = ["주문번호/시각", "이미지", "주문상품", "상품 가격", "수량", "합계", "배송정보"];
+  const labels = ["주문번호", "이미지", "주문상품", "상품 가격", "수량", "합계", "배송정보"];
   const [ordersWithTitle, setOrdersWithTitle] = useState<OrderType[]>();
   const [orders, setOrders] = useState<OrderType[]>();
 
@@ -78,6 +78,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
                     {order.merchant_uid ? (
                       !isAdmin ? (
                         <Button
+                          id="cancel_orer"
                           disabled={order.status === "주문 취소"}
                           onClick={() => {
                             onCancelOrder(order.merchant_uid, order.name);

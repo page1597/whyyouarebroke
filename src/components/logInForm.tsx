@@ -42,7 +42,7 @@ export default function LogInForm({ navigate }: { navigate: NavigateFunction }) 
               />
             </div>
 
-            <Button className="ml-2 h-full w-36" type="submit" disabled={isPending}>
+            <Button id="log_in" className="ml-2 h-full w-36" type="submit" disabled={isPending}>
               로그인
             </Button>
           </div>
