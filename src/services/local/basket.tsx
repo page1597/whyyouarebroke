@@ -4,7 +4,6 @@ import { fbGetUser } from "../firebase/user";
 
 // 로컬 스토리지 장바구니만 가져오기
 export function getBasket() {
-  console.log("get basket");
   let sessionStorageBasket = sessionStorage.getItem("basket");
   let localBasket = sessionStorageBasket === null ? [] : JSON.parse(sessionStorageBasket);
   return localBasket;

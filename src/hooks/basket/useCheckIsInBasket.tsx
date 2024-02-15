@@ -10,7 +10,6 @@ export default function useCheckIsInBasket(productId: string | null) {
     const checkIsInBasket = async () => {
       if (productId) {
         const isIn = await hasSameQuantityInBasket(productId, quantity);
-        console.log("is in?", isIn);
         setIsAdded(isIn);
       }
     };
@@ -18,7 +17,6 @@ export default function useCheckIsInBasket(productId: string | null) {
   }, [productId]);
 
   useEffect(() => {
-    console.log("changed");
     setIsAdded(false);
   }, [quantity]);
 

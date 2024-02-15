@@ -16,6 +16,7 @@ import {
 import { db } from ".";
 import { deleteObject, getBlob, getDownloadURL, getStorage, list, ref, uploadBytes } from "firebase/storage";
 import { ProductType } from "@/types/product";
+import { blobUriToBlob } from "@/lib/utils";
 
 export async function fbGetProducts(
   category: string | null,
@@ -26,7 +27,6 @@ export async function fbGetProducts(
   limitParam: number | null
 ) {
   let finalQuery = query(collection(db, "products"));
-
   // console.log(category, orderby, limitParam, pageParam, searchValue, priceRange);
 
   if (category) {
@@ -63,7 +63,6 @@ export async function fbGetProducts(
 // 추천 상품 목록 가져오는 함수
 export async function fbGetRandomProducts(productId: string, category: string, limitParam: number) {
   const collectionRef = collection(db, "products");
-
   // 같은 카테고리에 속하는 문서들을 필터링하여 가져옵니다.
   const querySnapshot = await getDocs(
     query(collectionRef, where("category", "==", category), where("id", "!=", productId))
@@ -117,19 +116,6 @@ export async function fbGetProduct(productId: string) {
 
   return product;
 }
-async function fbBlobUriToBlob(blobUri: string) {
-  try {
-    // Blob URI에서 데이터를 가져옴
-    const response = await fetch(blobUri);
-    // Blob으로 변환
-    const blob = await response.blob();
-
-    return blob;
-  } catch (error) {
-    console.error("Error converting Blob URI to Blob:", error);
-    throw error;
-  }
-}
 
 export async function fbAddProduct(product: ProductType) {
   const storage = getStorage();
@@ -161,8 +147,7 @@ export async function fbAddProduct(product: ProductType) {
   await Promise.all(
     product.image.map(async (image: string, index: number) => {
       const imageRef = ref(storage, `products/${product.id}/image${index}`);
-      const blob = await fbBlobUriToBlob(image);
-
+      const blob = await blobUriToBlob(image);
       try {
         const snapshot = await uploadBytes(imageRef, blob);
         const downloadURL = await getDownloadURL(snapshot.ref);

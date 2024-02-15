@@ -20,6 +20,19 @@ export const resizeFile = (file: Blob): Promise<string> =>
       "blob"
     );
   });
+export async function blobUriToBlob(blobUri: string) {
+  try {
+    // Blob URI에서 데이터를 가져옴
+    const response = await fetch(blobUri);
+    // Blob으로 변환
+    const blob = await response.blob();
+
+    return blob;
+  } catch (error) {
+    console.error("Error converting Blob URI to Blob:", error);
+    throw error;
+  }
+}
 export function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -44,4 +57,11 @@ export function generateOrderNumber(productId: string) {
   const orderNumber = `${productIdShortened}${+currentDate}`;
 
   return orderNumber;
+}
+
+export function preloadImage(src: string, alt: string) {
+  const image = new Image();
+  image.src = src;
+  image.alt = alt;
+  console.log(image);
 }

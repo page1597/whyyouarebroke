@@ -1,4 +1,4 @@
-import { OrderType, OrderStatusType } from "@/types/order";
+import { OrderType } from "@/types/order";
 import {
   doc,
   setDoc,
@@ -41,7 +41,6 @@ export async function fbGetUser(uid: string): Promise<DocumentData | undefined> 
 }
 export async function fbGetOrderStatus(orderId: string): Promise<DocumentData | undefined> {
   const result = await getDoc(doc(db, "orders", orderId)); // == merchant_uid
-  // const status = result.data();
   return result.data();
 }
 

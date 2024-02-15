@@ -31,7 +31,15 @@ export default function DrawerBasket({
       <div className="mt-6 flex flex-col gap-4">
         {basket.map((product: BasketProductType) => (
           <div key={product.id} className="flex flex-row gap-5 text-zinc-800">
-            <img alt={product.name} src={product.image} width={128} height={128} className="w-24 h-24 object-cover" />
+            <img
+              decoding="async"
+              loading="lazy"
+              alt={product.name}
+              src={product.image}
+              width={96}
+              height={96}
+              className="w-24 h-24 object-cover"
+            />
             <div className="flex flex-col relative w-full gap-2 text-sm">
               <div>{product.name}</div>
               <div>수량: {product.quantity}</div>

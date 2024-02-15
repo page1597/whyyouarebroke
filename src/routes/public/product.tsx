@@ -7,6 +7,7 @@ import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/component
 import { AuthContext } from "@/context/authContext";
 import useCheckIsInBasket from "@/hooks/basket/useCheckIsInBasket";
 import useGetProduct from "@/hooks/product/useGetProduct";
+// import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
 import { addToBasket } from "@/services/local/basket";
 import { useContext } from "react";
 import { useSearchParams } from "react-router-dom";

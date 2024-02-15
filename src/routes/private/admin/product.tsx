@@ -3,6 +3,7 @@ import ProductInfo from "@/components/productInfo";
 import { Button } from "@/components/ui/button";
 import useDeleteProductMutation from "@/hooks/product/useDeleteProductMutation";
 import useGetProduct from "@/hooks/product/useGetProduct";
+import { ProductType } from "@/types/product";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Product() {
@@ -23,8 +24,9 @@ export default function Product() {
             <Button
               id="delete_product"
               onClick={() => {
-                console.log(product.id);
-                deleteProduct(product.id);
+                if (confirm(`${product.id} 상품을 삭제하시겠습니까?`)) {
+                  deleteProduct(product.id);
+                }
               }}
               className="bg-zinc-500 w-28 hover:bg-zinc-600"
             >
@@ -38,7 +40,7 @@ export default function Product() {
               상품 정보 수정
             </Button>
           </div>
-          <ProductDetail product={product} />
+          <ProductDetail product={product as ProductType} />
         </>
       ) : (
         <>상품이 존재하지 않습니다.</>

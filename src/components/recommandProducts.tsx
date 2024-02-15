@@ -2,6 +2,7 @@ import { DocumentData } from "firebase/firestore";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 import { useNavigate } from "react-router-dom";
 import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
+import { preloadImage } from "@/lib/utils";
 
 export default function RecommandProducts({ category, productId }: { category: string; productId: string }) {
   const navigate = useNavigate();
@@ -21,12 +22,15 @@ export default function RecommandProducts({ category, productId }: { category: s
                       <div
                         className="relative overflow-hidden"
                         onClick={() => {
+                          preloadImage(product.image, product.name);
                           navigate({ pathname: "/product", search: `?id=${product.id}` });
                           window.location.reload(); // 이렇게 하는게 맞나?
                         }}
                       >
                         <img
-                          src={product["image"][0]}
+                          decoding="async"
+                          loading="lazy"
+                          src={product.image[0]}
                           width={240}
                           height={240}
                           className="h-60 w-60 object-contain transition-transform transform-gpu hover:scale-105"

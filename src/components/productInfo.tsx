@@ -25,13 +25,16 @@ export default function ProductInfo({
         <div className="flex justify-center md:justify-start ">
           <div className="w-80 h-80">
             {product.image ? (
-              <img
-                src={product.image[0]}
-                alt={product.name}
-                width={320}
-                height={320}
-                className="w-80 h-80 object-contain"
-              />
+              <>
+                <img
+                  decoding="async"
+                  src={product.image[0]}
+                  alt={product.name}
+                  width={320}
+                  height={320}
+                  className="w-80 h-80 object-contain"
+                />
+              </>
             ) : (
               <div className="w-60 h-60 bg-zinc-100" />
             )}
