@@ -1,7 +1,7 @@
 // root of the project
 import DocsSidebarNav from "@/components/sidebar";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import logo from "src/assets/logo.png";
+import logo from "src/assets/logo.webp";
 import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
 import { ErrorBoundary } from "react-error-boundary";
@@ -60,10 +60,10 @@ export default function Layout() {
         <Header items={headerNav} />
 
         {/* 반응형 구현 */}
-        <div className="md:px-12 md:py-8 md:flex md:flex-row md:flex-grow md:h-full">
+        <div className="md:px-12 md:py-8 md:flex ">
           <div className="hidden md:inline-block">
             <Link to={"/"} className="flex flex-col mb-7">
-              <img id="logo" src={logo} width={120} height={120} alt={"logo"} />
+              <img decoding="async" loading="lazy" id="logo" src={logo} width={120} height={101.72} alt={"logo"} />
             </Link>
             <DocsSidebarNav items={sidebarNav} />
           </div>
@@ -71,9 +71,8 @@ export default function Layout() {
           <div className="md:hidden px-5 py-3 flex justify-between">
             <DocsSidebarNav items={sidebarNav} />
             <Link to={"/"}>
-              <img src={logo} width={70} height={70} alt={"logo"} />
+              <img decoding="async" loading="lazy" id="logo" src={logo} width={80} height={80} alt={"logo"} />
             </Link>
-            {/* <div></div> */}
             {/* <DrawerRight direction="right">
               <DrawerRightTrigger name="search">
                 <svg
@@ -98,7 +97,7 @@ export default function Layout() {
             <div className="w-8" />
           </div>
           {/* <div className="md:flex-grow h-full px-6"> */}
-          <div className="md:flex-grow md:px-0 h-full px-6  overflow-x-clip">
+          <div className="md:flex-grow md:px-0 h-full px-6 overflow-x-clip">
             <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
               <Outlet />
             </ErrorBoundary>

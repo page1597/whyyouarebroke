@@ -1,11 +1,10 @@
-import { Suspense, lazy, useContext, useEffect } from "react";
+import { Suspense, lazy, useContext } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import PrivateRoutes from "./routes/private/admin/index.tsx";
 import PublicRoutes from "./routes/public/index.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 ("use client");
 
 export default function App() {
@@ -16,8 +15,6 @@ export default function App() {
 
   const Layout = lazy(() => import("./routes/index"));
   const Basket = lazy(() => import("./routes/public/basket"));
-  const Order = lazy(() => import("./routes/public/order"));
-  const AdminOrder = lazy(() => import("./routes/private/admin/order"));
   const RockPopEtc = lazy(() => import("./routes/public/category/rockpopetc"));
   const HipHopRandB = lazy(() => import("./routes/public/category/hiphopR&B"));
   const Jazz = lazy(() => import("./routes/public/category/jazz"));
@@ -80,7 +77,6 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
       <RouterProvider router={router} />
     </QueryClientProvider>
   );

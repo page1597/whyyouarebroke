@@ -52,9 +52,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     <FormControl>
                       <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
                   </FormItem>
                 )}
               />
@@ -96,7 +93,13 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                         <div className="flex gap-2">
                           {previewImages?.map((image, id) => (
                             <div key={id} className="w-20 h-20 relative">
-                              <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
+                              <img
+                                src={image}
+                                decoding="async"
+                                loading="lazy"
+                                alt={`${image}-${id}`}
+                                className="w-full h-full absolute"
+                              />
                               <button
                                 id="delete_image"
                                 onClick={(e) => deleteImage(e, id)}
@@ -150,9 +153,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                         </Label>
                       </div>
                     </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
                   </FormItem>
                 )}
               />
@@ -171,9 +171,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                           className="text-zinc-800 text-sm pl-3 pt-2 border border-zinc-400 rounded w-full h-44 resize-none"
                         />
                       </FormControl>
-                      <div className="hidden md:flex">
-                        <FormMessage />
-                      </div>
                     </FormItem>
                   )}
                 />
@@ -192,9 +189,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
                   </FormItem>
                 )}
               />
@@ -208,9 +202,9 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     <FormControl>
                       <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
-                    <div className="hidden md:flex">
+                    {/* <div className="hidden md:flex">
                       <FormMessage />
-                    </div>
+                    </div> */}
                   </FormItem>
                 )}
               />
@@ -224,9 +218,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     <FormControl>
                       <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
                   </FormItem>
                 )}
               />
@@ -240,9 +231,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     <FormControl>
                       <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
-                    <div className="hidden md:flex">
-                      <FormMessage />
-                    </div>
                   </FormItem>
                 )}
               />

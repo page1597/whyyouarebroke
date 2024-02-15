@@ -6,12 +6,15 @@ import { z } from "zod";
 export const addProductFormSchema = z.object({
   id: z.string(),
   category: z.string(),
-  name: z.string(),
+  // .min(2, {
+  //   message: "이름을 입력해주세요.",
+  // })
+  name: z.string().min(1),
   price: z.preprocess(Number, z.number()),
   image: z.any(), // 이미지 스키마 설정하기
   stock: z.preprocess(Number, z.number()),
-  description: z.string(),
-  artist: z.string().optional(),
+  description: z.string().min(1),
+  artist: z.string(),
   label: z.string().optional(),
   released: z.string().optional(),
   format: z.string().optional(),

@@ -1,4 +1,3 @@
-import { DocumentData } from "firebase/firestore";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +9,8 @@ import { PopoverClose } from "@radix-ui/react-popover";
 import { X } from "lucide-react";
 import useDebouncedSearch from "@/hooks/product/useDebouncedSearch";
 import useGetProducts from "@/hooks/product/useGetProducts";
+import { ProductType } from "@/types/product";
+import { preloadImage } from "@/lib/utils";
 
 export default function ProductList({ category }: { category?: string }) {
   const navigate = useNavigate();
@@ -38,12 +39,19 @@ export default function ProductList({ category }: { category?: string }) {
     }
   }, [inView, orderby]);
 
+  // useEffect(() => {
+  //   data?.pages[0].image.forEach((img: string) => {
+  //     const image = new Image();
+  //     image.src = img;
+  //   });
+  // }, []);
   return (
     <>
-      <div className="flex flex-row justify-between items-end">
+      <div className="flex justify-between items-end">
         <h3 className="text-2xl text-zinc-900">{category ? category.toUpperCase() : "전체 상품"}</h3>
         <div className="flex gap-3 items-center">
           <button
+            id="createdAt"
             name="createdAt"
             value={orderby}
             onClick={() => changeOrderby("createdAt")}
@@ -54,6 +62,7 @@ export default function ProductList({ category }: { category?: string }) {
           <Popover>
             <PopoverTrigger
               className="p-0 m-0 h-5 flex"
+              id="price"
               name="price"
               value={orderby}
               onClick={() => changeOrderby("price")}
@@ -66,7 +75,7 @@ export default function ProductList({ category }: { category?: string }) {
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3 w-60 text-sm">
               <div className="flex justify-between">
-                <div>가격 범위 설정</div>
+                <span>가격 범위 설정</span>
                 <PopoverClose>
                   <X />
                 </PopoverClose>
@@ -99,31 +108,36 @@ export default function ProductList({ category }: { category?: string }) {
             <div key={index}>
               {page ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
-                  {page.map((product: DocumentData) => (
+                  {page.map((product: ProductType) => (
                     <div
                       className="flex flex-col justify-center items-center cursor-pointer"
                       key={product.id}
-                      onClick={() => navigate({ pathname: "/product", search: `?id=${product.id}` })}
+                      onClick={() => {
+                        preloadImage(product.image, product.name);
+                        navigate({ pathname: "/product", search: `?id=${product.id}` });
+                      }}
                     >
                       <div>
                         {product.image ? (
                           <div className="relative overflow-hidden">
                             <img
-                              src={product["image"][0]}
-                              width={60}
-                              height={60}
+                              decoding="async"
+                              loading="lazy"
+                              id={product.name}
+                              src={product.image[0]}
+                              width={240}
+                              height={240}
                               className="h-60 w-60 object-contain transition-transform transform-gpu hover:scale-105"
                               alt={product.name}
                             />
                           </div>
                         ) : (
-                          <div className="w-60 h-60 bg-zinc-100" />
+                          <div className="w-240 h-240 bg-zinc-100" />
                         )}
-                        <div>
-                          <div className="text-sm mt-2 h-5 overflow-hidden text-ellipsis">{product["name"]}</div>
-                          <div className="text-xs font-bold text-zinc-800">{product["artist"]}</div>
-
-                          <div className="text-sm font-bold text-zinc-500 mt-1">{product["price"]}원</div>
+                        <div className="text-sm font-bold text-zinc-800">
+                          <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis">{product.name}</div>
+                          <div className="text-xs font-bold">{product.artist}</div>
+                          <div className="font-bold text-zinc-500 mt-1">{product.price}원</div>
                         </div>
                       </div>
                     </div>

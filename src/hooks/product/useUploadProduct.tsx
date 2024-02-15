@@ -67,6 +67,13 @@ export default function useUploadProduct(uploadProduct: any, product?: ProductTy
   });
 
   async function onSubmit(values: z.infer<typeof addProductFormSchema>) {
+    if (category === "") {
+      alert("카테고리를 선택해주세요.");
+      return;
+    } else if (previewImages.length === 0) {
+      alert("상품 이미지를 1개 이상 업로드해주세요.");
+      return;
+    }
     const product: ProductType = {
       id: values.id,
       category: category,
@@ -75,7 +82,7 @@ export default function useUploadProduct(uploadProduct: any, product?: ProductTy
       image: previewImages,
       stock: values.stock,
       description: values.description,
-      artist: values.artist || null,
+      artist: values.artist,
       label: values.label || null,
       released: values.released || null,
       format: values.format || null,

@@ -22,7 +22,7 @@ export function Header({ items }: HeaderNavProps) {
                     )}
                   </Link>
                 ) : (
-                  <button id="log_out" disabled={isPending} onClick={() => logOut()}>
+                  <button id={item.title} disabled={isPending} onClick={() => logOut()}>
                     {item.title}
                   </button>
                 )}
@@ -31,7 +31,7 @@ export function Header({ items }: HeaderNavProps) {
           : null}
       </div>
 
-      {/* 모바일 헤더(로고까지 포함) */}
+      {/* 모바일 헤더 */}
       <div className="md:hidden">
         <div className="flex bg-zinc-800 justify-end py-1.5 items-center gap-3 px-3">
           {items.length
@@ -49,7 +49,7 @@ export function Header({ items }: HeaderNavProps) {
                       )}
                     </Link>
                   ) : (
-                    <button id="log_out" disabled={isPending} onClick={() => logOut()}>
+                    <button id={item.title} disabled={isPending} onClick={() => logOut()}>
                       {item.title}
                     </button>
                   )}

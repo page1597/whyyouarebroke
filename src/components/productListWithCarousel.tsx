@@ -1,4 +1,4 @@
-import { replaceAll } from "@/lib/utils";
+import { preloadImage, replaceAll } from "@/lib/utils";
 import { categoryProductType } from "@/types/product";
 import { DocumentData } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -28,11 +28,16 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                   <div className="p-2 flex justify-center">
                     <div
                       className="cursor-pointer"
-                      onClick={() => navigate({ pathname: "/product", search: `?id=${product.id}` })}
+                      onClick={() => {
+                        preloadImage(product.image, product.name);
+                        navigate({ pathname: "/product", search: `?id=${product.id}` });
+                      }}
                     >
                       {product.image ? (
                         <div className="relative overflow-hidden">
                           <img
+                            decoding="async"
+                            loading="lazy"
                             src={product["image"][0]}
                             width={240}
                             height={240}

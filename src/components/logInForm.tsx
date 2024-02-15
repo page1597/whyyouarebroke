@@ -34,7 +34,7 @@ export default function LogInForm({ navigate }: { navigate: NavigateFunction }) 
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="비밀번호" {...field} />
+                      <Input type="password" placeholder="비밀번호" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
