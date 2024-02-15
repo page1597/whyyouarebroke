@@ -13,7 +13,7 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
       <h2 className="text-xl md:text-2xl text-center">{error.message}</h2>
       <hr />
       <div className="text-zinc-700">
-        <Button className="bg-zinc-700 hover:bg-zinc-800" onClick={resetErrorBoundary}>
+        <Button id="back_to_main" className="bg-zinc-700 hover:bg-zinc-800" onClick={resetErrorBoundary}>
           메인 화면으로 돌아가기
         </Button>
       </div>

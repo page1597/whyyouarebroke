@@ -40,7 +40,7 @@ export default function PaymentButton({
   }, []);
 
   return (
-    <Button className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
+    <Button id="payment" className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
       결제하기
     </Button>
   );

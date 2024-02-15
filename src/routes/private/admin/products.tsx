@@ -6,6 +6,7 @@ export default function Products() {
   return (
     <>
       <button
+        id="upload_product"
         title="상품 등록"
         className="fixed right-10 bottom-10 bg-zinc-200 rounded-full p-2 z-10"
         onClick={() => navigate("/add-product")}

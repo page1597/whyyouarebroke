@@ -63,7 +63,7 @@ export default function Layout() {
         <div className="md:px-12 md:py-8 md:flex md:flex-row md:flex-grow md:h-full">
           <div className="hidden md:inline-block">
             <Link to={"/"} className="flex flex-col mb-7">
-              <img src={logo} width={120} height={120} alt={"logo"} />
+              <img id="logo" src={logo} width={120} height={120} alt={"logo"} />
             </Link>
             <DocsSidebarNav items={sidebarNav} />
           </div>

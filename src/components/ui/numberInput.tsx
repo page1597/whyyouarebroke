@@ -20,7 +20,7 @@ function NumberInput({
   return (
     <div className="flex items-center">
       {/* {product ? <div>{product!.price * quantity}원</div> : <></>} */}
-      <button type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
+      <button id="minus" type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
         -
       </button>
       <input
@@ -29,7 +29,7 @@ function NumberInput({
         onChange={(e) => setQuantity(Number(e.target.value))}
         className="text-sm w-12 h-7 border border-zinc-400 rounded text-center outline-none"
       />
-      <button type="button" onClick={onPlus} className="px-2 rounded-r cursor-pointer">
+      <button id="plu" type="button" onClick={onPlus} className="px-2 rounded-r cursor-pointer">
         +
       </button>
     </div>

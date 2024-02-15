@@ -3,6 +3,7 @@ import { MouseEventHandler } from "react";
 export default function GoogleLoginButton({ onClick }: { onClick: MouseEventHandler<HTMLButtonElement> | undefined }) {
   return (
     <button
+      id="google_log_in"
       onClick={onClick}
       className="px-4 py-2 w-full flex text-sm justify-center gap-2 bg-zinc-200 text-zinc-600 rounded  hover:bg-zinc-300 transition duration-150"
     >

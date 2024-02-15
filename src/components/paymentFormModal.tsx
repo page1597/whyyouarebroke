@@ -31,13 +31,14 @@ function PaymentFormModal({
     <div>
       <div className="flex justify-center gap-5 mt-12">
         <Button
+          id="selected"
           name="selected"
           onClick={orderSelectedProducts}
           className="bg-white border text-zinc-800 border-zinc-800 hover:bg-zinc-100"
         >
           선택상품주문
         </Button>
-        <Button name="all" onClick={orderAllProducts} className="bg-zinc-700 hover:bg-zinc-800">
+        <Button id="null" name="all" onClick={orderAllProducts} className="bg-zinc-700 hover:bg-zinc-800">
           전체상품주문
         </Button>
       </div>

@@ -21,6 +21,7 @@ export default function Product() {
           <ProductInfo product={product} isAdmin={true} />
           <div className="w-full right-0 flex justify-end items-center gap-3 mt-5">
             <Button
+              id="delete_product"
               onClick={() => {
                 console.log(product.id);
                 deleteProduct(product.id);
@@ -30,6 +31,7 @@ export default function Product() {
               상품 삭제
             </Button>
             <Button
+              id="edit_product"
               className="bg-zinc-400 w-28 hover:bg-zinc-500"
               onClick={() => navigate({ pathname: "/edit-product", search: `?id=${product.id}` })}
             >

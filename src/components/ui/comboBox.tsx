@@ -25,6 +25,7 @@ export default function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id="category"
           variant="outline"
           role="combobox"
           size={"sm"}

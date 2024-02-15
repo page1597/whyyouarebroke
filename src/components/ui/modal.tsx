@@ -40,7 +40,11 @@ const ModalFooter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const ModalClose: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   return (
-    <Button className="bg-transparent text-zinc-900 border border-zinc-800 hover:bg-zinc-100" onClick={onClose}>
+    <Button
+      id="cancel_order"
+      className="bg-transparent text-zinc-900 border border-zinc-800 hover:bg-zinc-100"
+      onClick={onClose}
+    >
       주문취소
     </Button>
   );

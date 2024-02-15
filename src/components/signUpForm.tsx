@@ -207,7 +207,7 @@ export default function SignUpForm() {
           </div>
 
           <div className="flex w-full justify-center">
-            <Button type="submit" className="mt-6 w-32">
+            <Button id="sign_up" type="submit" className="mt-6 w-32">
               회원가입
             </Button>
           </div>
