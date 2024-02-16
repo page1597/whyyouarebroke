@@ -2,12 +2,12 @@ import { paymentFormSchema } from "@/types/formSchemas/payment";
 import { BasketProductType } from "@/types/product";
 import { UserInfoType } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export default function useOrderModal(
-  userInfo: UserInfoType,
+function useOrderModal(
+  userInfo: UserInfoType | null | undefined,
   checkedProducts: BasketProductType[],
   basketProducts: BasketProductType[]
 ) {
@@ -15,28 +15,23 @@ export default function useOrderModal(
   const [orderProducts, setOrderProducts] = useState<BasketProductType[]>(checkedProducts);
   const [totalPrice, setTotalPrice] = useState<number>();
 
-  useEffect(() => {
-    if (isOpen) {
-      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-        e.preventDefault();
-        e.returnValue = "";
-      };
-
-      const handlePopState = () => {};
-
-      window.addEventListener("beforeunload", handleBeforeUnload);
-      window.addEventListener("popstate", handlePopState);
-
-      return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-        window.removeEventListener("popstate", handlePopState);
-      };
-    }
-  });
-
-  // useEffect(() => {
-  //   setOrderProducts(checkedProducts);
-  // }, [checkedProducts]);
+  const onOpen = useCallback(
+    (orderProducts: BasketProductType[]) => {
+      console.log("함수 생성");
+      setOrderProducts(orderProducts);
+      if (orderProducts.length > 0) {
+        console.log(orderProducts);
+        setIsOpen(true);
+        setTotalPrice(
+          orderProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0)
+        );
+      } else {
+        alert("주문하려는 상품을 선택해 주세요.");
+        return;
+      }
+    },
+    [orderProducts]
+  );
 
   function orderSelectedProducts() {
     onOpen(checkedProducts);
@@ -47,17 +42,6 @@ export default function useOrderModal(
     onOpen(basketProducts);
   }
 
-  function onOpen(orderProducts: BasketProductType[]) {
-    setOrderProducts(orderProducts);
-    if (orderProducts.length > 0) {
-      console.log(orderProducts);
-      setIsOpen(true);
-      setTotalPrice(orderProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0));
-    } else {
-      alert("주문하려는 상품을 선택해 주세요.");
-      return;
-    }
-  }
   function onClose() {
     setIsOpen(false);
   }
@@ -83,3 +67,4 @@ export default function useOrderModal(
     totalPrice,
   };
 }
+export default useOrderModal;

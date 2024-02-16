@@ -7,7 +7,7 @@ import { fbGoogleLogIn } from "@/services/firebase/user";
 import useLogInMutation from "@/hooks/auth/useLogInMutation";
 import useLogIn from "@/hooks/auth/useLogin";
 
-export default function LogInForm({ navigate }: { navigate: NavigateFunction }) {
+function LogInForm({ navigate }: { navigate: NavigateFunction }) {
   const { logIn, isPending } = useLogInMutation();
   const { onSubmit, form } = useLogIn(logIn);
   return (
@@ -56,3 +56,4 @@ export default function LogInForm({ navigate }: { navigate: NavigateFunction }) 
     </Form>
   );
 }
+export default LogInForm;

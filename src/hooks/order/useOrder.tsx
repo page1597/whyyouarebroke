@@ -3,8 +3,9 @@ import useAddOrderMutation from "./useAddOrderMutation";
 import { FieldValues } from "react-hook-form";
 import { generateOrderNumber } from "@/lib/utils";
 import { OrderStatusType } from "@/types/order";
+import { useCallback, useMemo } from "react";
 
-export default function useOrder(
+function useOrder(
   userId: string | null | undefined,
   fieldValues: FieldValues,
   isAgreedTerm: boolean,
@@ -22,26 +23,24 @@ export default function useOrder(
     }
 
     // 결제 전 재고 우선감소
-    const isOutOfStock = await checkIsOutOfStock(orderProducts);
+    const isOutOfStock = await checkIsOutOfStock();
     if (isOutOfStock) {
       return;
     }
 
-    await decreaseProductStock(orderProducts);
+    await decreaseProductStock();
 
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init("imp24067853");
 
+    const priceAmount = useMemo(
+      () => orderProducts.reduce((total, product) => total + product.quantity * product.price, 0),
+      [orderProducts]
+    );
+
     const buyerInfo = fieldValues;
-    let priceAmount = 0;
 
-    orderProducts.forEach((products) => {
-      priceAmount += products.quantity * products.price;
-    });
-    console.log(priceAmount);
-
-    /* 2. 결제 데이터 정의하기 */
     const data = {
       pg: "html5_inicis", // PG사
       pay_method: "card", // 결제수단
@@ -56,10 +55,8 @@ export default function useOrder(
     };
     console.log(data);
 
-    /* 4. 결제 창 호출하기 */
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
       const { success, merchant_uid, error_msg } = response;
-      // console.log(success, merchant_uid);
       if (success) {
         alert("결제 성공");
         addOrder({
@@ -97,6 +94,7 @@ export default function useOrder(
         // });
       }
     });
-  }
+  } // ?
   return { onClickPayment };
 }
+export default useOrder;

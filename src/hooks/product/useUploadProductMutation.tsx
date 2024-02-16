@@ -3,7 +3,7 @@ import { ProductType } from "@/types/product";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-export default function useUploadProductMutation(isEdit: boolean) {
+function useUploadProductMutation(isEdit: boolean) {
   const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
     mutationKey: ["upload product"],
@@ -20,3 +20,4 @@ export default function useUploadProductMutation(isEdit: boolean) {
   });
   return { uploadProduct: mutate, isPending };
 }
+export default useUploadProductMutation;

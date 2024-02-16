@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { BasketProductType } from "@/types/product";
 import useBasketList from "@/hooks/basket/useBasketList";
 
-export default function BasketList({ basket }: { basket: BasketProductType[] | null }) {
+function BasketList({ basket }: { basket: BasketProductType[] | null }) {
   const shippingFee = 3000;
   const {
     basketProducts,
@@ -61,3 +61,4 @@ export default function BasketList({ basket }: { basket: BasketProductType[] | n
     </div>
   );
 }
+export default BasketList;

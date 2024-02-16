@@ -40,7 +40,7 @@ export const sidebarNav = [
   },
 ];
 
-export default function Layout() {
+function Layout() {
   const userInfo = useContext(AuthContext);
   const isAdmin = userInfo?.type === "관리자" ? true : false;
   const navigate = useNavigate();
@@ -107,3 +107,4 @@ export default function Layout() {
     </ErrorBoundary>
   );
 }
+export default Layout;

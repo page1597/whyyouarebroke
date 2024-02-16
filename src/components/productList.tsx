@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
@@ -12,7 +12,7 @@ import useGetProducts from "@/hooks/product/useGetProducts";
 import { ProductType } from "@/types/product";
 import { preloadImage } from "@/lib/utils";
 
-export default function ProductList({ category }: { category?: string }) {
+function ProductList({ category }: { category?: string }) {
   const navigate = useNavigate();
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
@@ -34,17 +34,11 @@ export default function ProductList({ category }: { category?: string }) {
   } = useGetProducts(category ?? null, debouncedSearchValue);
 
   useEffect(() => {
-    if (inView) {
+    if (inView && orderby) {
       prefetchNextPage();
     }
   }, [inView, orderby]);
 
-  // useEffect(() => {
-  //   data?.pages[0].image.forEach((img: string) => {
-  //     const image = new Image();
-  //     image.src = img;
-  //   });
-  // }, []);
   return (
     <>
       <div className="flex justify-between items-end">
@@ -158,3 +152,4 @@ export default function ProductList({ category }: { category?: string }) {
     </>
   );
 }
+export default memo(ProductList);

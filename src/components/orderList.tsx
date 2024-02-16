@@ -1,5 +1,5 @@
 import { AuthContext } from "@/context/authContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import useGetOrders from "@/hooks/order/useGetOrders";
 import useCancelOrderMutation from "@/hooks/order/useCancelOrderMutation";
@@ -9,13 +9,13 @@ import { OrderType } from "@/types/order";
 import { Button } from "./ui/button";
 import SelectOrderState from "./selectOrderStatus";
 
-// 이건 페이지네이션 ?
-export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
+//  페이지네이션 ?
+function OrderList({ isAdmin }: { isAdmin: boolean }) {
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
   const userInfo = useContext(AuthContext);
-  const { data, status, isFetchingNextPage, prefetchNextPage, refetch } = useGetOrders(isAdmin, userInfo.id);
+  const { data, status, isFetchingNextPage, prefetchNextPage, refetch } = useGetOrders(isAdmin, userInfo?.id);
 
   useEffect(() => {
     if (inView) {
@@ -28,14 +28,13 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
 
   const labels = ["주문번호", "이미지", "주문상품", "상품 가격", "수량", "합계", "배송정보"];
   const [ordersWithTitle, setOrdersWithTitle] = useState<OrderType[]>();
-  const [orders, setOrders] = useState<OrderType[]>();
 
-  useEffect(() => {
-    // basket이 null이 아닌 경우에만 상태를 업데이트하도록 처리
+  const orders = useMemo(() => {
     if (data?.pages !== null) {
-      setOrders(data?.pages as OrderType[]);
+      return data?.pages as OrderType[];
     }
-  }, [data]); // basket이 변경될 때마다 호출
+    return [];
+  }, [data]);
 
   useEffect(() => {
     if (orders) {
@@ -59,10 +58,6 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
       setOrdersWithTitle(withTitle);
     }
   }, [orders]);
-
-  useEffect(() => {
-    console.log(ordersWithTitle);
-  }, [ordersWithTitle]);
 
   return (
     <div className="flex flex-col mt-4">
@@ -113,3 +108,4 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
     </div>
   );
 }
+export default OrderList;

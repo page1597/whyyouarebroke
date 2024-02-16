@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "@/components/ui/modal";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "./ui/formInput";
@@ -26,6 +26,10 @@ function PaymentFormModal({
     checkedProducts,
     basketProducts
   );
+
+  // useEffect(() => {
+  //   console.log("checkedProducts is changed");
+  // }, [checkedProducts]);
 
   return (
     <div>

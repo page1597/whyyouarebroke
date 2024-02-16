@@ -1,18 +1,14 @@
 import { AuthContext } from "@/context/authContext";
-import { getBasket, removeFromBasket } from "@/services/local/basket";
+import useBasket from "@/hooks/basket/useBasket";
+// import { getBasket, removeFromBasket } from "@/services/local/basket";
 import { BasketProductType } from "@/types/product";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
-export default function DrawerBasket({
-  setIsAdded,
-  productId,
-}: {
-  setIsAdded: Dispatch<SetStateAction<boolean>>;
-  productId: string;
-}) {
+function DrawerBasket({ setIsAdded, productId }: { setIsAdded: Dispatch<SetStateAction<boolean>>; productId: string }) {
   const [basket, setBasket] = useState<BasketProductType[]>([]);
   const userId = useContext(AuthContext)?.id || null;
   const [isRemoved, setIsRemoved] = useState(false);
+  const { getBasket, removeFromBasket } = useBasket();
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 장바구니 정보를 가져와서 상태를 설정
@@ -63,3 +59,4 @@ export default function DrawerBasket({
     </div>
   );
 }
+export default DrawerBasket;

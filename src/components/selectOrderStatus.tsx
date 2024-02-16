@@ -1,8 +1,9 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import useSelectOrderStatus from "@/hooks/order/useSelectOrderStatus";
 import { OrderStatusType } from "@/types/order";
+import { memo } from "react";
 
-export default function SelectOrderStatus({ id }: { id: string }) {
+function SelectOrderStatus({ id }: { id: string }) {
   const { selectedStatus, onValueChange, onCancel } = useSelectOrderStatus(id);
 
   return (
@@ -24,3 +25,4 @@ export default function SelectOrderStatus({ id }: { id: string }) {
     </Select>
   );
 }
+export default memo(SelectOrderStatus);

@@ -1,9 +1,8 @@
 import { AuthContext } from "@/context/authContext";
 import { useContext } from "react";
 
-export default function MyPage() {
+function MyPage() {
   const userInfo = useContext(AuthContext);
-
   return (
     <>
       <h3 className="text-xl">마이페이지</h3>
@@ -11,3 +10,4 @@ export default function MyPage() {
     </>
   );
 }
+export default MyPage;

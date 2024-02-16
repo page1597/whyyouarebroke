@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-export default function LazyImage({
+function LazyImage({
   src,
   alt,
   className,
@@ -50,3 +50,4 @@ export default function LazyImage({
     </div>
   );
 }
+export default LazyImage;

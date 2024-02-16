@@ -1,7 +1,8 @@
 import LogInForm from "@/components/logInForm";
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function LogIn() {
+function LogIn() {
   const navigate = useNavigate();
 
   return (
@@ -11,3 +12,4 @@ export default function LogIn() {
     </div>
   );
 }
+export default memo(LogIn);

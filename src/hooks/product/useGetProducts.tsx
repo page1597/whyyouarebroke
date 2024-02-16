@@ -1,10 +1,10 @@
 import { fbGetProducts } from "@/services/firebase/product";
 import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 // useGetProductsWithSearch
-export default function useGetProducts(category: string | null, debouncedSearchValue: string) {
+function useGetProducts(category: string | null, debouncedSearchValue: string) {
   const [orderby, setOrderby] = useState<string>("createdAt");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(500000);
@@ -18,13 +18,13 @@ export default function useGetProducts(category: string | null, debouncedSearchV
     refetch();
   }
 
-  function onSearchByPrice() {
+  const onSearchByPrice = useCallback(() => {
     setPriceRange({
       minPrice: minPrice,
       maxPrice: maxPrice,
     });
     refetch();
-  }
+  }, [minPrice, maxPrice]);
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -59,11 +59,12 @@ export default function useGetProducts(category: string | null, debouncedSearchV
     },
   });
 
-  async function prefetchNextPage() {
+  const prefetchNextPage = useCallback(async () => {
     if (hasNextPage && !isFetchingNextPage) {
       await queryClient.prefetchInfiniteQuery({ queryKey: ["products"], queryFn: fetchNextPage, pages: 3 });
     }
-  }
+  }, [hasNextPage, isFetchingNextPage, queryClient, fetchNextPage]);
+
   return {
     data,
     orderby,
@@ -78,3 +79,4 @@ export default function useGetProducts(category: string | null, debouncedSearchV
     prefetchNextPage,
   };
 }
+export default useGetProducts;

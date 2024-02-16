@@ -1,8 +1,9 @@
 import { fbLogIn } from "@/services/firebase/user";
 import { useMutation } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function useLogInMutation() {
+function useLogInMutation() {
   const navigate = useNavigate();
 
   const { mutate, isPending, isError } = useMutation({
@@ -18,5 +19,11 @@ export default function useLogInMutation() {
       alert("이메일과 비밀번호를 다시 한 번 확인해 주세요.");
     },
   });
-  return { logIn: mutate, isPending, isError };
+
+  const logIn = useCallback(({ email, password }: { email: string; password: string }) => {
+    mutate({ email, password });
+  }, []);
+
+  return { logIn, isPending, isError };
 }
+export default useLogInMutation;

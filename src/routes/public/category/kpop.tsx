@@ -1,5 +1,6 @@
 import Products from "@/components/productList";
 
-export default function Kpop() {
+function Kpop() {
   return <Products category="k-pop" />;
 }
+export default Kpop;

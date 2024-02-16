@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-export default function PaymentButton({
+function PaymentButton({
   fieldValues,
   orderProducts,
   isAgreedTerm,
@@ -24,7 +24,7 @@ export default function PaymentButton({
   setIsAgreedTerm: Dispatch<SetStateAction<boolean>>;
   userId?: string | null;
 }) {
-  const { checkIsOutOfStock, decreaseProductStock, increaseProductStock } = useOrderProcessing(userId);
+  const { checkIsOutOfStock, decreaseProductStock, increaseProductStock } = useOrderProcessing(userId, orderProducts);
   const { onClickPayment } = useOrder(
     userId,
     fieldValues,
@@ -45,3 +45,4 @@ export default function PaymentButton({
     </Button>
   );
 }
+export default PaymentButton;

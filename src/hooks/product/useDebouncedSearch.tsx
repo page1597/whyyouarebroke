@@ -1,14 +1,14 @@
 import { useState, useCallback, useEffect, ChangeEvent } from "react";
 import _ from "lodash";
 
-export default function useDebouncedSearch(debounceDelay: number = 1000) {
+function useDebouncedSearch(debounceDelay: number = 1000) {
   const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
 
   const debouncedSearch = useCallback(
     _.debounce((value: string) => {
       setDebouncedSearchValue(value);
     }, debounceDelay),
-    []
+    [debounceDelay]
   );
 
   // 컴포넌트가 언마운트될 때 debounce 함수 클리어
@@ -18,10 +18,14 @@ export default function useDebouncedSearch(debounceDelay: number = 1000) {
     };
   }, [debouncedSearch]);
 
-  function onSearch(e: ChangeEvent<HTMLInputElement>) {
-    const searchValue = e.target.value;
-    debouncedSearch(searchValue);
-  }
+  const onSearch = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const searchValue = e.target.value;
+      debouncedSearch(searchValue);
+    },
+    [debouncedSearch]
+  );
 
   return { debouncedSearchValue, onSearch };
 }
+export default useDebouncedSearch;

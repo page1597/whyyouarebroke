@@ -1,6 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -9,7 +6,7 @@ import { Label } from "@radix-ui/react-label";
 import GoogleSignUpButton from "./ui/googleSignupButton";
 import useSignUp from "@/hooks/auth/useSignUp";
 
-export default function SignUpForm() {
+function SignUpForm() {
   const { form, onSubmit, onGoogleSignUp } = useSignUp();
 
   return (
@@ -216,3 +213,4 @@ export default function SignUpForm() {
     </>
   );
 }
+export default SignUpForm;

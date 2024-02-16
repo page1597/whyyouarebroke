@@ -2,7 +2,7 @@ import { fbUpdateProduct } from "@/services/firebase/product";
 import { BasketProductType } from "@/types/product";
 import { useMutation } from "@tanstack/react-query";
 
-export default function useUpdateProductQuantityMutation() {
+function useUpdateProductQuantityMutation() {
   const { mutate } = useMutation({
     mutationKey: ["update product"],
     mutationFn: ({ type, DBStock, product }: { type: string; DBStock: number; product: BasketProductType }) =>
@@ -17,3 +17,4 @@ export default function useUpdateProductQuantityMutation() {
 
   return { updateProductQuantity: mutate };
 }
+export default useUpdateProductQuantityMutation;

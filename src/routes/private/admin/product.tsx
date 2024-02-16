@@ -6,7 +6,7 @@ import useGetProduct from "@/hooks/product/useGetProduct";
 import { ProductType } from "@/types/product";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-export default function Product() {
+function Product() {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -48,3 +48,4 @@ export default function Product() {
     </div>
   );
 }
+export default Product;

@@ -1,5 +1,6 @@
 import Products from "@/components/productList";
 
-export default function RockPopEtc() {
+function RockPopEtc() {
   return <Products category="rock/pop/etc" />;
 }
+export default RockPopEtc;

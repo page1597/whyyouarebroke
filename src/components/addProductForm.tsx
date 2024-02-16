@@ -9,7 +9,7 @@ import useUploadProductMutation from "@/hooks/product/useUploadProductMutation";
 import useUploadProduct from "@/hooks/product/useUploadProduct";
 import Combobox from "./ui/comboBox";
 
-export default function AddProductForm({ product }: { product?: ProductType }) {
+function AddProductForm({ product }: { product?: ProductType }) {
   const isEdit = product ? true : false;
   const { uploadProduct, isPending } = useUploadProductMutation(isEdit);
   const { previewImages, category, setCategory, onSubmit, addImages, deleteImage, form } = useUploadProduct(
@@ -247,3 +247,4 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
     </div>
   );
 }
+export default AddProductForm;

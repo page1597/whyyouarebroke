@@ -2,7 +2,7 @@ import { fbUpdateOrderStatus } from "@/services/firebase/order";
 import { OrderStatusType } from "@/types/order";
 import { useMutation } from "@tanstack/react-query";
 
-export default function useCancelOrderMutation(refetch: () => void) {
+function useCancelOrderMutation(refetch: () => void) {
   const { mutate } = useMutation({
     mutationKey: ["cancel order"],
     mutationFn: (orderId: string) => fbUpdateOrderStatus(orderId, OrderStatusType.ORDER_CANCELLED),
@@ -17,3 +17,4 @@ export default function useCancelOrderMutation(refetch: () => void) {
   });
   return { cancelOrder: mutate };
 }
+export default useCancelOrderMutation;

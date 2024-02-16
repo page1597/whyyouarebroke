@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
 import { preloadImage } from "@/lib/utils";
 
-export default function RecommandProducts({ category, productId }: { category: string; productId: string }) {
+function RecommandProducts({ category, productId }: { category: string; productId: string }) {
   const navigate = useNavigate();
   const { isLoading, recommands } = useGetRecommandProducts(productId, category, 4);
 
@@ -58,3 +58,4 @@ export default function RecommandProducts({ category, productId }: { category: s
     </div>
   );
 }
+export default RecommandProducts;

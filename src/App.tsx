@@ -7,22 +7,21 @@ import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 ("use client");
 
-export default function App() {
+const Layout = lazy(() => import("./routes/index"));
+const Basket = lazy(() => import("./routes/public/basket"));
+const RockPopEtc = lazy(() => import("./routes/public/category/rockpopetc"));
+const HipHopRandB = lazy(() => import("./routes/public/category/hiphopR&B"));
+const Jazz = lazy(() => import("./routes/public/category/jazz"));
+const OST = lazy(() => import("./routes/public/category/ost"));
+const KPop = lazy(() => import("./routes/public/category/kpop"));
+const Merchandise = lazy(() => import("./routes/public/category/merchandise"));
+const JPopCityPopAsia = lazy(() => import("./routes/public/category/jpopCityPopAsia"));
+
+function App() {
   const userInfo = useContext(AuthContext);
   const isAdmin = localStorage.getItem("user type") == "관리자";
 
   const queryClient = new QueryClient();
-
-  const Layout = lazy(() => import("./routes/index"));
-  const Basket = lazy(() => import("./routes/public/basket"));
-  const RockPopEtc = lazy(() => import("./routes/public/category/rockpopetc"));
-  const HipHopRandB = lazy(() => import("./routes/public/category/hiphopR&B"));
-  const Jazz = lazy(() => import("./routes/public/category/jazz"));
-  const OST = lazy(() => import("./routes/public/category/ost"));
-  const KPop = lazy(() => import("./routes/public/category/kpop"));
-  const Merchandise = lazy(() => import("./routes/public/category/merchandise"));
-  const JPopCityPopAsia = lazy(() => import("./routes/public/category/jpopCityPopAsia"));
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -81,3 +80,4 @@ export default function App() {
     </QueryClientProvider>
   );
 }
+export default App;

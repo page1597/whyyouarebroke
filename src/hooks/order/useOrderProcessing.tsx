@@ -1,12 +1,16 @@
 import { fbGetProduct } from "@/services/firebase/product";
-import { updateBasketProductStock } from "@/services/local/basket";
+// import { updateBasketProductStock } from "@/services/local/basket";
 import { BasketProductType } from "@/types/product";
 import useUpdateProductQuantityMutation from "../product/useUpdateProductQuantityMutation";
+import { useCallback } from "react";
+import useBasket from "../basket/useBasket";
 
-export default function useOrderProcessing(userId: string | null | undefined) {
+function useOrderProcessing(userId: string | null | undefined, orderProducts: BasketProductType[]) {
   const { updateProductQuantity } = useUpdateProductQuantityMutation();
+  const { updateBasketProductStock } = useBasket();
 
-  async function checkIsOutOfStock(orderProducts: BasketProductType[]) {
+  const checkIsOutOfStock = useCallback(async () => {
+    console.log("order 1. check is out of stock");
     try {
       // 모든 상품의 재고를 확인하여 부족한 상품이 있는지 확인
       const results = await Promise.all(
@@ -29,11 +33,11 @@ export default function useOrderProcessing(userId: string | null | undefined) {
       console.error("상품 재고 확인 실패:", error);
       return true; // 에러 발생 시 재고 부족으로 처리
     }
-  }
+  }, [orderProducts]);
 
   // 실제 결제 진행 전 firebase DB에서 재고수량 미리 감소시키기
-  async function decreaseProductStock(orderProducts: BasketProductType[]) {
-    console.log("pre prose");
+  const decreaseProductStock = useCallback(async () => {
+    console.log("order 2. decrease product stock");
     // 2. 모든 제품의 재고가 충분한 경우에만 DB 업데이트 수행
     try {
       await Promise.all(
@@ -49,10 +53,11 @@ export default function useOrderProcessing(userId: string | null | undefined) {
     } catch (e) {
       console.error("상품 재고 업데이트 실패:", e);
     }
-  }
+  }, [orderProducts]);
 
   // 상품 재고 늘리기
-  async function increaseProductStock(orderProducts: BasketProductType[]) {
+  const increaseProductStock = useCallback(async () => {
+    console.log("cancel: increase product stock");
     try {
       await Promise.all(
         orderProducts.map(async (product) => {
@@ -71,7 +76,8 @@ export default function useOrderProcessing(userId: string | null | undefined) {
     } catch (e) {
       console.error("상품 재고 업데이트 실패:", e);
     }
-  }
+  }, [orderProducts]);
 
   return { checkIsOutOfStock, decreaseProductStock, increaseProductStock };
 }
+export default useOrderProcessing;

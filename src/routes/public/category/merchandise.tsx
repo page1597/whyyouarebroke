@@ -1,5 +1,6 @@
 import Products from "@/components/productList";
 
-export default function Merchandise() {
+function Merchandise() {
   return <Products category="merchandise" />;
 }
+export default Merchandise;

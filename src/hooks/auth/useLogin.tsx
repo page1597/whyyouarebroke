@@ -1,12 +1,13 @@
 import { logInFormSchema } from "@/types/formSchemas/logIn";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export default function useLogIn(logIn: any) {
-  function onSubmit(values: z.infer<typeof logInFormSchema>) {
+function useLogIn(logIn: any) {
+  const onSubmit = useCallback((values: z.infer<typeof logInFormSchema>) => {
     logIn(values);
-  }
+  }, []);
 
   const form = useForm<z.infer<typeof logInFormSchema>>({
     resolver: zodResolver(logInFormSchema),
@@ -17,3 +18,4 @@ export default function useLogIn(logIn: any) {
   });
   return { onSubmit, form };
 }
+export default useLogIn;

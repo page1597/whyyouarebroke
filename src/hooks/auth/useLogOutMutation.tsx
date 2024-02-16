@@ -1,8 +1,9 @@
 import { fbLogOut } from "@/services/firebase/user";
 import { useMutation } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function useLogOutMutation() {
+function useLogOutMutation() {
   const navigate = useNavigate();
 
   const { mutate, isPending, isError } = useMutation({
@@ -18,5 +19,10 @@ export default function useLogOutMutation() {
       alert("로그아웃하지 못했습니다.");
     },
   });
-  return { logOut: mutate, isPending, isError };
+  const logOut = useCallback(() => {
+    mutate();
+  }, [mutate]);
+
+  return { logOut, isPending, isError };
 }
+export default useLogOutMutation;

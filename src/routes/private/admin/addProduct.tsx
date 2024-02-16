@@ -1,6 +1,6 @@
 import AddProductForm from "@/components/addProductForm";
 
-export default function AddProduct() {
+function AddProduct() {
   return (
     <div>
       <h3 className="text-xl">상품 등록</h3>
@@ -11,3 +11,4 @@ export default function AddProduct() {
     </div>
   );
 }
+export default AddProduct;

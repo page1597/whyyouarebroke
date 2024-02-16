@@ -1,7 +1,7 @@
 import { BasketProductType } from "@/types/product";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, memo } from "react";
 
-export default function QuantityInput({
+function QuantityInput({
   product,
   basketProducts,
   setBasketProducts,
@@ -56,3 +56,4 @@ export default function QuantityInput({
     </>
   );
 }
+export default memo(QuantityInput);

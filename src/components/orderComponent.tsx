@@ -1,6 +1,7 @@
 import { OrderType } from "@/types/order";
+import { memo } from "react";
 
-export default function OrderComponent({ order, labels }: { order: OrderType; labels: string[] }) {
+function OrderComponent({ order, labels }: { order: OrderType; labels: string[] }) {
   const rowSpan = `row-span-${order.products.length}`;
   return (
     <div className="w-full grid text-center items-center">
@@ -53,3 +54,4 @@ export default function OrderComponent({ order, labels }: { order: OrderType; la
     </div>
   );
 }
+export default memo(OrderComponent);
