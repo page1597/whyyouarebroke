@@ -1,17 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { NavigateFunction } from "react-router-dom";
 import GoogleLoginButton from "./ui/googleLoginButton";
 import { fbGoogleLogIn } from "@/services/firebase/user";
 import useLogInMutation from "@/hooks/auth/useLogInMutation";
 import useLogIn from "@/hooks/auth/useLogin";
 import Alert from "./alert";
 
-function LogInForm({ navigate }: { navigate: NavigateFunction }) {
+function LogInForm() {
   const { logIn, isPending, showAlert, setShowAlert, alertContent } = useLogInMutation();
   const { onSubmit, form } = useLogIn(logIn);
-  
+
   return (
     <>
       <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
@@ -54,7 +53,7 @@ function LogInForm({ navigate }: { navigate: NavigateFunction }) {
 
           <div className="w-full flex flex-col justify-center items-center mt-14">
             <div className="text-zinc-500 mb-5">소셜 로그인</div>
-            <GoogleLoginButton onClick={() => fbGoogleLogIn(navigate)} />
+            <GoogleLoginButton onClick={() => fbGoogleLogIn()} />
           </div>
         </div>
       </Form>

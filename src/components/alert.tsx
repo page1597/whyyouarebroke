@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,7 +27,7 @@ function Alert({
   useEffect(() => {
     console.log(showAlert, alertContent);
   }, [showAlert]);
-  
+
   return (
     <AlertDialog open={showAlert}>
       <AlertDialogContent>

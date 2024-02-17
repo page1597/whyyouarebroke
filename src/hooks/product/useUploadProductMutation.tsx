@@ -1,7 +1,6 @@
 import { fbAddProduct } from "@/services/firebase/product";
 import { ProductType } from "@/types/product";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import useShowAlert from "../useShowAlert";
 
 function useUploadProductMutation(isEdit: boolean) {
