@@ -1,6 +1,14 @@
 import Products from "@/components/productList";
+import { Helmet } from "react-helmet";
 
 function RockPopEtc() {
-  return <Products category="rock/pop/etc" />;
+  return (
+    <>
+      <Helmet>
+        <title>rock/pop/etc</title>
+      </Helmet>
+      <Products category="rock/pop/etc" />
+    </>
+  );
 }
 export default RockPopEtc;

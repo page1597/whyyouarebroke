@@ -5,10 +5,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+import Sitemap from "vite-plugin-sitemap";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react(), tsconfigPaths(), Sitemap({})],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src/"),
