@@ -8,12 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { addProductFormSchema } from "@/types/formSchemas/addProduct";
 import { resizeFile } from "@/lib/utils";
+import useShowAlert from "../useShowAlert";
 
 function useUploadProduct(uploadProduct: any, product?: ProductType) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
   const [category, setCategory] = useState<string>(product ? product.category : "");
   const uploadedDate = +new Date(); // 등록시간 기준
   const uuid = uuidv4();
+  const { setShowAlert, setAlertContent, showAlert, alertContent } = useShowAlert();
 
   // 로딩 추가하기
   useEffect(() => {
@@ -73,10 +75,12 @@ function useUploadProduct(uploadProduct: any, product?: ProductType) {
   function onSubmit(values: z.infer<typeof addProductFormSchema>) {
     console.log("on submit");
     if (category === "") {
-      alert("카테고리를 선택해주세요.");
+      setShowAlert(true);
+      setAlertContent({ title: "상품 등록", desc: "카테고리를 선택해주세요.", nav: null });
       return;
     } else if (previewImages.length === 0) {
-      alert("상품 이미지를 1개 이상 업로드해주세요.");
+      setShowAlert(true);
+      setAlertContent({ title: "상품 등록", desc: "상품 이미지를 1개 이상 업로드해주세요.", nav: null });
       return;
     }
     const product: ProductType = {
@@ -96,6 +100,17 @@ function useUploadProduct(uploadProduct: any, product?: ProductType) {
     uploadProduct(product);
   }
 
-  return { previewImages, category, setCategory, onSubmit, addImages, deleteImage, form };
+  return {
+    previewImages,
+    category,
+    setCategory,
+    onSubmit,
+    addImages,
+    deleteImage,
+    form,
+    setShowAlert,
+    alertContent,
+    showAlert,
+  };
 }
 export default useUploadProduct;

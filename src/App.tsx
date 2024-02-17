@@ -6,6 +6,7 @@ import PublicRoutes from "./routes/public/index.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 ("use client");
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const Layout = lazy(() => import("./routes/index"));
 const Basket = lazy(() => import("./routes/public/basket"));
@@ -76,6 +77,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
       <RouterProvider router={router} />
     </QueryClientProvider>
   );

@@ -3,7 +3,8 @@ import useAddOrderMutation from "./useAddOrderMutation";
 import { FieldValues } from "react-hook-form";
 import { generateOrderNumber } from "@/lib/utils";
 import { OrderStatusType } from "@/types/order";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
+import useShowAlert from "../useShowAlert";
 
 function useOrder(
   userId: string | null | undefined,
@@ -15,10 +16,13 @@ function useOrder(
   increaseProductStock: any
 ) {
   const { addOrder } = useAddOrderMutation();
+  const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
 
   async function onClickPayment() {
     if (!isAgreedTerm) {
-      alert("쇼핑몰 이용약관을 동의해주세요.");
+      // alert("쇼핑몰 이용약관을 동의해주세요.");
+      setShowAlert(true);
+      setAlertContent({ title: "주문/결제", desc: "쇼핑몰 이용약관을 동의해주세요.", nav: null });
       return;
     }
 
@@ -58,7 +62,8 @@ function useOrder(
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
       const { success, merchant_uid, error_msg } = response;
       if (success) {
-        alert("결제 성공");
+        setShowAlert(true);
+        setAlertContent({ title: "주문/결제", desc: "결제가 완료되었습니다.", nav: null });
         addOrder({
           merchant_uid: data.merchant_uid,
           status: OrderStatusType.PURCHASE_CONFIRMED,
@@ -95,6 +100,6 @@ function useOrder(
       }
     });
   } // ?
-  return { onClickPayment };
+  return { onClickPayment, setShowAlert, showAlert, alertContent };
 }
 export default useOrder;

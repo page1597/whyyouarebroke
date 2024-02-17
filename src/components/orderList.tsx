@@ -8,8 +8,9 @@ import OrderComponent from "./orderComponent";
 import { OrderType } from "@/types/order";
 import { Button } from "./ui/button";
 import SelectOrderState from "./selectOrderStatus";
+import Alert from "./alert";
 
-//  페이지네이션 ?
+// 페이지네이션 ?
 function OrderList({ isAdmin }: { isAdmin: boolean }) {
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
@@ -24,7 +25,7 @@ function OrderList({ isAdmin }: { isAdmin: boolean }) {
   }, [inView]);
 
   const { cancelOrder } = useCancelOrderMutation(refetch);
-  const { onCancelOrder } = useCancelOrder(cancelOrder);
+  const { onCancelOrder, setShowAlert, showAlert, alertContent } = useCancelOrder(cancelOrder);
 
   const labels = ["주문번호", "이미지", "주문상품", "상품 가격", "수량", "합계", "배송정보"];
   const [ordersWithTitle, setOrdersWithTitle] = useState<OrderType[]>();
@@ -60,52 +61,55 @@ function OrderList({ isAdmin }: { isAdmin: boolean }) {
   }, [orders]);
 
   return (
-    <div className="flex flex-col mt-4">
-      <hr />
-      {status === "success" ? (
-        <div className="mt-4 flex flex-col gap-5 text-base">
-          {ordersWithTitle ? (
-            <div className="mt-4 flex flex-col gap-5 text-base">
-              {ordersWithTitle?.map((order) => (
-                <div key={order.merchant_uid} className="flex flex-row items-center gap-3">
-                  <OrderComponent order={order} labels={labels} />
-                  <div className=" w-[128px] flex justify-center">
-                    {order.merchant_uid ? (
-                      !isAdmin ? (
-                        <Button
-                          id="cancel_orer"
-                          disabled={order.status === "주문 취소"}
-                          onClick={() => {
-                            onCancelOrder(order.merchant_uid, order.name);
-                          }}
-                          className="bg-zinc-0 border-zinc-800 border text-zinc-800 hover:bg-zinc-100 disabled:bg-zinc-100"
-                        >
-                          취소하기
-                        </Button>
+    <>
+      <Alert alertContent={alertContent} setShowAlert={setShowAlert} showAlert={showAlert} />
+      <div className="flex flex-col mt-4">
+        <hr />
+        {status === "success" ? (
+          <div className="mt-4 flex flex-col gap-5 text-base">
+            {ordersWithTitle ? (
+              <div className="mt-4 flex flex-col gap-5 text-base">
+                {ordersWithTitle?.map((order) => (
+                  <div key={order.merchant_uid} className="flex flex-row items-center gap-3">
+                    <OrderComponent order={order} labels={labels} />
+                    <div className=" w-[128px] flex justify-center">
+                      {order.merchant_uid ? (
+                        !isAdmin ? (
+                          <Button
+                            id="cancel_orer"
+                            disabled={order.status === "주문 취소"}
+                            onClick={() => {
+                              onCancelOrder(order.merchant_uid, order.name);
+                            }}
+                            className="bg-zinc-0 border-zinc-800 border text-zinc-800 hover:bg-zinc-100 disabled:bg-zinc-100"
+                          >
+                            취소하기
+                          </Button>
+                        ) : (
+                          <SelectOrderState id={order.merchant_uid} />
+                        )
+                      ) : isAdmin ? (
+                        <div>주문상태</div>
                       ) : (
-                        <SelectOrderState id={order.merchant_uid} />
-                      )
-                    ) : isAdmin ? (
-                      <div>주문상태</div>
-                    ) : (
-                      <div>주문취소</div>
-                    )}
+                        <div>주문취소</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p>주문이 존재하지 않습니다.</p>
-          )}
+                ))}
+              </div>
+            ) : (
+              <p>주문이 존재하지 않습니다.</p>
+            )}
+          </div>
+        ) : (
+          <p>loading...</p>
+        )}
+        {/* 다음 페이지 로딩 중인 경우 */}
+        <div ref={inViewRef} className="h-42 w-full">
+          {isFetchingNextPage && <p>loading...</p>}
         </div>
-      ) : (
-        <p>loading...</p>
-      )}
-      {/* 다음 페이지 로딩 중인 경우 */}
-      <div ref={inViewRef} className="h-42 w-full">
-        {isFetchingNextPage && <p>loading...</p>}
       </div>
-    </div>
+    </>
   );
 }
 export default OrderList;

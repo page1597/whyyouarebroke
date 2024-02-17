@@ -15,6 +15,7 @@ function useGetProducts(category: string | null, debouncedSearchValue: string) {
 
   function changeOrderby(order: string) {
     setOrderby(order);
+
     refetch();
   }
 
@@ -23,13 +24,14 @@ function useGetProducts(category: string | null, debouncedSearchValue: string) {
       minPrice: minPrice,
       maxPrice: maxPrice,
     });
+
     refetch();
   }, [minPrice, maxPrice]);
 
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: Infinity,
+        staleTime: 1000, //
       },
     },
   });
@@ -61,7 +63,25 @@ function useGetProducts(category: string | null, debouncedSearchValue: string) {
 
   const prefetchNextPage = useCallback(async () => {
     if (hasNextPage && !isFetchingNextPage) {
-      await queryClient.prefetchInfiniteQuery({ queryKey: ["products"], queryFn: fetchNextPage, pages: 3 });
+      // 데이터 프리패칭?????????????????????????????????
+      //?????????????????????????????????????
+      await queryClient.prefetchInfiniteQuery({
+        queryKey: ["products", category, orderby, JSON.stringify(priceRange), debouncedSearchValue],
+        queryFn: fetchNextPage,
+        initialPageParam: null,
+        getNextPageParam: (querySnapshot: DocumentData) => {
+          if (querySnapshot.length < 12) {
+            return null;
+          } else {
+            if (orderby === "createdAt") {
+              return querySnapshot[querySnapshot.length - 1].createdAt;
+            } else if (orderby === "price") {
+              return querySnapshot[querySnapshot.length - 1].price;
+            }
+          }
+        },
+        pages: 2,
+      });
     }
   }, [hasNextPage, isFetchingNextPage, queryClient, fetchNextPage]);
 

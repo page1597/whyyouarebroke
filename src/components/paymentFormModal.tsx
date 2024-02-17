@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Modal from "@/components/ui/modal";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "./ui/formInput";
@@ -8,6 +8,8 @@ import { AuthContext } from "@/context/authContext";
 import { Button } from "./ui/button";
 import { BasketProductType } from "@/types/product";
 import useOrderModal from "@/hooks/order/useOrderModal";
+
+import Alert from "./alert";
 
 // 모달창 직접 구현
 function PaymentFormModal({
@@ -21,18 +23,23 @@ function PaymentFormModal({
   const [isAgreedTerm, setIsAgreedTerm] = useState(false);
   const shippingFee = 3000;
 
-  const { form, isOpen, onClose, orderProducts, orderSelectedProducts, orderAllProducts, totalPrice } = useOrderModal(
-    userInfo,
-    checkedProducts,
-    basketProducts
-  );
-
-  // useEffect(() => {
-  //   console.log("checkedProducts is changed");
-  // }, [checkedProducts]);
+  const {
+    form,
+    isOpen,
+    onClose,
+    orderProducts,
+    orderSelectedProducts,
+    orderAllProducts,
+    totalPrice,
+    showAlert,
+    setShowAlert,
+    alertContent,
+  } = useOrderModal(userInfo, checkedProducts, basketProducts);
 
   return (
     <div>
+      <Alert showAlert={showAlert} setShowAlert={setShowAlert} alertContent={alertContent} />
+
       <div className="flex justify-center gap-5 mt-12">
         <Button
           id="selected"

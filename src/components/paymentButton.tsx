@@ -4,6 +4,7 @@ import { BasketProductType } from "@/types/product";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import useOrderProcessing from "@/hooks/order/useOrderProcessing";
 import useOrder from "@/hooks/order/useOrder";
+import Alert from "./alert";
 
 declare global {
   interface Window {
@@ -25,7 +26,7 @@ function PaymentButton({
   userId?: string | null;
 }) {
   const { checkIsOutOfStock, decreaseProductStock, increaseProductStock } = useOrderProcessing(userId, orderProducts);
-  const { onClickPayment } = useOrder(
+  const { onClickPayment, setShowAlert, showAlert, alertContent } = useOrder(
     userId,
     fieldValues,
     isAgreedTerm,
@@ -40,9 +41,12 @@ function PaymentButton({
   }, []);
 
   return (
-    <Button id="payment" className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
-      결제하기
-    </Button>
+    <>
+      <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
+      <Button id="payment" className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
+        결제하기
+      </Button>
+    </>
   );
 }
 export default PaymentButton;

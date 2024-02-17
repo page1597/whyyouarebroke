@@ -2,24 +2,31 @@ import { fbDeleteProduct } from "@/services/firebase/product";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import useShowAlert from "../useShowAlert";
 
 function useDeleteProductMutation() {
   const navigate = useNavigate();
+  const { setAlertContent, setShowAlert, showAlert, alertContent } = useShowAlert();
 
   const { mutate } = useMutation({
     mutationKey: ["delete product"],
     mutationFn: async (productId: string) => await fbDeleteProduct(productId),
     onSuccess: useCallback(() => {
-      console.log("상품 삭제 성공");
-      alert("상품이 삭제되었습니다.");
-      navigate("/");
+      setShowAlert(true);
+      setAlertContent({ title: "상품 삭제", desc: "상품이 삭제되었습니다.", nav: "/" });
     }, [navigate]),
     onError: useCallback((error: any) => {
       console.log("상품 삭제 실패", error);
-      alert("상품을 삭제하지 못했습니다.");
+      setAlertContent({ title: "상품 삭제", desc: "상품을 삭제하지 못했습니다.", nav: null });
+      setShowAlert(true);
     }, []),
   });
 
-  return { deleteProduct: mutate };
+  return {
+    deleteProduct: mutate,
+    mutateAlertContent: alertContent,
+    setMutateShowAlert: setShowAlert,
+    mutateShowAlert: showAlert,
+  };
 }
 export default useDeleteProductMutation;

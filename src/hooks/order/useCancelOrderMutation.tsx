@@ -8,7 +8,6 @@ function useCancelOrderMutation(refetch: () => void) {
     mutationFn: (orderId: string) => fbUpdateOrderStatus(orderId, OrderStatusType.ORDER_CANCELLED),
     onSuccess: () => {
       console.log("주문 취소 성공");
-      alert("주문이 취소되었습니다.");
       refetch();
     },
     onError: (error) => {

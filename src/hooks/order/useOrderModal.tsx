@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import useShowAlert from "../useShowAlert";
 
 function useOrderModal(
   userInfo: UserInfoType | null | undefined,
@@ -14,6 +15,7 @@ function useOrderModal(
   const [isOpen, setIsOpen] = useState(false);
   const [orderProducts, setOrderProducts] = useState<BasketProductType[]>(checkedProducts);
   const [totalPrice, setTotalPrice] = useState<number>();
+  const { showAlert, setShowAlert, alertContent, setAlertContent } = useShowAlert();
 
   const onOpen = useCallback(
     (orderProducts: BasketProductType[]) => {
@@ -26,7 +28,8 @@ function useOrderModal(
           orderProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0)
         );
       } else {
-        alert("주문하려는 상품을 선택해 주세요.");
+        setShowAlert(true);
+        setAlertContent({ title: "장바구니", desc: "주문하려는 상품을 선택해 주세요.", nav: null });
         return;
       }
     },
@@ -65,6 +68,9 @@ function useOrderModal(
     orderSelectedProducts,
     orderAllProducts,
     totalPrice,
+    showAlert,
+    setShowAlert,
+    alertContent,
   };
 }
 export default useOrderModal;

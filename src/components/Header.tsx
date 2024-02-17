@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { HeaderNavProps } from "@/types/navigation";
 import useLogOutMutation from "@/hooks/auth/useLogOutMutation";
+import Alert from "./alert";
 
 export function Header({ items }: HeaderNavProps) {
-  const { logOut, isPending } = useLogOutMutation();
+  const { logOut, isPending, setShowAlert, showAlert, alertContent } = useLogOutMutation();
   return (
     <>
+      <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
       <div className="hidden md:flex bg-zinc-800 justify-end py-1.5 items-center px-3 gap-3">
         {items.length
           ? items.map((item) => (
