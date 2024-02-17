@@ -24,7 +24,7 @@ function RecommandProducts({ category, productId }: { category: string; productI
                         onClick={() => {
                           preloadImage(product.image, product.name);
                           navigate({ pathname: "/product", search: `?id=${product.id}` });
-                          window.location.reload(); // 이렇게 하는게 맞나?
+                          // window.location.reload(); // 이렇게 하는게 맞나?
                         }}
                       >
                         <img
