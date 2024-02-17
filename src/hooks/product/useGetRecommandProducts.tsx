@@ -20,7 +20,7 @@ function useGetRecommandProducts(productId: string, category: string, limit: num
 
   useEffect(() => {
     getRecommands();
-  }, []);
+  }, [productId]);
 
   return { isLoading, recommands };
 }
