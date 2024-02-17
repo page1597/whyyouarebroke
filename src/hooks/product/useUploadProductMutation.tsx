@@ -9,7 +9,6 @@ function useUploadProductMutation(isEdit: boolean) {
     mutationKey: ["upload product"],
     mutationFn: (product: ProductType) => fbAddProduct(product),
     onSuccess: () => {
-      console.log("상품 등록 성공");
       // alert(isEdit ? "상품 정보가 수정되었습니다." : "상품이 등록되었습니다.");
       setShowAlert(true);
       setAlertContent({
@@ -18,8 +17,7 @@ function useUploadProductMutation(isEdit: boolean) {
         nav: "/",
       });
     },
-    onError: (error) => {
-      console.log("상품 등록 실패", error);
+    onError: () => {
       // alert(isEdit ? "상품을 수정하지 못했습니다." : "상품을 등록하지 못했습니다.");
       setShowAlert(true);
       setAlertContent({

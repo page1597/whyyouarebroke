@@ -8,10 +8,10 @@ function useUpdateProductQuantityMutation() {
     mutationFn: ({ type, DBStock, product }: { type: string; DBStock: number; product: BasketProductType }) =>
       fbUpdateProduct(product.id, type === "add" ? DBStock + product.quantity : DBStock - product.quantity),
     onSuccess: () => {
-      console.log("상품 수량 업데이트 성공");
+      // console.log("상품 수량 업데이트 성공");
     },
-    onError: (error) => {
-      console.log("상품 수량 업데이트 실패", error);
+    onError: () => {
+      alert("상품 수량 업데이트에 실패했습니다.");
     },
   });
 

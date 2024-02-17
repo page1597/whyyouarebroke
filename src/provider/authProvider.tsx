@@ -16,7 +16,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // 첫 렌더링 시에는 실행하지 않음
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
-      console.log("구독 시작: ", currentUser);
       if (currentUser) {
         await fbGetUser(currentUser.uid)
           .then((userInfo) => {

@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_APP_API_KEY,
+  apiKey: "AIzaSyD4BnagxDk7hTnU6DjI5TJzO57iQ3ajKC0",
   authDomain: "commerce-fee29.firebaseapp.com",
   projectId: "commerce-fee29",
   storageBucket: "commerce-fee29.appspot.com",

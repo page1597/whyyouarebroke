@@ -27,7 +27,6 @@ export const signUpFormSchema = z
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
-      console.log("비밀번호 다름");
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "비밀번호가 다릅니다.",

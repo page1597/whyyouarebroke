@@ -63,5 +63,4 @@ export function preloadImage(src: string, alt: string) {
   const image = new Image();
   image.src = src;
   image.alt = alt;
-  console.log(image);
 }

@@ -151,7 +151,6 @@ export async function fbAddProduct(product: ProductType) {
       try {
         const snapshot = await uploadBytes(imageRef, blob);
         const downloadURL = await getDownloadURL(snapshot.ref);
-        console.log(downloadURL);
         images.push(downloadURL);
       } catch (e) {
         console.error(`${index}번째 이미지 업로드 실패:`, e);

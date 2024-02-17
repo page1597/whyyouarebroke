@@ -19,15 +19,12 @@ function useUploadProduct(uploadProduct: any, product?: ProductType) {
 
   // 로딩 추가하기
   useEffect(() => {
-    console.log("useEffect");
     if (product) {
       getPrevImages();
     }
   }, []);
 
   async function getPrevImages() {
-    console.log("get prev images");
-    console.log("원래 있던 이미지", product?.image);
     if (product && product?.image) {
       const result = await fbGetPrevImagesURL(product.id, product?.image);
       setPreviewImages(result); // preview : blob
@@ -36,7 +33,6 @@ function useUploadProduct(uploadProduct: any, product?: ProductType) {
 
   // 이미지 추가
   async function addImages(e: ChangeEvent<HTMLInputElement>) {
-    console.log("addImages");
     e.preventDefault();
     let images = e.target.files;
     if (images) {
@@ -49,7 +45,6 @@ function useUploadProduct(uploadProduct: any, product?: ProductType) {
 
   // X버튼 클릭 시 이미지 삭제
   function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
-    console.log("delete image");
     e.preventDefault();
     setPreviewImages(previewImages.filter((_, index) => index !== id));
   }
@@ -73,7 +68,6 @@ function useUploadProduct(uploadProduct: any, product?: ProductType) {
   });
 
   function onSubmit(values: z.infer<typeof addProductFormSchema>) {
-    console.log("on submit");
     if (category === "") {
       setShowAlert(true);
       setAlertContent({ title: "상품 등록", desc: "카테고리를 선택해주세요.", nav: null });
