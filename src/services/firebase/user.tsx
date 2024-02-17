@@ -17,7 +17,7 @@ export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction)
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, user.email, user.password!);
 
     try {
-      const updated = await updateProfile(userCredential.user, { displayName: user.name });
+      await updateProfile(userCredential.user, { displayName: user.name });
 
       try {
         const uid = userCredential.user.uid;
