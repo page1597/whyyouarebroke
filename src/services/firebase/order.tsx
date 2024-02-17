@@ -34,11 +34,7 @@ export async function fbUpdateOrderStatus(orderId: string, status: string) {
     status: status,
   });
 }
-export async function fbGetUser(uid: string): Promise<DocumentData | undefined> {
-  const result = await getDoc(doc(db, "users", uid));
-  console.log(result.data());
-  return result.data();
-}
+
 export async function fbGetOrderStatus(orderId: string): Promise<DocumentData | undefined> {
   const result = await getDoc(doc(db, "orders", orderId)); // == merchant_uid
   return result.data();

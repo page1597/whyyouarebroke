@@ -8,21 +8,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { addProductFormSchema } from "@/types/formSchemas/addProduct";
 import { resizeFile } from "@/lib/utils";
+import useShowAlert from "../useShowAlert";
 
-export default function useUploadProduct(uploadProduct: any, product?: ProductType) {
+function useUploadProduct(uploadProduct: any, product?: ProductType) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
   const [category, setCategory] = useState<string>(product ? product.category : "");
   const uploadedDate = +new Date(); // 등록시간 기준
   const uuid = uuidv4();
+  const { setShowAlert, setAlertContent, showAlert, alertContent } = useShowAlert();
 
   // 로딩 추가하기
   useEffect(() => {
+    console.log("useEffect");
     if (product) {
       getPrevImages();
     }
   }, []);
 
   async function getPrevImages() {
+    console.log("get prev images");
     console.log("원래 있던 이미지", product?.image);
     if (product && product?.image) {
       const result = await fbGetPrevImagesURL(product.id, product?.image);
@@ -32,6 +36,7 @@ export default function useUploadProduct(uploadProduct: any, product?: ProductTy
 
   // 이미지 추가
   async function addImages(e: ChangeEvent<HTMLInputElement>) {
+    console.log("addImages");
     e.preventDefault();
     let images = e.target.files;
     if (images) {
@@ -44,6 +49,7 @@ export default function useUploadProduct(uploadProduct: any, product?: ProductTy
 
   // X버튼 클릭 시 이미지 삭제
   function deleteImage(e: MouseEvent<HTMLElement>, id: number) {
+    console.log("delete image");
     e.preventDefault();
     setPreviewImages(previewImages.filter((_, index) => index !== id));
   }
@@ -66,12 +72,15 @@ export default function useUploadProduct(uploadProduct: any, product?: ProductTy
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addProductFormSchema>) {
+  function onSubmit(values: z.infer<typeof addProductFormSchema>) {
+    console.log("on submit");
     if (category === "") {
-      alert("카테고리를 선택해주세요.");
+      setShowAlert(true);
+      setAlertContent({ title: "상품 등록", desc: "카테고리를 선택해주세요.", nav: null });
       return;
     } else if (previewImages.length === 0) {
-      alert("상품 이미지를 1개 이상 업로드해주세요.");
+      setShowAlert(true);
+      setAlertContent({ title: "상품 등록", desc: "상품 이미지를 1개 이상 업로드해주세요.", nav: null });
       return;
     }
     const product: ProductType = {
@@ -91,5 +100,17 @@ export default function useUploadProduct(uploadProduct: any, product?: ProductTy
     uploadProduct(product);
   }
 
-  return { previewImages, category, setCategory, onSubmit, addImages, deleteImage, form };
+  return {
+    previewImages,
+    category,
+    setCategory,
+    onSubmit,
+    addImages,
+    deleteImage,
+    form,
+    setShowAlert,
+    alertContent,
+    showAlert,
+  };
 }
+export default useUploadProduct;

@@ -1,6 +1,6 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, memo } from "react";
 
-export default function GoogleSignUpButton({ onClick }: { onClick: MouseEventHandler<HTMLButtonElement> | undefined }) {
+function GoogleSignUpButton({ onClick }: { onClick: MouseEventHandler<HTMLButtonElement> | undefined }) {
   return (
     <button
       id="google_sign_up"
@@ -17,3 +17,4 @@ export default function GoogleSignUpButton({ onClick }: { onClick: MouseEventHan
     </button>
   );
 }
+export default memo(GoogleSignUpButton);

@@ -5,21 +5,20 @@ import RecommandProducts from "@/components/recommandProducts";
 import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
 import { AuthContext } from "@/context/authContext";
+import useBasket from "@/hooks/basket/useBasket";
 import useCheckIsInBasket from "@/hooks/basket/useCheckIsInBasket";
 import useGetProduct from "@/hooks/product/useGetProduct";
-// import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
-import { addToBasket } from "@/services/local/basket";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // 구매자가 보는 상품 상세 페이지
-export default function Product() {
+function Product() {
   const [searchParams] = useSearchParams();
-  const productId = searchParams.get("id"); // param 으로 가져오는 product id
+  const productId = searchParams.get("id");
   const userId = useContext(AuthContext)?.id || null;
   const { loading, product } = useGetProduct(productId);
   const { isAdded, setIsAdded, quantity, setQuantity } = useCheckIsInBasket(productId);
-
+  const { addToBasket } = useBasket();
   return (
     <div className="flex flex-col">
       {!loading && product ? (
@@ -63,3 +62,4 @@ export default function Product() {
     </div>
   );
 }
+export default memo(Product);

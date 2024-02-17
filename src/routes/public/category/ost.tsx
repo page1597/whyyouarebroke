@@ -1,5 +1,6 @@
 import Products from "@/components/productList";
 
-export default function Ost() {
+function Ost() {
   return <Products category="ost" />;
 }
+export default Ost;

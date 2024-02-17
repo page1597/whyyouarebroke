@@ -1,12 +1,12 @@
 import { fbGetRandomProducts } from "@/services/firebase/product";
 import { DocumentData } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // 추천상품 4개만 보여짐 (number = 4)
-export default function useGetRecommandProducts(productId: string, category: string, limit: number) {
+function useGetRecommandProducts(productId: string, category: string, limit: number) {
   const [recommands, setRecommands] = useState<DocumentData[]>(new Array(limit));
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  async function getRecommands() {
+  const getRecommands = useCallback(async () => {
     try {
       setIsLoading(true);
       const result = await fbGetRandomProducts(productId, category, limit);
@@ -16,10 +16,12 @@ export default function useGetRecommandProducts(productId: string, category: str
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [productId]);
+
   useEffect(() => {
     getRecommands();
   }, []);
 
   return { isLoading, recommands };
 }
+export default useGetRecommandProducts;

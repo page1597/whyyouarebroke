@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
@@ -12,7 +12,7 @@ import useGetProducts from "@/hooks/product/useGetProducts";
 import { ProductType } from "@/types/product";
 import { preloadImage } from "@/lib/utils";
 
-export default function ProductList({ category }: { category?: string }) {
+function ProductList({ category }: { category?: string }) {
   const navigate = useNavigate();
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
@@ -31,20 +31,29 @@ export default function ProductList({ category }: { category?: string }) {
     status,
     isFetchingNextPage,
     prefetchNextPage,
+    // currentPage, // 현재 페이지 상태 반환
+    // setCurrentPage, // 현재 페이지 설정 함수 반환
   } = useGetProducts(category ?? null, debouncedSearchValue);
 
   useEffect(() => {
-    if (inView) {
+    if (inView && orderby) {
+      console.log("prefetch next page");
       prefetchNextPage();
     }
+    // 스크롤이 끝에 도달할 때마다 페이지 증가
   }, [inView, orderby]);
 
   // useEffect(() => {
-  //   data?.pages[0].image.forEach((img: string) => {
-  //     const image = new Image();
-  //     image.src = img;
-  //   });
-  // }, []);
+  //   // prefetchNextPage()가 호출되었을 때만 currentPage를 증가시킴
+  //   if (isFetchingNextPage) {
+  //     setCurrentPage((prevPage) => prevPage + 1);
+  //   }
+  // }, [isFetchingNextPage]);
+
+  // useEffect(() => {
+  //   console.log(currentPage);
+  // }, [currentPage]);
+
   return (
     <>
       <div className="flex justify-between items-end">
@@ -158,3 +167,4 @@ export default function ProductList({ category }: { category?: string }) {
     </>
   );
 }
+export default memo(ProductList);

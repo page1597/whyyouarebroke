@@ -1,8 +1,8 @@
 import { BasketProductType } from "@/types/product";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, memo } from "react";
 import QuantityInput from "./quantityInput";
 
-export default function BasketProductComponent({
+function BasketProductComponent({
   product,
   labels,
   basketProducts,
@@ -41,3 +41,4 @@ export default function BasketProductComponent({
     </div>
   );
 }
+export default memo(BasketProductComponent);

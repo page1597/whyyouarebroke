@@ -8,6 +8,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
 import { Header } from "@/components/Header";
 import { HeaderNavItem } from "@/types/navigation";
+import useShowAlert from "@/hooks/useShowAlert";
+import Alert from "@/components/alert";
 
 export const sidebarNav = [
   {
@@ -40,10 +42,11 @@ export const sidebarNav = [
   },
 ];
 
-export default function Layout() {
+function Layout() {
   const userInfo = useContext(AuthContext);
   const isAdmin = userInfo?.type === "관리자" ? true : false;
   const navigate = useNavigate();
+
   // 전역관리 유저타입 저장
   const headerNav: HeaderNavItem[] = [
     userInfo ? { title: "로그아웃", href: "/" } : { title: "로그인", href: "/login" },
@@ -58,7 +61,6 @@ export default function Layout() {
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
       <div className="w-full flex flex-col h-screen">
         <Header items={headerNav} />
-
         {/* 반응형 구현 */}
         <div className="md:px-12 md:py-8 md:flex ">
           <div className="hidden md:inline-block">
@@ -107,3 +109,4 @@ export default function Layout() {
     </ErrorBoundary>
   );
 }
+export default Layout;

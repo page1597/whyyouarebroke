@@ -1,5 +1,6 @@
 import Products from "@/components/productList";
 
-export default function HipHopRandB() {
+function HipHopRandB() {
   return <Products category="hip hop/r&b" />;
 }
+export default HipHopRandB;

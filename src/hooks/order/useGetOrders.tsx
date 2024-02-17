@@ -1,9 +1,10 @@
 import { fbGetOrders } from "@/services/firebase/order";
 import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
+import { useCallback } from "react";
 
 // useGetProductsWithSearch
-export default function useGetOrders(isAdmin: boolean, userId: string) {
+function useGetOrders(isAdmin: boolean, userId: string | undefined | null) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -26,10 +27,12 @@ export default function useGetOrders(isAdmin: boolean, userId: string) {
     },
   });
 
-  async function prefetchNextPage() {
+  const prefetchNextPage = useCallback(async () => {
     if (hasNextPage && !isFetchingNextPage) {
       await queryClient.prefetchInfiniteQuery({ queryKey: ["orders"], queryFn: fetchNextPage, pages: 3 });
     }
-  }
+  }, [hasNextPage, isFetchingNextPage, queryClient, fetchNextPage]);
+
   return { data, status, isFetchingNextPage, prefetchNextPage, refetch };
 }
+export default useGetOrders;

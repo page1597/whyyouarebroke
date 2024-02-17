@@ -1,5 +1,6 @@
 import Products from "@/components/productList";
 
-export default function Jazz() {
+function Jazz() {
   return <Products category="jazz" />;
 }
+export default Jazz;

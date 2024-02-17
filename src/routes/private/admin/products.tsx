@@ -1,7 +1,7 @@
 import ProductList from "@/components/productList";
 import { useNavigate } from "react-router-dom";
 
-export default function Products() {
+function Products() {
   const navigate = useNavigate();
   return (
     <>
@@ -31,3 +31,4 @@ export default function Products() {
     </>
   );
 }
+export default Products;

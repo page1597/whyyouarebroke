@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useState } from "react";
+import { memo, useState } from "react";
 
-export default function Combobox({
+function Combobox({
   categories,
   category,
   setCategory,
@@ -57,3 +57,4 @@ export default function Combobox({
     </Popover>
   );
 }
+export default memo(Combobox);

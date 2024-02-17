@@ -4,7 +4,7 @@ import { DocumentData } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "./ui/carousel";
 
-export default function ProductListWithCarousel({ productList }: { productList: categoryProductType[] }) {
+function ProductListWithCarousel({ productList }: { productList: categoryProductType[] }) {
   const navigate = useNavigate();
   return (
     <div>
@@ -15,7 +15,8 @@ export default function ProductListWithCarousel({ productList }: { productList: 
             <button
               name="more"
               onClick={() => {
-                navigate(`/category/${replaceAll(categoryProduct.category, ["-", ""], ["/", "-"], [" ", ""])}`);
+                const formattedCategory = replaceAll(categoryProduct.category, ["-", ""], ["/", "-"], [" ", ""]);
+                navigate(`/category/${formattedCategory}`);
               }}
             >
               더보기
@@ -68,3 +69,4 @@ export default function ProductListWithCarousel({ productList }: { productList: 
     </div>
   );
 }
+export default ProductListWithCarousel;

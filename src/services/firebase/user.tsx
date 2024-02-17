@@ -2,7 +2,6 @@ import { UserSignUpType } from "@/types/user";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -49,9 +48,11 @@ export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction)
 
 // Email 로그인
 export async function fbLogIn(email: string, password: string) {
-  const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
-  console.log(userCredential);
-  return userCredential;
+  // const userCredential =
+  // console.log(email, password);
+  await signInWithEmailAndPassword(firebaseAuth, email, password);
+  // console.log("console");
+  // return userCredential;
 }
 
 export async function fbGoogleSignUp(navigate: NavigateFunction, type: string) {
@@ -87,7 +88,7 @@ export async function fbGoogleLogIn(navigate: NavigateFunction) {
   try {
     const userCredential = await signInWithPopup(firebaseAuth, provider);
     console.log(userCredential);
-    navigate("/");
+    // navigate("/");
     alert("로그인 되었습니다.");
     return userCredential;
   } catch (e) {
@@ -108,8 +109,8 @@ export async function fbGetUser(uid: string): Promise<DocumentData | undefined> 
   return result.data();
 }
 
-export function onUserStateChange(callback: any) {
-  onAuthStateChanged(firebaseAuth, (user) => {
-    callback(user);
-  });
-}
+// export function onUserStateChange(callback: any) {
+//   onAuthStateChanged(firebaseAuth, (user) => {
+//     callback(user);
+//   });
+// }

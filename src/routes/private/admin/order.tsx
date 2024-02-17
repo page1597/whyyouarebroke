@@ -1,6 +1,6 @@
 import OrderList from "@/components/orderList";
 
-export default function Order() {
+function Order() {
   // 관리자(판매자) 판매상품 리스트 목록
   return (
     <>
@@ -9,3 +9,4 @@ export default function Order() {
     </>
   );
 }
+export default Order;

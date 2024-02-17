@@ -1,6 +1,6 @@
 import SignUpForm from "@/components/signUpForm";
 
-export default function SignUp() {
+function SignUp() {
   return (
     <div>
       <h3 className="text-xl">회원가입</h3>
@@ -11,3 +11,4 @@ export default function SignUp() {
     </div>
   );
 }
+export default SignUp;

@@ -1,8 +1,8 @@
 import { ProductType } from "@/types/product";
 import NumberInput from "./ui/numberInput";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, memo } from "react";
 
-export default function ProductInfo({
+function ProductInfo({
   product,
   isAdmin,
   quantity,
@@ -25,16 +25,14 @@ export default function ProductInfo({
         <div className="flex justify-center md:justify-start ">
           <div className="w-80 h-80">
             {product.image ? (
-              <>
-                <img
-                  decoding="async"
-                  src={product.image[0]}
-                  alt={product.name}
-                  width={320}
-                  height={320}
-                  className="w-80 h-80 object-contain"
-                />
-              </>
+              <img
+                decoding="async"
+                src={product.image[0]}
+                alt={product.name}
+                width={320}
+                height={320}
+                className="w-80 h-80 object-contain"
+              />
             ) : (
               <div className="w-60 h-60 bg-zinc-100" />
             )}
@@ -49,29 +47,25 @@ export default function ProductInfo({
             </h3>
           </div>
           <hr />
-          <div className="grid md:grid-cols-202 mt-3 ml-4 gap-1">
-            <h4 className="text-zinc-600 text-base font-bold">판매가</h4>
-            <h4 className="text-zinc-600 text-base font-bold">{product.price}원</h4>
-            <h5 className="text-zinc-900 text-base mt-2">재고</h5>
-            <h5 className="text-zinc-500 text-base mt-2">{product.stock}</h5>
-            <h5 className="text-zinc-900 text-base">Artist</h5>
-            <h5 className="text-zinc-500 text-base font-light">{product.artist}</h5>
-            <h5 className="text-zinc-900 text-base">Label</h5>
-            <h5 className="text-zinc-500 text-base font-light">{product.label}</h5>
-            <h5 className="text-zinc-900 text-base">Released</h5>
-            <h5 className="text-zinc-500 text-base font-light">{product.released}</h5>
-            <h5 className="text-zinc-900 text-base">Format</h5>
-            <h5 className="text-zinc-500 text-base font-light">{product.format}</h5>
+          <div className="grid md:grid-cols-202 mt-3 ml-4 gap-1 text-base">
+            <h4 className="text-zinc-600 font-bold">판매가</h4>
+            <h4 className="text-zinc-600 font-bold">{product.price}원</h4>
+            <h5 className="text-zinc-900 mt-2">재고</h5>
+            <h5 className="text-zinc-500 mt-2">{product.stock}</h5>
+            <h5 className="text-zinc-900">Artist</h5>
+            <h5 className="text-zinc-500 font-light">{product.artist}</h5>
+            <h5 className="text-zinc-900">Label</h5>
+            <h5 className="text-zinc-500 font-light">{product.label}</h5>
+            <h5 className="text-zinc-900">Released</h5>
+            <h5 className="text-zinc-500 font-light">{product.released}</h5>
+            <h5 className="text-zinc-900">Format</h5>
+            <h5 className="text-zinc-500 font-light">{product.format}</h5>
           </div>
 
           {!isAdmin && quantity && setQuantity ? (
             <div className="flex justify-between bg-zinc-100 w-full p-5 mt-5 text-lg font-normal text-zinc-700">
               [{product.format}] {product.name}
-              <NumberInput
-                // product={"quantity" in product ? product : undefined}
-                quantity={quantity}
-                setQuantity={setQuantity}
-              />
+              <NumberInput product={product} quantity={quantity} setQuantity={setQuantity} />
             </div>
           ) : (
             <></>
@@ -81,3 +75,12 @@ export default function ProductInfo({
     </div>
   );
 }
+export default memo(ProductInfo, (prevProps, nextProps) => {
+  // isAdmin, quantity, setQuantity props가 변경되지 않은 경우에만 리렌더링을 방지
+  return (
+    prevProps.product === nextProps.product &&
+    prevProps.isAdmin === nextProps.isAdmin &&
+    prevProps.quantity === nextProps.quantity &&
+    prevProps.setQuantity === nextProps.setQuantity
+  );
+});

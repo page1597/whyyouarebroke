@@ -3,8 +3,10 @@ import useAddOrderMutation from "./useAddOrderMutation";
 import { FieldValues } from "react-hook-form";
 import { generateOrderNumber } from "@/lib/utils";
 import { OrderStatusType } from "@/types/order";
+import { useMemo } from "react";
+import useShowAlert from "../useShowAlert";
 
-export default function useOrder(
+function useOrder(
   userId: string | null | undefined,
   fieldValues: FieldValues,
   isAgreedTerm: boolean,
@@ -14,34 +16,35 @@ export default function useOrder(
   increaseProductStock: any
 ) {
   const { addOrder } = useAddOrderMutation();
+  const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
 
   async function onClickPayment() {
     if (!isAgreedTerm) {
-      alert("쇼핑몰 이용약관을 동의해주세요.");
+      // alert("쇼핑몰 이용약관을 동의해주세요.");
+      setShowAlert(true);
+      setAlertContent({ title: "주문/결제", desc: "쇼핑몰 이용약관을 동의해주세요.", nav: null });
       return;
     }
 
     // 결제 전 재고 우선감소
-    const isOutOfStock = await checkIsOutOfStock(orderProducts);
+    const isOutOfStock = await checkIsOutOfStock();
     if (isOutOfStock) {
       return;
     }
 
-    await decreaseProductStock(orderProducts);
+    await decreaseProductStock();
 
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init("imp24067853");
 
+    const priceAmount = useMemo(
+      () => orderProducts.reduce((total, product) => total + product.quantity * product.price, 0),
+      [orderProducts]
+    );
+
     const buyerInfo = fieldValues;
-    let priceAmount = 0;
 
-    orderProducts.forEach((products) => {
-      priceAmount += products.quantity * products.price;
-    });
-    console.log(priceAmount);
-
-    /* 2. 결제 데이터 정의하기 */
     const data = {
       pg: "html5_inicis", // PG사
       pay_method: "card", // 결제수단
@@ -56,12 +59,11 @@ export default function useOrder(
     };
     console.log(data);
 
-    /* 4. 결제 창 호출하기 */
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
       const { success, merchant_uid, error_msg } = response;
-      // console.log(success, merchant_uid);
       if (success) {
-        alert("결제 성공");
+        setShowAlert(true);
+        setAlertContent({ title: "주문/결제", desc: "결제가 완료되었습니다.", nav: null });
         addOrder({
           merchant_uid: data.merchant_uid,
           status: OrderStatusType.PURCHASE_CONFIRMED,
@@ -97,6 +99,7 @@ export default function useOrder(
         // });
       }
     });
-  }
-  return { onClickPayment };
+  } // ?
+  return { onClickPayment, setShowAlert, showAlert, alertContent };
 }
+export default useOrder;
