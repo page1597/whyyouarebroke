@@ -1,6 +1,6 @@
 // root of the project
 import DocsSidebarNav from "@/components/sidebar";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import logo from "src/assets/logo.webp";
 import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
@@ -8,6 +8,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
 import { Header } from "@/components/Header";
 import { HeaderNavItem } from "@/types/navigation";
+import { Helmet } from "react-helmet";
 
 export const sidebarNav = [
   {
@@ -56,24 +57,32 @@ function Layout() {
   ].filter((item) => item.title !== "" && item.href !== "");
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
-      <div className="w-full flex flex-col h-screen">
-        <Header items={headerNav} />
-        {/* 반응형 구현 */}
-        <div className="md:px-12 md:py-8 md:flex ">
-          <div className="hidden md:inline-block">
-            <Link to={"/"} className="flex flex-col mb-7">
-              <img decoding="async" loading="lazy" id="logo" src={logo} width={120} height={101.72} alt={"logo"} />
-            </Link>
-            <DocsSidebarNav items={sidebarNav} />
-          </div>
+    <>
+      <Helmet>
+        <title>whyyouarebroke</title>
+      </Helmet>
+      <Helmet>
+        <meta name="description" content="whyyouarebroke" />
+        <meta name="keywords" content="whyyouarebroke" />
+      </Helmet>
+      <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
+        <div className="w-full flex flex-col h-screen">
+          <Header items={headerNav} />
+          {/* 반응형 구현 */}
+          <div className="md:px-12 md:py-8 md:flex ">
+            <div className="hidden md:inline-block">
+              <div className="flex flex-col mb-7" onClick={() => navigate("/")}>
+                <img decoding="async" loading="lazy" id="logo" src={logo} width={120} height={101.72} alt={"logo"} />
+              </div>
+              <DocsSidebarNav items={sidebarNav} />
+            </div>
 
-          <div className="md:hidden px-5 py-3 flex justify-between">
-            <DocsSidebarNav items={sidebarNav} />
-            <Link to={"/"}>
-              <img decoding="async" loading="lazy" id="logo" src={logo} width={80} height={80} alt={"logo"} />
-            </Link>
-            {/* <DrawerRight direction="right">
+            <div className="md:hidden px-5 py-3 flex justify-between">
+              <DocsSidebarNav items={sidebarNav} />
+              <div className="flex flex-col mb-7" onClick={() => navigate("/")}>
+                <img decoding="async" loading="lazy" id="logo" src={logo} width={80} height={80} alt={"logo"} />
+              </div>
+              {/* <DrawerRight direction="right">
               <DrawerRightTrigger name="search">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -94,17 +103,18 @@ function Layout() {
                 <SearchFilterProducts />
               </DrawerRightContent>
             </DrawerRight> */}
-            <div className="w-8" />
-          </div>
-          {/* <div className="md:flex-grow h-full px-6"> */}
-          <div className="md:flex-grow md:px-0 h-full px-6 overflow-x-clip">
-            <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
-              <Outlet />
-            </ErrorBoundary>
+              <div className="w-8" />
+            </div>
+            {/* <div className="md:flex-grow h-full px-6"> */}
+            <div className="md:flex-grow md:px-0 h-full px-6 overflow-x-clip">
+              <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
+                <Outlet />
+              </ErrorBoundary>
+            </div>
           </div>
         </div>
-      </div>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </>
   );
 }
 export default Layout;

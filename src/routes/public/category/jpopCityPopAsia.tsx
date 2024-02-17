@@ -1,6 +1,14 @@
 import Products from "@/components/productList";
+import { Helmet } from "react-helmet";
 
 function JPopCityPopAsia() {
-  return <Products category="j-pop/city pop/asia" />;
+  return (
+    <>
+      <Helmet>
+        <title>jpopCityPopAsia</title>
+      </Helmet>
+      <Products category="j-pop/city pop/asia" />
+    </>
+  );
 }
 export default JPopCityPopAsia;
