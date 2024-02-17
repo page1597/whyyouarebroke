@@ -1,10 +1,14 @@
 import ProductList from "@/components/productList";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 function Products() {
   const navigate = useNavigate();
   return (
     <>
+      <Helmet>
+        <title>whyyouarebroke</title>
+      </Helmet>
       <button
         id="upload_product"
         title="상품 등록"
