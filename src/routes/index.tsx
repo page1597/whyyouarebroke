@@ -8,8 +8,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
 import { Header } from "@/components/Header";
 import { HeaderNavItem } from "@/types/navigation";
-import useShowAlert from "@/hooks/useShowAlert";
-import Alert from "@/components/alert";
 
 export const sidebarNav = [
   {

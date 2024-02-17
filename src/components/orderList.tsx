@@ -16,11 +16,11 @@ function OrderList({ isAdmin }: { isAdmin: boolean }) {
     triggerOnce: false,
   });
   const userInfo = useContext(AuthContext);
-  const { data, status, isFetchingNextPage, prefetchNextPage, refetch } = useGetOrders(isAdmin, userInfo?.id);
+  const { data, status, isFetchingNextPage, fetchNextPage, refetch } = useGetOrders(isAdmin, userInfo?.id);
 
   useEffect(() => {
     if (inView) {
-      prefetchNextPage();
+      fetchNextPage();
     }
   }, [inView]);
 

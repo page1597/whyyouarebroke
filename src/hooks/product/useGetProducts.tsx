@@ -1,5 +1,5 @@
 import { fbGetProducts } from "@/services/firebase/product";
-import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
 import { useCallback, useState } from "react";
 
@@ -28,15 +28,22 @@ function useGetProducts(category: string | null, debouncedSearchValue: string) {
     refetch();
   }, [minPrice, maxPrice]);
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 1000, //
-      },
-    },
-  });
+  // const queryClient = new QueryClient({
+  //   defaultOptions: {
+  //     queries: {
+  //       staleTime: 1000, //
+  //     },
+  //   },
+  // });
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } = useInfiniteQuery({
+  const {
+    data,
+    fetchNextPage,
+    isFetchingNextPage,
+    status,
+    refetch,
+    // hasNextPage,
+  } = useInfiniteQuery({
     queryKey: ["products", category, orderby, JSON.stringify(priceRange), debouncedSearchValue],
     queryFn: ({ pageParam }) =>
       fbGetProducts(
@@ -61,29 +68,37 @@ function useGetProducts(category: string | null, debouncedSearchValue: string) {
     },
   });
 
-  const prefetchNextPage = useCallback(async () => {
-    if (hasNextPage && !isFetchingNextPage) {
-      // 데이터 프리패칭?????????????????????????????????
-      //?????????????????????????????????????
-      await queryClient.prefetchInfiniteQuery({
-        queryKey: ["products", category, orderby, JSON.stringify(priceRange), debouncedSearchValue],
-        queryFn: fetchNextPage,
-        initialPageParam: null,
-        getNextPageParam: (querySnapshot: DocumentData) => {
-          if (querySnapshot.length < 12) {
-            return null;
-          } else {
-            if (orderby === "createdAt") {
-              return querySnapshot[querySnapshot.length - 1].createdAt;
-            } else if (orderby === "price") {
-              return querySnapshot[querySnapshot.length - 1].price;
-            }
-          }
-        },
-        pages: 2,
-      });
-    }
-  }, [hasNextPage, isFetchingNextPage, queryClient, fetchNextPage]);
+  // const prefetchNextPage = useCallback(async () => {
+  //   // if (hasNextPage && !isFetchingNextPage) {
+  //   // 데이터 프리패칭?????????????????????????????????
+  //   //?????????????????????????????????????
+  //   await queryClient.prefetchInfiniteQuery({
+  //     queryKey: ["products", category, orderby, JSON.stringify(priceRange), debouncedSearchValue],
+  //     queryFn: ({ pageParam }) =>
+  //       fbGetProducts(
+  //         category ? category : null,
+  //         debouncedSearchValue,
+  //         orderby !== "createdAt" ? priceRange : null,
+  //         orderby,
+  //         pageParam,
+  //         12
+  //       ),
+  //     initialPageParam: null,
+  //     getNextPageParam: (querySnapshot: DocumentData) => {
+  //       if (querySnapshot.length < 12) {
+  //         return null;
+  //       } else {
+  //         if (orderby === "createdAt") {
+  //           return querySnapshot[querySnapshot.length - 1].createdAt;
+  //         } else if (orderby === "price") {
+  //           return querySnapshot[querySnapshot.length - 1].price;
+  //         }
+  //       }
+  //     },
+  //     pages: 2,
+  //   });
+  //   // }
+  // }, [hasNextPage, isFetchingNextPage, queryClient, fetchNextPage]);
 
   return {
     data,
@@ -96,7 +111,8 @@ function useGetProducts(category: string | null, debouncedSearchValue: string) {
     onSearchByPrice,
     status,
     isFetchingNextPage,
-    prefetchNextPage,
+    fetchNextPage,
+    // prefetchNextPage,
   };
 }
 export default useGetProducts;

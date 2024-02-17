@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import useShowAlert from "../useShowAlert";
 function useLogInMutation() {
-  const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
+  const { setShowAlert, showAlert, alertContent } = useShowAlert();
   const { mutate, isPending, isError } = useMutation({
     mutationKey: ["log in"],
     mutationFn: ({ email, password }: { email: string; password: string }) => fbLogIn(email, password), // 비동기 작업을 수행하는 함수
@@ -14,7 +14,7 @@ function useLogInMutation() {
     },
     onError: (error) => {
       alert("이메일과 비밀번호를 다시 한 번 확인해 주세요.");
-      // console.error("로그인 실패", error);
+      console.error("로그인 실패", error);
       // setAlertContent({ title: "로그인", desc: "이메일과 비밀번호를 다시 한 번 확인해 주세요.", nav: null });
       // setShowAlert(true);
     },

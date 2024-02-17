@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function useShowAlert() {
   const [showAlert, setShowAlert] = useState<boolean>(false);

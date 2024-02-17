@@ -60,7 +60,7 @@ function useOrder(
     console.log(data);
 
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
-      const { success, merchant_uid, error_msg } = response;
+      const { success, error_msg } = response;
       if (success) {
         setShowAlert(true);
         setAlertContent({ title: "주문/결제", desc: "결제가 완료되었습니다.", nav: null });

@@ -83,12 +83,11 @@ export async function fbGoogleSignUp(navigate: NavigateFunction, type: string) {
   }
 }
 
-export async function fbGoogleLogIn(navigate: NavigateFunction) {
+export async function fbGoogleLogIn() {
   const provider = new GoogleAuthProvider(); // provider 구글 설정
   try {
     const userCredential = await signInWithPopup(firebaseAuth, provider);
     console.log(userCredential);
-    // navigate("/");
     alert("로그인 되었습니다.");
     return userCredential;
   } catch (e) {

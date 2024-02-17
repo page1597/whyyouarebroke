@@ -30,15 +30,15 @@ function ProductList({ category }: { category?: string }) {
     onSearchByPrice,
     status,
     isFetchingNextPage,
-    prefetchNextPage,
+    fetchNextPage,
+    // prefetchNextPage,
     // currentPage, // 현재 페이지 상태 반환
     // setCurrentPage, // 현재 페이지 설정 함수 반환
   } = useGetProducts(category ?? null, debouncedSearchValue);
 
   useEffect(() => {
     if (inView && orderby) {
-      console.log("prefetch next page");
-      prefetchNextPage();
+      fetchNextPage();
     }
     // 스크롤이 끝에 도달할 때마다 페이지 증가
   }, [inView, orderby]);

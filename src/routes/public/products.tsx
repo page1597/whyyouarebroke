@@ -1,6 +1,5 @@
 import useGetAllProducts from "@/hooks/product/useGetAllProducts";
 import ProductListWithCarousel from "@/components/productListWithCarousel";
-import Alert from "@/components/alert";
 
 function Products() {
   const { loading, productList } = useGetAllProducts();
