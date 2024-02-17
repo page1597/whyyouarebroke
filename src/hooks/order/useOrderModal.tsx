@@ -19,10 +19,8 @@ function useOrderModal(
 
   const onOpen = useCallback(
     (orderProducts: BasketProductType[]) => {
-      console.log("함수 생성");
       setOrderProducts(orderProducts);
       if (orderProducts.length > 0) {
-        console.log(orderProducts);
         setIsOpen(true);
         setTotalPrice(
           orderProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0)

@@ -9,12 +9,10 @@ function useGetProduct(productId: string | null) {
     throw Error("해당 상품이 존재하지 않습니다.");
   }
   async function getProductInfo(productId: string) {
-    console.log("get product info");
     try {
       setLoading(true);
       const result = await fbGetProduct(productId);
       setProduct(result as ProductType);
-      console.log(result);
     } catch (error) {
       console.error("Error fetching product:", error);
     } finally {

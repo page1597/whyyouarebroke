@@ -7,11 +7,10 @@ function useAddOrderMutation() {
     mutationKey: ["make order"],
     mutationFn: (order: OrderType) => fbAddOrder(order),
     onSuccess: () => {
-      console.log("주문 성공");
-      // navigate("/");
+      alert("주문을 완료하였습니다.");
     },
     onError: (error) => {
-      console.log("주문 실패", error);
+      alert(`주문 실패: ${error}`);
     },
   });
 

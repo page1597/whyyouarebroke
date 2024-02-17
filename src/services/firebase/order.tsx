@@ -46,13 +46,11 @@ export async function fbGetOrders(
   pageParam: number | null,
   limitParam: number | null
 ) {
-  console.log(userId);
   let finalQuery = query(collection(db, "orders"));
   if (!isAdmin) {
     if (userId !== undefined && userId !== null) {
       finalQuery = query(finalQuery, where("buyer_uid", "==", userId));
     } else {
-      console.log("user id is undefined");
       finalQuery = query(finalQuery, where("buyer_uid", "==", "none")); // 아무 값도 안나오게
     }
   }

@@ -27,7 +27,6 @@ function useBasketList(basket: BasketProductType[] | null) {
 
   const onCheck = useCallback(
     (newProductId: string, checked: CheckedState) => {
-      console.log("on check");
       setCheckedProductIds((prevIds) => {
         if (newProductId === "") {
           return checked ? basketProducts.map((product) => product.id) : [];

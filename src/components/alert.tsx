@@ -24,10 +24,6 @@ function Alert({
 }) {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(showAlert, alertContent);
-  }, [showAlert]);
-
   return (
     <AlertDialog open={showAlert}>
       <AlertDialogContent>
@@ -38,7 +34,6 @@ function Alert({
         <AlertDialogFooter>
           <AlertDialogCancel
             onClick={() => {
-              console.log("취소");
               setShowAlert(false);
               if (setConfirm) {
                 setConfirm(false);

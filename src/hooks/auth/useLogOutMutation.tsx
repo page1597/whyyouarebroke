@@ -10,12 +10,10 @@ function useLogOutMutation() {
     mutationKey: ["log out"], // Query Key
     mutationFn: () => fbLogOut(), // 비동기 작업을 수행하는 함수
     onSuccess: () => {
-      console.log("로그아웃 성공");
       setShowAlert(true);
       setAlertContent({ title: "로그아웃", desc: "로그아웃 하였습니다.", nav: "/" });
     },
-    onError: (error) => {
-      console.error("로그아웃 실패", error);
+    onError: () => {
       setShowAlert(true);
       setAlertContent({ title: "로그아웃", desc: "로그아웃 하지 못했습니다.", nav: null });
     },

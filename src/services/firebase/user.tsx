@@ -18,7 +18,6 @@ export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction)
 
     try {
       const updated = await updateProfile(userCredential.user, { displayName: user.name });
-      console.log(updated);
 
       try {
         const uid = userCredential.user.uid;
@@ -33,7 +32,6 @@ export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction)
       }
 
       alert("회원가입 되었습니다.");
-      console.log(userCredential);
 
       // 로그아웃 후 로그인 페이지로 이동
       await signOut(firebaseAuth);
@@ -73,7 +71,6 @@ export async function fbGoogleSignUp(navigate: NavigateFunction, type: string) {
     }
 
     alert("회원가입 되었습니다.");
-    console.log(userCredential);
 
     // 로그아웃 후 로그인 페이지로 이동
     await signOut(firebaseAuth);
@@ -87,11 +84,9 @@ export async function fbGoogleLogIn() {
   const provider = new GoogleAuthProvider(); // provider 구글 설정
   try {
     const userCredential = await signInWithPopup(firebaseAuth, provider);
-    console.log(userCredential);
     alert("로그인 되었습니다.");
     return userCredential;
   } catch (e) {
-    console.log(e);
     alert("로그인에 실패하였습니다.");
     return e;
   }
@@ -104,7 +99,6 @@ export async function fbLogOut() {
 
 export async function fbGetUser(uid: string): Promise<DocumentData | undefined> {
   const result = await getDoc(doc(db, "users", uid));
-  console.log(result.data());
   return result.data();
 }
 

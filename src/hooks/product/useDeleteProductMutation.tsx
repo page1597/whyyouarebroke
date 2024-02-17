@@ -15,8 +15,7 @@ function useDeleteProductMutation() {
       setShowAlert(true);
       setAlertContent({ title: "상품 삭제", desc: "상품이 삭제되었습니다.", nav: "/" });
     }, [navigate]),
-    onError: useCallback((error: any) => {
-      console.log("상품 삭제 실패", error);
+    onError: useCallback(() => {
       setAlertContent({ title: "상품 삭제", desc: "상품을 삭제하지 못했습니다.", nav: null });
       setShowAlert(true);
     }, []),

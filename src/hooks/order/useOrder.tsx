@@ -57,7 +57,6 @@ function useOrder(
       buyer_addr: buyerInfo.buyer_addr, // 구매자 주소
       buyer_postcode: buyerInfo.buyer_postcode, // 구매자 우편번호
     };
-    console.log(data);
 
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
       const { success, error_msg } = response;

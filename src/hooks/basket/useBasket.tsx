@@ -16,7 +16,6 @@ function useBasket() {
     const localBasket = getLocalBasket === null ? [] : JSON.parse(getLocalBasket); // 원래 장바구니 리스트
 
     const userData = await fbGetUser(userId);
-    console.log("userData?.basket", userData?.basket);
     const DBBasket = userData?.basket === undefined ? [] : userData?.basket;
 
     const mergedBasket = [...DBBasket, ...localBasket];
