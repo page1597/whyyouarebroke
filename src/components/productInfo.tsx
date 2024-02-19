@@ -75,12 +75,4 @@ function ProductInfo({
     </div>
   );
 }
-export default memo(ProductInfo, (prevProps, nextProps) => {
-  // isAdmin, quantity, setQuantity props가 변경되지 않은 경우에만 리렌더링을 방지
-  return (
-    prevProps.product === nextProps.product &&
-    prevProps.isAdmin === nextProps.isAdmin &&
-    prevProps.quantity === nextProps.quantity &&
-    prevProps.setQuantity === nextProps.setQuantity
-  );
-});
+export default memo(ProductInfo);

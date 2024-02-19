@@ -8,11 +8,11 @@ import { AuthContext } from "@/context/authContext";
 import { Button } from "./ui/button";
 import { BasketProductType } from "@/types/product";
 import useOrderModal from "@/hooks/order/useOrderModal";
-
+import { memo } from "react";
 import Alert from "./alert";
 
 // 모달창 직접 구현
-export default function PaymentFormModal({
+function PaymentFormModal({
   checkedProducts,
   basketProducts,
 }: {
@@ -186,3 +186,4 @@ export default function PaymentFormModal({
     </div>
   );
 }
+export default memo(PaymentFormModal);

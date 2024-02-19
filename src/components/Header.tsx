@@ -1,10 +1,14 @@
-import { Link } from "react-router-dom";
 import { HeaderNavProps } from "@/types/navigation";
 import useLogOutMutation from "@/hooks/auth/useLogOutMutation";
 import Alert from "./alert";
-
-export default function Header({ items }: HeaderNavProps) {
+import { useNavigate } from "react-router-dom";
+import { memo } from "react";
+import useBasket from "@/hooks/basket/useBasket";
+function Header({ items }: HeaderNavProps) {
+  const navigate = useNavigate();
   const { logOut, isPending, setShowAlert, showAlert, alertContent } = useLogOutMutation();
+  const { getBasket } = useBasket();
+  const basket = getBasket();
   return (
     <>
       <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
@@ -13,16 +17,16 @@ export default function Header({ items }: HeaderNavProps) {
           ? items.map((item) => (
               <div key={item.title} className="text-white flex text-sm flex-row">
                 {item.title !== "로그아웃" ? (
-                  <Link to={item.href}>
+                  <button onClick={() => navigate(item.href)}>
                     {item.title !== "장바구니" ? (
                       item.title
                     ) : (
                       <>
                         {item.title}
-                        {/* {basket && <>({basket.length})</>} */}
+                        {basket && <>({basket.length})</>}
                       </>
                     )}
-                  </Link>
+                  </button>
                 ) : (
                   <button id={item.title} disabled={isPending} onClick={() => logOut()}>
                     {item.title}
@@ -40,16 +44,16 @@ export default function Header({ items }: HeaderNavProps) {
             ? items.map((item) => (
                 <div key={item.title} className="text-white text-sm">
                   {item.title !== "로그아웃" ? (
-                    <Link to={item.href}>
+                    <button onClick={() => navigate(item.href)}>
                       {item.title !== "장바구니" ? (
                         item.title
                       ) : (
                         <>
                           {item.title}
-                          {/* {basket && <>({basket.length})</>} */}
+                          {basket && <>({basket.length})</>}
                         </>
                       )}
-                    </Link>
+                    </button>
                   ) : (
                     <button id={item.title} disabled={isPending} onClick={() => logOut()}>
                       {item.title}
@@ -63,3 +67,4 @@ export default function Header({ items }: HeaderNavProps) {
     </>
   );
 }
+export default memo(Header);

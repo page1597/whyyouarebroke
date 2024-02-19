@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   DrawerLeft,
   DrawerLeftTrigger,
@@ -20,7 +20,9 @@ export default function DocsSidebarNav({ items }: DocsSidebarNavProps) {
                 key={index}
                 className={cn("pb-5 text-zinc-900 text-base font-bold transition-all hover:translate-x-2")}
               >
-                <Link to={item.href}>{item.title}</Link>
+                <button className="text-left" onClick={() => navigate(item.href)}>
+                  {item.title}
+                </button>
               </div>
             ))
           : null}
