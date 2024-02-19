@@ -12,13 +12,13 @@ export default function Products() {
       <button
         id="upload_product"
         title="상품 등록"
-        className="fixed right-10 bottom-10 bg-zinc-200 rounded-full p-2 z-10"
+        className="fixed md:right-10 md:bottom-10 right-6 bottom-6 bg-zinc-200 rounded-full p-2 z-10"
         onClick={() => navigate("/add-product")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="44"
-          height="44"
+          width="32"
+          height="32"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#555555"

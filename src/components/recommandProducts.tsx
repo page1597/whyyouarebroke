@@ -11,21 +11,20 @@ function RecommandProducts({ category, productId }: { category: string; productI
 
   return (
     <div>
-      <div className="text-zinc-700 ml-8 mt-6">추천 상품</div>
-      <div className="flex flex-row justify-center mt-10">
+      <div className="text-zinc-700 ml-2 md:ml-8 mt-6">추천 상품</div>
+      <div className="flex flex-row justify-center md:mt-10 mt-5">
         {!isLoading && recommands[0] != undefined ? (
-          <Carousel opts={{ align: "start" }} className="w-11/12">
-            <CarouselContent className="-ml-2">
+          <Carousel opts={{ align: "start" }} className="w-11/12 flex">
+            <CarouselContent>
               {recommands.map((product: DocumentData) => (
-                <CarouselItem key={product?.id} className="pl-1 basis-1/2 md:basis-1/4 cursor-pointer">
-                  <div className="p-1 flex justify-center">
+                <CarouselItem key={product?.id} className="basis-1/2 md:basis-1/4 cursor-pointer">
+                  <div className="md:flex hidden">
                     {product?.image ? (
                       <div
                         className="relative overflow-hidden"
                         onClick={() => {
                           preloadImage(product.image, product.name);
                           navigate({ pathname: "/product", search: `?id=${product.id}` });
-                          // window.location.reload(); // 이렇게 하는게 맞나?
                         }}
                       >
                         <img
@@ -39,18 +38,37 @@ function RecommandProducts({ category, productId }: { category: string; productI
                         />
                       </div>
                     ) : (
-                      <div className="w-60 h-60 bg-slate-300" />
+                      <div className="w-60 h-60 bg-zinc-100" />
                     )}
-                    {/* <div className="text-sm">{product["name"]}</div>
-                    <div className="text-sm font-bold text-zinc-500">{product["price"]}원</div> */}
+                  </div>
+                  <div className="md:hidden flex">
+                    {product?.image ? (
+                      <div
+                        className="relative overflow-hidden"
+                        onClick={() => {
+                          preloadImage(product.image, product.name);
+                          navigate({ pathname: "/product", search: `?id=${product.id}` });
+                        }}
+                      >
+                        <img
+                          decoding="async"
+                          loading="lazy"
+                          src={product.image[0]}
+                          width={160}
+                          height={160}
+                          className="h-40 w-40 object-contain transition-transform transform-gpu hover:scale-105"
+                          alt={product?.name}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-40 h-40 bg-zinc-100" />
+                    )}
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="md:hidden">
-              <CarouselPrevious />
-              <CarouselNext />
-            </div>
+            <CarouselPrevious className="mt-6" />
+            <CarouselNext className="mt-6" />
           </Carousel>
         ) : (
           <p>추천 상품이 존재하지 않습니다.</p>

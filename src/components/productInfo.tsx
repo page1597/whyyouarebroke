@@ -19,10 +19,17 @@ function ProductInfo({
         <div className="text-xl">
           [{product.format}] {product.name}
         </div>
-        <div className="text-sm text-zinc-600">카테고리: {product.category}</div>
+        <div className="text-sm text-zinc-600 text-right text-nowrap flex">
+          {
+            <>
+              <span className="hidden md:flex">카테고리:&nbsp;</span>
+              <>{product.category}</>
+            </>
+          }
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-502 w-full mt-6">
-        <div className="flex justify-center md:justify-start ">
+        <div className="flex justify-center md:justify-start">
           <div className="w-80 h-80">
             {product.image ? (
               <img
@@ -34,20 +41,20 @@ function ProductInfo({
                 className="w-80 h-80 object-contain"
               />
             ) : (
-              <div className="w-60 h-60 bg-zinc-100" />
+              <div className="w-80 h-80 bg-zinc-100" />
             )}
           </div>
         </div>
         <div className="flex-grow mt-8 md:mt-0">
           <hr />
-          <div className="grid grid-cols-402 md:grid-cols-202 text-xl text-zinc-900 my-3 ml-4">
+          <div className="grid grid-cols-402 md:grid-cols-202 text-lg md:text-xl text-zinc-900 my-3 ml-4">
             <h3>상품명</h3>
             <h3>
               [{product.format}] {product.name}
             </h3>
           </div>
           <hr />
-          <div className="grid md:grid-cols-202 mt-3 ml-4 gap-1 text-base">
+          <div className="grid grid-cols-402 md:grid-cols-202 mt-3 ml-4 gap-1 text-base ">
             <h4 className="text-zinc-600 font-bold">판매가</h4>
             <h4 className="text-zinc-600 font-bold">{product.price}원</h4>
             <h5 className="text-zinc-900 mt-2">재고</h5>
@@ -61,9 +68,8 @@ function ProductInfo({
             <h5 className="text-zinc-900">Format</h5>
             <h5 className="text-zinc-500 font-light">{product.format}</h5>
           </div>
-
           {!isAdmin && quantity && setQuantity ? (
-            <div className="flex justify-between bg-zinc-100 w-full p-5 mt-5 text-lg font-normal text-zinc-700">
+            <div className="flex justify-between bg-zinc-100 w-full p-5 pr-2 md:pr-3 mt-5 md:text-lg font-normal text-zinc-700">
               [{product.format}] {product.name}
               <NumberInput product={product} quantity={quantity} setQuantity={setQuantity} />
             </div>

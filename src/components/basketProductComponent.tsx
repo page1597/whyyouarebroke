@@ -16,9 +16,11 @@ function BasketProductComponent({
   return (
     <div key={product.id} className="w-full grid text-center items-center">
       {product.id !== "" ? (
-        <div className="grid grid-flow-col grid-cols-5 gap-2">
-          <div className="flex justify-center">
-            <img decoding="async" loading="lazy" src={product.image} width={96} height={96} />
+        <div className="grid grid-flow-col md:grid-cols-5 grid-cols-4 gap-2 text-sm md:text-base">
+          <div className="flex justify-center items-center">
+            <div>
+              <img decoding="async" loading="lazy" src={product.image} width={96} height={96} />
+            </div>
           </div>
           <div className="flex items-center justify-center">
             [{product.format}] {product.name}
@@ -27,15 +29,21 @@ function BasketProductComponent({
           <div className="flex justify-center items-center">
             <QuantityInput product={product} basketProducts={basketProducts} setBasketProducts={setBasketProducts} />
           </div>
-          <div className="flex items-center justify-center">
+          <div className="md:flex hidden items-center justify-center">
             {basketProducts.find((basketProduct) => basketProduct.id === product.id)!.quantity * product.price}원
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-5">
-          {labels.map((label, index) => (
-            <div key={index}>{label}</div>
-          ))}
+        <div className="grid md:grid-cols-5 grid-cols-4">
+          {labels.map((label, index) =>
+            label === "합계" ? (
+              <div className="hidden md:grid" key={index}>
+                {label}
+              </div>
+            ) : (
+              <div key={index}>{label}</div>
+            )
+          )}
         </div>
       )}
     </div>

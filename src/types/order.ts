@@ -4,7 +4,6 @@ export type OrderType = {
   merchant_uid: string; // 주문번호
   amount: number;
   name: string;
-  // status: string;
   status: string;
   products: BasketProductType[];
   orderedAt: number;
@@ -14,6 +13,19 @@ export type OrderType = {
   buyer_email: string;
   buyer_addr: string;
   buyer_postcode: string;
+};
+
+export type OrderTypeMobile = {
+  merchant_uid: string; // 주문번호
+  amount: number;
+  name: string;
+  status: string;
+  products: BasketProductType[];
+  orderedAt: number;
+  buyer_uid: string | null;
+  buyer_name: string;
+  buyer_tel: string;
+  buyer_email: string;
 };
 
 // 한 상품에 대한 타입

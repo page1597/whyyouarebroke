@@ -5,7 +5,7 @@ function GoogleLoginButton({ onClick }: { onClick: MouseEventHandler<HTMLButtonE
     <button
       id="google_log_in"
       onClick={onClick}
-      className="px-4 py-2 w-full flex text-sm justify-center gap-2 bg-zinc-200 text-zinc-600 rounded  hover:bg-zinc-300 transition duration-150"
+      className="px-4 py-3 w-full flex text-sm justify-center gap-2 bg-zinc-200 text-zinc-600 rounded  hover:bg-zinc-300 transition duration-150"
     >
       <img
         className="w-5 h-5"

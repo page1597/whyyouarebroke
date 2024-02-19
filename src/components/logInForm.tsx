@@ -15,10 +15,10 @@ export default function LogInForm() {
     <>
       <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
       <Form {...form}>
-        <div className="flex flex-col justify-center items-center w-96">
+        <div className="flex flex-col justify-center items-center md:w-96 w-full">
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full">
-            <div className="flex flex-row w-full">
-              <div className="flex flex-col justify-between h-20 w-full">
+            <div className="flex md:flex-row w-full flex-col">
+              <div className="flex flex-col justify-between h-20 w-full md:gap-0 gap-2">
                 <FormField
                   control={form.control}
                   name="email"
@@ -45,7 +45,12 @@ export default function LogInForm() {
                 />
               </div>
 
-              <Button id="log_in" className="ml-2 h-full w-36" type="submit" disabled={isPending}>
+              <Button
+                id="log_in"
+                className="md:ml-2 md:h-full md:w-36 bg-zinc-600 hover:bg-zinc-700 md:mt-0 mt-3"
+                type="submit"
+                disabled={isPending}
+              >
                 로그인
               </Button>
             </div>

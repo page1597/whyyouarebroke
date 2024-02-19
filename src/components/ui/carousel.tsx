@@ -176,10 +176,10 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
         variant={variant}
         size={size}
         className={cn(
-          "absolute h-8 border-none hover:bg-transparent",
+          "absolute md:h-8 md:w-8 h-6 w-6 border-none hover:bg-transparent bg-transparent",
           orientation === "horizontal"
-            ? "-left-10 top-1/2 -translate-y-1/2"
-            : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+            ? "md:-left-10 md:top-1/2 md:-translate-y-1/2 -left-6 top-1/3 -translate-y-1/3"
+            : "md:-top-12 md:left-1/2 md:-translate-x-1/2 rotate-90 -translate-x-1/3",
           className
         )}
         disabled={!canScrollPrev}
@@ -205,12 +205,19 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
         variant={variant}
         size={size}
         className={cn(
-          "absolute h-8 border-none hover:bg-transparent",
+          "absolute md:h-8 md:w-8 h-6 w-6 border-none hover:bg-transparent bg-transparent",
           orientation === "horizontal"
-            ? "-right-10 top-1/2 -translate-y-1/2"
-            : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+            ? "md:-right-10 md:top-1/2 md:-translate-y-1/2 -right-6 top-1/3 -translate-y-1/3"
+            : "md:-bottom-12 md:left-1/2 md:-translate-x-1/2 rotate-90 -translate-x-1/3",
           className
         )}
+        // className={cn(
+        //   "absolute md:h-8 md:w-8 h-6 w-6 border-none hover:bg-transparent bg-zinc-100",
+        //   orientation === "horizontal"
+        //     ? "md:-left-10 md:top-1/2 md:-translate-y-1/2 -left-6 top-1/3"
+        //     : "md:-top-12 md:left-1/2 md:-translate-x-1/2 md:rotate-90",
+        //   className
+        // )}
         disabled={!canScrollNext}
         onClick={scrollNext}
         {...props}

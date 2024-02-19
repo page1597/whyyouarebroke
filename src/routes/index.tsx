@@ -69,7 +69,7 @@ export default function Layout() {
         <div className="w-full flex flex-col h-screen">
           <Header items={headerNav} />
           {/* 반응형 구현 */}
-          <div className="md:px-12 md:py-8 md:flex ">
+          <div className="md:px-12 md:py-8 md:flex">
             <div className="hidden md:inline-block">
               <div className="flex flex-col mb-7" onClick={() => navigate("/")}>
                 <img decoding="async" id="logo" src={logo} width={120} height={101.72} alt={"logo"} />
@@ -77,10 +77,10 @@ export default function Layout() {
               <DocsSidebarNav items={sidebarNav} />
             </div>
 
-            <div className="md:hidden px-5 py-3 flex justify-between">
+            <div className="md:hidden px-5 py-3 flex justify-between items-center">
               <DocsSidebarNav items={sidebarNav} />
-              <div className="flex flex-col mb-7" onClick={() => navigate("/")}>
-                <img decoding="async" id="logo" src={logo} width={80} height={80} alt={"logo"} />
+              <div onClick={() => navigate("/")}>
+                <img decoding="async" id="logo" src={logo} width={60} height={60} alt={"logo"} />
               </div>
               {/* <DrawerRight direction="right">
               <DrawerRightTrigger name="search">
@@ -106,7 +106,7 @@ export default function Layout() {
               <div className="w-8" />
             </div>
             {/* <div className="md:flex-grow h-full px-6"> */}
-            <div className="md:flex-grow md:px-0 h-full px-6 overflow-x-clip">
+            <div className="md:flex-grow md:px-0 h-full px-5 overflow-x-clip">
               <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
                 <Outlet />
               </ErrorBoundary>

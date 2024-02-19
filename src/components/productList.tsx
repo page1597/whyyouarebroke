@@ -56,7 +56,7 @@ function ProductList({ category }: { category?: string }) {
   return (
     <>
       <div className="flex justify-between items-end">
-        <h3 className="text-2xl text-zinc-900">{category ? category.toUpperCase() : "전체 상품"}</h3>
+        <h3 className="md:text-2xl text-lg text-zinc-900">{category ? category.toUpperCase() : "전체 상품"}</h3>
         <div className="flex gap-3 items-center">
           <button
             id="createdAt"
@@ -115,10 +115,10 @@ function ProductList({ category }: { category?: string }) {
           {data?.pages.map((page, index) => (
             <div key={index}>
               {page ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-y-20">
+                <div className="grid grid-cols-2 md:grid-cols-4">
                   {page.map((product: ProductType) => (
                     <div
-                      className="flex flex-col justify-center items-center cursor-pointer"
+                      className="flex flex-col justify-center items-center cursor-pointer mb-10 md:mb-20"
                       key={product.id}
                       onClick={() => {
                         preloadImage(product.image, product.name);
@@ -126,22 +126,40 @@ function ProductList({ category }: { category?: string }) {
                       }}
                     >
                       <div>
-                        {product.image ? (
-                          <div className="relative overflow-hidden">
-                            <img
-                              decoding="async"
-                              loading="lazy"
-                              id={product.name}
-                              src={product.image[0]}
-                              width={240}
-                              height={240}
-                              className="h-60 w-60 object-contain transition-transform transform-gpu hover:scale-105"
-                              alt={product.name}
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-240 h-240 bg-zinc-100" />
-                        )}
+                        <div className="md:flex hidden">
+                          {product.image ? (
+                            <div className="relative overflow-hidden">
+                              <img
+                                decoding="async"
+                                loading="lazy"
+                                src={product["image"][0]}
+                                width={240}
+                                height={240}
+                                className="h-60 w-60 object-contain transition-transform transform-cpu hover:scale-105"
+                                alt={product.name}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-60 h-60 bg-zinc-100" />
+                          )}
+                        </div>
+                        <div className="md:hidden flex h-40 justify-center items-center  ">
+                          {product.image ? (
+                            <div className="relative overflow-hidden">
+                              <img
+                                decoding="async"
+                                loading="lazy"
+                                src={product["image"][0]}
+                                width={160}
+                                height={160}
+                                className=" h-40 w-40 object-contain transition-transform transform-cpu hover:scale-105"
+                                alt={product.name}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-40 h-40 bg-zinc-100" />
+                          )}
+                        </div>
                         <div className="text-sm font-bold text-zinc-800">
                           <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis">{product.name}</div>
                           <div className="text-xs font-bold">{product.artist}</div>

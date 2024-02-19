@@ -20,9 +20,8 @@ export default function SignUpForm() {
             <div>기본정보</div>
             <div className="text-xs  text-zinc-600">* 필수입력사항</div>
           </div>
-          <div className="hidden md:grid grid-cols-102 gap-4 border border-zinc-300 rounded p-8 mt-3">
-            <FormLabel>이메일 *</FormLabel>
-
+          <div className="hidden md:grid md:grid-cols-102 gap-4 border border-zinc-300 rounded p-8 mt-3">
+            <FormLabel className="flex items-center">이메일 *</FormLabel>
             <FormField
               control={form.control}
               name="email"
@@ -39,7 +38,7 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <FormLabel>회원 구분 *</FormLabel>
+            <FormLabel className="flex items-center">회원 구분 *</FormLabel>
             <FormField
               control={form.control}
               name="type"
@@ -62,7 +61,7 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <FormLabel>비밀번호 *</FormLabel>
+            <FormLabel className="flex items-center">비밀번호 *</FormLabel>
             <FormField
               control={form.control}
               name="password"
@@ -80,7 +79,7 @@ export default function SignUpForm() {
               )}
             />
 
-            <FormLabel>비밀번호 확인 *</FormLabel>
+            <FormLabel className="flex items-center">비밀번호 확인 *</FormLabel>
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -97,7 +96,7 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <FormLabel>이름 *</FormLabel>
+            <FormLabel className="flex items-center">이름 *</FormLabel>
             <FormField
               control={form.control}
               name="name"
@@ -117,8 +116,8 @@ export default function SignUpForm() {
           </div>
 
           {/* 모바일 화면 */}
-          <div className="md:hidden grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3">
-            <FormLabel>이메일 *</FormLabel>
+          <div className="md:hidden grid grid-cols-302 gap-3 border border-zinc-300 rounded p-6 mt-3 text-sm">
+            <FormLabel className="flex items-center">이메일 *</FormLabel>
             <FormField
               control={form.control}
               name="email"
@@ -126,14 +125,14 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input {...field} className="w-56" />
+                      <Input {...field} />
                     </FormControl>
-                    <FormMessage className="mt-2" />
+                    <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
                 </FormItem>
               )}
             />
-            <FormLabel>회원 구분 *</FormLabel>
+            <FormLabel className="flex items-center">회원 구분 *</FormLabel>
             <FormField
               control={form.control}
               name="type"
@@ -155,7 +154,7 @@ export default function SignUpForm() {
               )}
             />
 
-            <FormLabel>비밀번호 *</FormLabel>
+            <FormLabel className="flex items-center">비밀번호 *</FormLabel>
             <FormField
               control={form.control}
               name="password"
@@ -163,15 +162,15 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input type="password" {...field} className="w-56" />
+                      <Input type="password" {...field} />
                     </FormControl>
-                    <FormMessage className="mt-2" />
+                    <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
                 </FormItem>
               )}
             />
 
-            <FormLabel>비밀번호 확인 *</FormLabel>
+            <FormLabel className="flex items-center">비밀번호 확인 *</FormLabel>
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -179,14 +178,14 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input type="password" {...field} className="w-56" />
+                      <Input type="password" {...field} />
                     </FormControl>
-                    <FormMessage className="mt-2" />
+                    <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
                 </FormItem>
               )}
             />
-            <FormLabel>이름 *</FormLabel>
+            <FormLabel className="flex items-center">이름 *</FormLabel>
             <FormField
               control={form.control}
               name="name"
@@ -194,9 +193,9 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input {...field} className="w-56" />
+                      <Input {...field} />
                     </FormControl>
-                    <FormMessage className="mt-2" />
+                    <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
                 </FormItem>
               )}
@@ -204,7 +203,7 @@ export default function SignUpForm() {
           </div>
 
           <div className="flex w-full justify-center">
-            <Button id="sign_up" type="submit" className="mt-6 w-32">
+            <Button id="sign_up" type="submit" className="mt-6 w-32 bg-zinc-700 hover:bg-zinc-800">
               회원가입
             </Button>
           </div>

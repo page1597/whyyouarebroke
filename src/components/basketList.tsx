@@ -47,7 +47,7 @@ function BasketList({ basket }: { basket: BasketProductType[] | null }) {
         <></>
       )}
       <hr className="my-6" />
-      <div className="flex w-full justify-end gap-2 items-center text-zinc-700 text-sm">
+      <div className="flex w-full md:justify-end justify-center gap-2 items-center text-zinc-700 md:text-sm text-xs">
         <div>상품구매금액</div>
         <div className="text-zinc-500 font-bold text-base">{totalPrice}원</div>
         <div>+</div>

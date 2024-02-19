@@ -7,7 +7,7 @@ export default function LogIn() {
       <Helmet>
         <title>로그인</title>
       </Helmet>
-      <div className="flex flex-col items-center mt-36">
+      <div className="flex flex-col items-center md:mt-36 mt-12">
         <h3 className="text-2xl font-normal text-zinc-700 mb-10">회원 로그인</h3>
         <LogInForm />
       </div>
