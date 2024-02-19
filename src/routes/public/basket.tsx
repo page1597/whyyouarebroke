@@ -1,16 +1,10 @@
 import BasketList from "@/components/basketList";
 import useBasket from "@/hooks/basket/useBasket";
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
 export default function Basket() {
   const { getBasket } = useBasket();
-  const [basket, setBasket] = useState([]);
-
-  useEffect(() => {
-    const basketData = getBasket();
-    setBasket(basketData);
-  }, [getBasket]);
+  const basket = getBasket();
 
   return (
     <>
