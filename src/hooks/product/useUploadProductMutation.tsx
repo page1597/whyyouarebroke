@@ -3,7 +3,7 @@ import { ProductType } from "@/types/product";
 import { useMutation } from "@tanstack/react-query";
 import useShowAlert from "../useShowAlert";
 
-function useUploadProductMutation(isEdit: boolean) {
+export default function useUploadProductMutation(isEdit: boolean) {
   const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
   const { mutate, isPending } = useMutation({
     mutationKey: ["upload product"],
@@ -35,4 +35,3 @@ function useUploadProductMutation(isEdit: boolean) {
     mutationAlertContent: alertContent,
   };
 }
-export default useUploadProductMutation;

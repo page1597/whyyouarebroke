@@ -1,7 +1,7 @@
 import OrderList from "@/components/orderList";
 import { Helmet } from "react-helmet";
 
-function Order() {
+export default function Order() {
   // 구매자 구매 확인 목록
   return (
     <>
@@ -13,4 +13,3 @@ function Order() {
     </>
   );
 }
-export default Order;

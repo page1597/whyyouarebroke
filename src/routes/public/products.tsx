@@ -1,7 +1,7 @@
 import useGetAllProducts from "@/hooks/product/useGetAllProducts";
 import ProductListWithCarousel from "@/components/productListWithCarousel";
 import { Helmet } from "react-helmet";
-function Products() {
+export default function Products() {
   const { loading, productList } = useGetAllProducts();
 
   return (
@@ -21,4 +21,3 @@ function Products() {
     </>
   );
 }
-export default Products;

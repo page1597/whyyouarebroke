@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import useShowAlert from "../useShowAlert";
 
-function useDeleteProductMutation() {
+export default function useDeleteProductMutation() {
   const navigate = useNavigate();
   const { setAlertContent, setShowAlert, showAlert, alertContent } = useShowAlert();
 
@@ -28,4 +28,3 @@ function useDeleteProductMutation() {
     mutateShowAlert: showAlert,
   };
 }
-export default useDeleteProductMutation;

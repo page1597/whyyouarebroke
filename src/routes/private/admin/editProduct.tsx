@@ -2,7 +2,7 @@ import AddProductForm from "@/components/addProductForm";
 import useGetProduct from "@/hooks/product/useGetProduct";
 import { useSearchParams } from "react-router-dom";
 
-function EditProduct() {
+export default function EditProduct() {
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("id");
   const { loading, product } = useGetProduct(productId);
@@ -18,4 +18,3 @@ function EditProduct() {
     </div>
   );
 }
-export default EditProduct;

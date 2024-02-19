@@ -3,7 +3,7 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 // 장바구니 checkbox
-function useBasketList(basket: BasketProductType[] | null) {
+export default function useBasketList(basket: BasketProductType[] | null) {
   const [basketProducts, setBasketProducts] = useState<BasketProductType[]>([]); // 수량 변경 반영
   const [basketWithTitle, setBasketWithTitle] = useState<BasketProductType[]>([]); // 제목을 위한
   const [checkedProductIds, setCheckedProductIds] = useState<string[]>([]); // id 배열
@@ -65,4 +65,3 @@ function useBasketList(basket: BasketProductType[] | null) {
     onCheck,
   };
 }
-export default useBasketList;

@@ -4,7 +4,7 @@ import { DocumentData } from "firebase/firestore";
 import { useCallback, useState } from "react";
 
 // useGetProductsWithSearch
-function useGetProducts(category: string | null, debouncedSearchValue: string) {
+export default function useGetProducts(category: string | null, debouncedSearchValue: string) {
   const [orderby, setOrderby] = useState<string>("createdAt");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(500000);
@@ -115,4 +115,3 @@ function useGetProducts(category: string | null, debouncedSearchValue: string) {
     // prefetchNextPage,
   };
 }
-export default useGetProducts;

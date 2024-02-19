@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
-function useSignUp() {
+export default function useSignUp() {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -40,4 +40,3 @@ function useSignUp() {
 
   return { form, onSubmit, onGoogleSignUp };
 }
-export default useSignUp;

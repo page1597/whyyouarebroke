@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import useShowAlert from "../useShowAlert";
 
-function useCancelOrder(cancelOrder: any) {
+export default function useCancelOrder(cancelOrder: any) {
   const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
   const onCancelOrder = useCallback((orderId: string, orderName: string) => {
     var confirmation = confirm(`${orderName}의 주문을 취소하시겠습니까?`);
@@ -15,4 +15,3 @@ function useCancelOrder(cancelOrder: any) {
 
   return { onCancelOrder, showAlert, alertContent, setShowAlert };
 }
-export default useCancelOrder;

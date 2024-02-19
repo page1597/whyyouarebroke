@@ -5,7 +5,7 @@ import useUpdateProductQuantityMutation from "../product/useUpdateProductQuantit
 import { useCallback } from "react";
 import useBasket from "../basket/useBasket";
 
-function useOrderProcessing(userId: string | null | undefined, orderProducts: BasketProductType[]) {
+export default function useOrderProcessing(userId: string | null | undefined, orderProducts: BasketProductType[]) {
   const { updateProductQuantity } = useUpdateProductQuantityMutation();
   const { updateBasketProductStock } = useBasket();
 
@@ -77,4 +77,3 @@ function useOrderProcessing(userId: string | null | undefined, orderProducts: Ba
 
   return { checkIsOutOfStock, decreaseProductStock, increaseProductStock };
 }
-export default useOrderProcessing;

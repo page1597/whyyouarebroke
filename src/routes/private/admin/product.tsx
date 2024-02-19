@@ -9,7 +9,7 @@ import { ProductType } from "@/types/product";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-function Product() {
+export default function Product() {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -66,4 +66,3 @@ function Product() {
     </>
   );
 }
-export default Product;

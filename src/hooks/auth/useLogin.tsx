@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-function useLogIn(logIn: any) {
+export default function useLogIn(logIn: any) {
   const onSubmit = useCallback((values: z.infer<typeof logInFormSchema>) => {
     logIn(values);
   }, []);
@@ -18,4 +18,3 @@ function useLogIn(logIn: any) {
   });
   return { onSubmit, form };
 }
-export default useLogIn;

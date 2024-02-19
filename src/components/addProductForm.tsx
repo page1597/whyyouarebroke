@@ -10,7 +10,7 @@ import useUploadProduct from "@/hooks/product/useUploadProduct";
 import Combobox from "./ui/comboBox";
 import Alert from "./alert";
 
-function AddProductForm({ product }: { product?: ProductType }) {
+export default function AddProductForm({ product }: { product?: ProductType }) {
   const isEdit = product ? true : false;
   const { uploadProduct, isPending, mutationShowAlert, setMutationShowAlert, mutationAlertContent } =
     useUploadProductMutation(isEdit);
@@ -262,4 +262,3 @@ function AddProductForm({ product }: { product?: ProductType }) {
     </>
   );
 }
-export default AddProductForm;

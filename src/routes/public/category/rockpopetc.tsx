@@ -1,7 +1,7 @@
 import Products from "@/components/productList";
 import { Helmet } from "react-helmet";
 
-function RockPopEtc() {
+export default function RockPopEtc() {
   return (
     <>
       <Helmet>
@@ -11,4 +11,3 @@ function RockPopEtc() {
     </>
   );
 }
-export default RockPopEtc;

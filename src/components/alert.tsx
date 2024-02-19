@@ -10,7 +10,7 @@ import {
 } from "./ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 
-function Alert({
+export default function Alert({
   showAlert,
   setShowAlert,
   alertContent,
@@ -62,4 +62,3 @@ function Alert({
     </AlertDialog>
   );
 }
-export default Alert;

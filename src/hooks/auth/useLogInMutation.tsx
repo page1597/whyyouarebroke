@@ -2,7 +2,7 @@ import { fbLogIn } from "@/services/firebase/user";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import useShowAlert from "../useShowAlert";
-function useLogInMutation() {
+export default function useLogInMutation() {
   const { setShowAlert, showAlert, alertContent } = useShowAlert();
   const { mutate, isPending, isError } = useMutation({
     mutationKey: ["log in"],
@@ -26,4 +26,3 @@ function useLogInMutation() {
 
   return { logIn, isPending, isError, setShowAlert, showAlert, alertContent };
 }
-export default useLogInMutation;

@@ -1,7 +1,7 @@
 import Products from "@/components/productList";
 import { Helmet } from "react-helmet";
 
-function JPopCityPopAsia() {
+export default function JPopCityPopAsia() {
   return (
     <>
       <Helmet>
@@ -11,4 +11,3 @@ function JPopCityPopAsia() {
     </>
   );
 }
-export default JPopCityPopAsia;

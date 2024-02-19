@@ -1,7 +1,7 @@
 import Products from "@/components/productList";
 import { Helmet } from "react-helmet";
 
-function HipHopRandB() {
+export default function HipHopRandB() {
   return (
     <>
       <Helmet>
@@ -11,4 +11,3 @@ function HipHopRandB() {
     </>
   );
 }
-export default HipHopRandB;

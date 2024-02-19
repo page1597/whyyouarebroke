@@ -7,7 +7,7 @@ import useLogInMutation from "@/hooks/auth/useLogInMutation";
 import useLogIn from "@/hooks/auth/useLogin";
 import Alert from "./alert";
 
-function LogInForm() {
+export default function LogInForm() {
   const { logIn, isPending, showAlert, setShowAlert, alertContent } = useLogInMutation();
   const { onSubmit, form } = useLogIn(logIn);
 
@@ -60,4 +60,3 @@ function LogInForm() {
     </>
   );
 }
-export default LogInForm;

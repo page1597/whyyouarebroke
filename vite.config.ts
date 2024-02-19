@@ -21,6 +21,7 @@ export default defineConfig({
     },
   },
   build: {
+    // 코드 분할 설정
     rollupOptions: {
       output: {
         manualChunks(id) {

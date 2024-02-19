@@ -2,7 +2,7 @@ import ProductList from "@/components/productList";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-function Products() {
+export default function Products() {
   const navigate = useNavigate();
   return (
     <>
@@ -35,4 +35,3 @@ function Products() {
     </>
   );
 }
-export default Products;

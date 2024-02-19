@@ -1,8 +1,7 @@
 import LogInForm from "@/components/logInForm";
-import { memo } from "react";
 import { Helmet } from "react-helmet";
 
-function LogIn() {
+export default function LogIn() {
   return (
     <>
       <Helmet>
@@ -15,4 +14,3 @@ function LogIn() {
     </>
   );
 }
-export default memo(LogIn);

@@ -1,11 +1,10 @@
 import { useState, useCallback, useEffect, ChangeEvent } from "react";
-import _ from "lodash";
-
-function useDebouncedSearch(debounceDelay: number = 1000) {
+import debounce from "lodash.debounce";
+export default function useDebouncedSearch(debounceDelay: number = 1000) {
   const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
 
   const debouncedSearch = useCallback(
-    _.debounce((value: string) => {
+    debounce((value: string) => {
       setDebouncedSearchValue(value);
     }, debounceDelay),
     [debounceDelay]
@@ -28,4 +27,3 @@ function useDebouncedSearch(debounceDelay: number = 1000) {
 
   return { debouncedSearchValue, onSearch };
 }
-export default useDebouncedSearch;

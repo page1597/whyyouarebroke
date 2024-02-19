@@ -9,7 +9,7 @@ const LogIn = lazy(() => import("./login"));
 const SignUp = lazy(() => import("./signup"));
 
 // 로그인 한 상태에서 구매자가 볼 수 있는 화면
-function PublicRoutes(userInfo: UserInfoType | null) {
+export default function PublicRoutes(userInfo: UserInfoType | null) {
   return [
     { path: "/", element: <Products /> }, // 판매 상품 조회
     { path: "/product", element: <Product /> }, // 판매 상품 상세
@@ -20,4 +20,3 @@ function PublicRoutes(userInfo: UserInfoType | null) {
     // { path: "*", element: <Navigate to="/member/products" replace /> },
   ];
 }
-export default PublicRoutes;

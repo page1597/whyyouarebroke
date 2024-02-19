@@ -2,7 +2,7 @@ import { AuthContext } from "@/context/authContext";
 import { useContext } from "react";
 import { Helmet } from "react-helmet";
 
-function MyPage() {
+export default function MyPage() {
   const userInfo = useContext(AuthContext);
   return (
     <>
@@ -14,4 +14,3 @@ function MyPage() {
     </>
   );
 }
-export default MyPage;

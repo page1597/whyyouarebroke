@@ -10,7 +10,7 @@ import { addProductFormSchema } from "@/types/formSchemas/addProduct";
 import { resizeFile } from "@/lib/utils";
 import useShowAlert from "../useShowAlert";
 
-function useUploadProduct(uploadProduct: any, product?: ProductType) {
+export default function useUploadProduct(uploadProduct: any, product?: ProductType) {
   const [previewImages, setPreviewImages] = useState<string[]>([]); // blob data
   const [category, setCategory] = useState<string>(product ? product.category : "");
   const uploadedDate = +new Date(); // 등록시간 기준
@@ -107,4 +107,3 @@ function useUploadProduct(uploadProduct: any, product?: ProductType) {
     showAlert,
   };
 }
-export default useUploadProduct;

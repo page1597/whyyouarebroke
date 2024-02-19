@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ProductType } from "@/types/product";
 import { fbGetProduct } from "@/services/firebase/product";
 
-function useGetProduct(productId: string | null) {
+export default function useGetProduct(productId: string | null) {
   const [product, setProduct] = useState<ProductType | undefined>();
   const [loading, setLoading] = useState(true);
   if (productId == null || productId == "") {
@@ -28,4 +28,3 @@ function useGetProduct(productId: string | null) {
 
   return { loading, product };
 }
-export default useGetProduct;

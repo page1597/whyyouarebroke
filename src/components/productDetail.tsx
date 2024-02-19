@@ -1,6 +1,6 @@
 import { ProductType } from "@/types/product";
 
-function ProductDetail({ product }: { product: ProductType }) {
+export default function ProductDetail({ product }: { product: ProductType }) {
   return (
     <div className="my-10">
       <div className="flex justify-center mb-24">
@@ -24,4 +24,3 @@ function ProductDetail({ product }: { product: ProductType }) {
     </div>
   );
 }
-export default ProductDetail;

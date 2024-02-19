@@ -1,7 +1,7 @@
 import SignUpForm from "@/components/signUpForm";
 import { Helmet } from "react-helmet";
 
-function SignUp() {
+export default function SignUp() {
   return (
     <>
       <Helmet>
@@ -15,4 +15,3 @@ function SignUp() {
     </>
   );
 }
-export default SignUp;

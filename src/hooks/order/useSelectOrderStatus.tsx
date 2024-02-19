@@ -2,7 +2,7 @@ import { fbGetOrderStatus, fbUpdateOrderStatus } from "@/services/firebase/order
 import { useCallback, useEffect, useState } from "react";
 import useShowAlert from "../useShowAlert";
 
-function useSelectOrderStatus(orderId: string) {
+export default function useSelectOrderStatus(orderId: string) {
   const [selectBeforeConfirm, setSelectBeforeConfirm] = useState<string | undefined>(undefined);
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined);
 
@@ -43,4 +43,3 @@ function useSelectOrderStatus(orderId: string) {
 
   return { selectedStatus, onValueChange, setShowAlert, showAlert, alertContent, setConfirm, confirm };
 }
-export default useSelectOrderStatus;

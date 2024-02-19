@@ -1,7 +1,7 @@
 import Products from "@/components/productList";
 import { Helmet } from "react-helmet";
 
-function Ost() {
+export default function Ost() {
   return (
     <>
       <Helmet>
@@ -11,4 +11,3 @@ function Ost() {
     </>
   );
 }
-export default Ost;

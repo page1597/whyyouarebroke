@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
 
 // useGetProductsWithSearch
-function useGetOrders(isAdmin: boolean, userId: string | undefined | null) {
+export default function useGetOrders(isAdmin: boolean, userId: string | undefined | null) {
   // const queryClient = new QueryClient({
   //   defaultOptions: {
   //     queries: {
@@ -41,4 +41,3 @@ function useGetOrders(isAdmin: boolean, userId: string | undefined | null) {
 
   return { data, status, isFetchingNextPage, fetchNextPage, refetch };
 }
-export default useGetOrders;

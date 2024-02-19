@@ -1,7 +1,7 @@
 import Products from "@/components/productList";
 import { Helmet } from "react-helmet";
 
-function Merchandise() {
+export default function Merchandise() {
   return (
     <>
       <Helmet>
@@ -11,4 +11,3 @@ function Merchandise() {
     </>
   );
 }
-export default Merchandise;

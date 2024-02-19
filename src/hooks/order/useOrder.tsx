@@ -6,7 +6,7 @@ import { OrderStatusType } from "@/types/order";
 import { useMemo } from "react";
 import useShowAlert from "../useShowAlert";
 
-function useOrder(
+export default function useOrder(
   userId: string | null | undefined,
   fieldValues: FieldValues,
   isAgreedTerm: boolean,
@@ -101,4 +101,3 @@ function useOrder(
   } // ?
   return { onClickPayment, setShowAlert, showAlert, alertContent };
 }
-export default useOrder;

@@ -1,7 +1,7 @@
 import Products from "@/components/productList";
 import { Helmet } from "react-helmet";
 
-function Kpop() {
+export default function Kpop() {
   return (
     <>
       <Helmet>
@@ -11,4 +11,3 @@ function Kpop() {
     </>
   );
 }
-export default Kpop;

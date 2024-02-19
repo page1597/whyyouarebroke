@@ -8,7 +8,7 @@ const AddProduct = lazy(() => import("./addProduct"));
 const EditProduct = lazy(() => import("./editProduct"));
 
 // 로그인 한 상태에서 판매자(관리자)가 볼 수 있는 화면
-function PrivateRoutes() {
+export default function PrivateRoutes() {
   return [
     { path: "/", element: <Products /> }, // 판매상품조회
     { path: "/order", element: <Orders /> }, // 주문조회
@@ -21,4 +21,3 @@ function PrivateRoutes() {
     // { path: "*", element: <Navigate to="/" replace /> },
   ];
 }
-export default PrivateRoutes;

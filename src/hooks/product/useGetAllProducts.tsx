@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { categoryProductType } from "@/types/product";
 import { fbGetProducts } from "@/services/firebase/product";
 
-function useGetAllProducts() {
+export default function useGetAllProducts() {
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [productList, setProductList] = useState<categoryProductType[]>([]);
 
@@ -43,4 +43,3 @@ function useGetAllProducts() {
 
   return { loading, productList };
 }
-export default useGetAllProducts;

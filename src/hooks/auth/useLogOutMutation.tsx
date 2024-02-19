@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import useShowAlert from "../useShowAlert";
 
-function useLogOutMutation() {
+export default function useLogOutMutation() {
   const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
 
   const { mutate, isPending, isError } = useMutation({
@@ -24,4 +24,3 @@ function useLogOutMutation() {
 
   return { logOut, isPending, isError, showAlert, setShowAlert, alertContent };
 }
-export default useLogOutMutation;

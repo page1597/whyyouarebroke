@@ -6,7 +6,7 @@ import { Label } from "@radix-ui/react-label";
 import GoogleSignUpButton from "./ui/googleSignupButton";
 import useSignUp from "@/hooks/auth/useSignUp";
 
-function SignUpForm() {
+export default function SignUpForm() {
   const { form, onSubmit, onGoogleSignUp } = useSignUp();
 
   return (
@@ -213,4 +213,3 @@ function SignUpForm() {
     </>
   );
 }
-export default SignUpForm;

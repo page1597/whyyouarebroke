@@ -12,7 +12,7 @@ import useOrderModal from "@/hooks/order/useOrderModal";
 import Alert from "./alert";
 
 // 모달창 직접 구현
-function PaymentFormModal({
+export default function PaymentFormModal({
   checkedProducts,
   basketProducts,
 }: {
@@ -186,4 +186,3 @@ function PaymentFormModal({
     </div>
   );
 }
-export default PaymentFormModal;

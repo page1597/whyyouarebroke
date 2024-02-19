@@ -2,7 +2,7 @@ import { fbUpdateUserBasket } from "@/services/firebase/basket";
 import { fbGetUser } from "@/services/firebase/user";
 import { BasketProductType, ProductType } from "@/types/product";
 
-function useBasket() {
+export default function useBasket() {
   // 로컬 스토리지 장바구니만 가져오기
   function getBasket() {
     let sessionStorageBasket = sessionStorage.getItem("basket");
@@ -105,4 +105,3 @@ function useBasket() {
   }
   return { getBasket, matchBasketlocalToDB, addToBasket, updateBasketProductStock, removeFromBasket };
 }
-export default useBasket;

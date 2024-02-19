@@ -11,7 +11,7 @@ import SelectOrderState from "./selectOrderStatus";
 import Alert from "./alert";
 
 // 페이지네이션 ?
-function OrderList({ isAdmin }: { isAdmin: boolean }) {
+export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
@@ -112,4 +112,3 @@ function OrderList({ isAdmin }: { isAdmin: boolean }) {
     </>
   );
 }
-export default OrderList;

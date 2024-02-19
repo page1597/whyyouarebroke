@@ -3,7 +3,7 @@ import { HeaderNavProps } from "@/types/navigation";
 import useLogOutMutation from "@/hooks/auth/useLogOutMutation";
 import Alert from "./alert";
 
-export function Header({ items }: HeaderNavProps) {
+export default function Header({ items }: HeaderNavProps) {
   const { logOut, isPending, setShowAlert, showAlert, alertContent } = useLogOutMutation();
   return (
     <>

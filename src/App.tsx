@@ -5,7 +5,6 @@ import PrivateRoutes from "./routes/private/admin/index.tsx";
 import PublicRoutes from "./routes/public/index.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-("use client");
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const Layout = lazy(() => import("./routes/index"));
@@ -18,7 +17,7 @@ const KPop = lazy(() => import("./routes/public/category/kpop"));
 const Merchandise = lazy(() => import("./routes/public/category/merchandise"));
 const JPopCityPopAsia = lazy(() => import("./routes/public/category/jpopCityPopAsia"));
 
-function App() {
+export default function App() {
   const userInfo = useContext(AuthContext);
   const isAdmin = localStorage.getItem("user type") == "관리자";
 
@@ -82,4 +81,3 @@ function App() {
     </QueryClientProvider>
   );
 }
-export default App;

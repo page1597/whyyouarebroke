@@ -6,7 +6,7 @@ import { firebaseAuth } from "@/services/firebase";
 import { fbGetUser } from "@/services/firebase/user";
 import useBasket from "@/hooks/basket/useBasket";
 
-function AuthProvider({ children }: { children: ReactNode }) {
+export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
   const [loading, setLoading] = useState(true);
   const { matchBasketlocalToDB } = useBasket();
@@ -60,5 +60,3 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
   return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 }
-
-export default AuthProvider;

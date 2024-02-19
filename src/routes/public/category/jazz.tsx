@@ -1,7 +1,7 @@
 import Products from "@/components/productList";
 import { Helmet } from "react-helmet";
 
-function Jazz() {
+export default function Jazz() {
   return (
     <>
       <Helmet>
@@ -11,4 +11,3 @@ function Jazz() {
     </>
   );
 }
-export default Jazz;

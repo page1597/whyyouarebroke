@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
-import { Header } from "@/components/Header";
+import Header from "@/components/Header";
 import { HeaderNavItem } from "@/types/navigation";
 import { Helmet } from "react-helmet";
 
@@ -41,7 +41,7 @@ export const sidebarNav = [
   },
 ];
 
-function Layout() {
+export default function Layout() {
   const userInfo = useContext(AuthContext);
   const isAdmin = userInfo?.type === "관리자" ? true : false;
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ function Layout() {
           <div className="md:px-12 md:py-8 md:flex ">
             <div className="hidden md:inline-block">
               <div className="flex flex-col mb-7" onClick={() => navigate("/")}>
-                <img decoding="async" loading="lazy" id="logo" src={logo} width={120} height={101.72} alt={"logo"} />
+                <img decoding="async" id="logo" src={logo} width={120} height={101.72} alt={"logo"} />
               </div>
               <DocsSidebarNav items={sidebarNav} />
             </div>
@@ -80,7 +80,7 @@ function Layout() {
             <div className="md:hidden px-5 py-3 flex justify-between">
               <DocsSidebarNav items={sidebarNav} />
               <div className="flex flex-col mb-7" onClick={() => navigate("/")}>
-                <img decoding="async" loading="lazy" id="logo" src={logo} width={80} height={80} alt={"logo"} />
+                <img decoding="async" id="logo" src={logo} width={80} height={80} alt={"logo"} />
               </div>
               {/* <DrawerRight direction="right">
               <DrawerRightTrigger name="search">
@@ -117,4 +117,3 @@ function Layout() {
     </>
   );
 }
-export default Layout;

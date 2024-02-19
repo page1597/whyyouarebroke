@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/drawerLeft";
 import { DocsSidebarNavProps } from "@/types/navigation";
 
-function DocsSidebarNav({ items }: DocsSidebarNavProps) {
+export default function DocsSidebarNav({ items }: DocsSidebarNavProps) {
   const navigate = useNavigate();
   return (
     <>
@@ -62,4 +62,3 @@ function DocsSidebarNav({ items }: DocsSidebarNavProps) {
     </>
   );
 }
-export default DocsSidebarNav;

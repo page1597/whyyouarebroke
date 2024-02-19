@@ -3,7 +3,7 @@ import { DocumentData } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 
 // 추천상품 4개만 보여짐 (number = 4)
-function useGetRecommandProducts(productId: string, category: string, limit: number) {
+export default function useGetRecommandProducts(productId: string, category: string, limit: number) {
   const [recommands, setRecommands] = useState<DocumentData[]>(new Array(limit));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const getRecommands = useCallback(async () => {
@@ -24,4 +24,3 @@ function useGetRecommandProducts(productId: string, category: string, limit: num
 
   return { isLoading, recommands };
 }
-export default useGetRecommandProducts;

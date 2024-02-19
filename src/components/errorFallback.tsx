@@ -6,7 +6,7 @@ interface ErrorFallbackProps {
   resetErrorBoundary: () => void;
 }
 
-function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+export default function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
   return (
     <div className="flex flex-col w-full h-full justify-center items-center gap-3 text-zinc-900">
       <AlertCircle width={50} height={50} />
@@ -20,5 +20,3 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
     </div>
   );
 }
-
-export default ErrorFallback;

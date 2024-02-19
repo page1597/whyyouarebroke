@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function useCheckIsInBasket(productId: string | null) {
+export default function useCheckIsInBasket(productId: string | null) {
   const [isAdded, setIsAdded] = useState(false); // 장바구니에 추가된 상품인지 여부
   const [quantity, setQuantity] = useState(1); // quantity (수량)
 
@@ -23,4 +23,3 @@ function useCheckIsInBasket(productId: string | null) {
 
   return { isAdded, setIsAdded, quantity, setQuantity };
 }
-export default useCheckIsInBasket;

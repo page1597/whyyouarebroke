@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-function PaymentButton({
+export default function PaymentButton({
   fieldValues,
   orderProducts,
   isAgreedTerm,
@@ -49,4 +49,3 @@ function PaymentButton({
     </>
   );
 }
-export default PaymentButton;

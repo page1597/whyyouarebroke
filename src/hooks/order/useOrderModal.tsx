@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useShowAlert from "../useShowAlert";
 
-function useOrderModal(
+export default function useOrderModal(
   userInfo: UserInfoType | null | undefined,
   checkedProducts: BasketProductType[],
   basketProducts: BasketProductType[]
@@ -71,4 +71,3 @@ function useOrderModal(
     alertContent,
   };
 }
-export default useOrderModal;

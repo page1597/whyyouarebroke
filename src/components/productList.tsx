@@ -2,7 +2,6 @@ import { memo, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
-import _ from "lodash";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "./ui/button";
 import { PopoverClose } from "@radix-ui/react-popover";

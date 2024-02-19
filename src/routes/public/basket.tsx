@@ -3,7 +3,7 @@ import useBasket from "@/hooks/basket/useBasket";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
-function Basket() {
+export default function Basket() {
   const { getBasket } = useBasket();
   const [basket, setBasket] = useState([]);
 
@@ -22,4 +22,3 @@ function Basket() {
     </>
   );
 }
-export default Basket;

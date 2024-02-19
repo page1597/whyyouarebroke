@@ -4,7 +4,7 @@ import { DocumentData } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "./ui/carousel";
 
-function ProductListWithCarousel({ productList }: { productList: categoryProductType[] }) {
+export default function ProductListWithCarousel({ productList }: { productList: categoryProductType[] }) {
   const navigate = useNavigate();
   return (
     <div>
@@ -69,4 +69,3 @@ function ProductListWithCarousel({ productList }: { productList: categoryProduct
     </div>
   );
 }
-export default ProductListWithCarousel;

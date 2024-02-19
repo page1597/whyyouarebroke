@@ -4,7 +4,13 @@ import useBasket from "@/hooks/basket/useBasket";
 import { BasketProductType } from "@/types/product";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
-function DrawerBasket({ setIsAdded, productId }: { setIsAdded: Dispatch<SetStateAction<boolean>>; productId: string }) {
+export default function DrawerBasket({
+  setIsAdded,
+  productId,
+}: {
+  setIsAdded: Dispatch<SetStateAction<boolean>>;
+  productId: string;
+}) {
   const [basket, setBasket] = useState<BasketProductType[]>([]);
   const userId = useContext(AuthContext)?.id || null;
   const [isRemoved, setIsRemoved] = useState(false);
@@ -59,4 +65,3 @@ function DrawerBasket({ setIsAdded, productId }: { setIsAdded: Dispatch<SetState
     </div>
   );
 }
-export default DrawerBasket;
