@@ -1,6 +1,6 @@
 import { z } from "zod";
 
 export const logInFormSchema = z.object({
-  email: z.string(),
-  password: z.string(),
+  email: z.string().min(1),
+  password: z.string().min(1),
 });

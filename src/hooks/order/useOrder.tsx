@@ -3,9 +3,8 @@ import useAddOrderMutation from "./useAddOrderMutation";
 import { FieldValues } from "react-hook-form";
 import { generateOrderNumber } from "@/lib/utils";
 import { OrderStatusType } from "@/types/order";
-import { useMemo } from "react";
 import useShowAlert from "../useShowAlert";
-
+import { paymentFormSchema } from "@/types/formSchemas/payment";
 export default function useOrder(
   userId: string | null | undefined,
   fieldValues: FieldValues,
@@ -19,30 +18,31 @@ export default function useOrder(
   const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
 
   async function onClickPayment() {
+    const validation = paymentFormSchema.safeParse(fieldValues);
+    console.log(fieldValues, validation);
+
     if (!isAgreedTerm) {
-      // alert("쇼핑몰 이용약관을 동의해주세요.");
       setShowAlert(true);
       setAlertContent({ title: "주문/결제", desc: "쇼핑몰 이용약관을 동의해주세요.", nav: null });
       return;
     }
-
+    if (!validation.success) {
+      setShowAlert(true);
+      setAlertContent({ title: "주문/결제", desc: "모든 주문서 항목을 작성해주세요.", nav: null });
+      return;
+    }
     // 결제 전 재고 우선감소
     const isOutOfStock = await checkIsOutOfStock();
     if (isOutOfStock) {
       return;
     }
-
     await decreaseProductStock();
 
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init("imp24067853");
 
-    const priceAmount = useMemo(
-      () => orderProducts.reduce((total, product) => total + product.quantity * product.price, 0),
-      [orderProducts]
-    );
-
+    const priceAmount = orderProducts.reduce((total, product) => total + product.quantity * product.price, 0);
     const buyerInfo = fieldValues;
 
     const data = {
@@ -57,7 +57,7 @@ export default function useOrder(
       buyer_addr: buyerInfo.buyer_addr, // 구매자 주소
       buyer_postcode: buyerInfo.buyer_postcode, // 구매자 우편번호
     };
-
+    console.log("IMP request pay");
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
       const { success, error_msg } = response;
       if (success) {
@@ -82,22 +82,22 @@ export default function useOrder(
         increaseProductStock(orderProducts);
         alert(`${error_msg}`);
 
-        // addOrder({
-        //   merchant_uid: data.merchant_uid,
-        //   amount: data.amount,
-        //   name: data.name,
-        //   status: "received",
-        //   products: orderProducts,
-        //   orderedAt: +new Date(),
-        //   buyer_uid: userId || null,
-        //   buyer_name: data.buyer_name,
-        //   buyer_tel: data.buyer_tel,
-        //   buyer_email: data.buyer_email,
-        //   buyer_addr: data.buyer_addr,
-        //   buyer_postcode: data.buyer_postcode,
-        // });
+        addOrder({
+          merchant_uid: data.merchant_uid,
+          amount: data.amount,
+          name: data.name,
+          status: "received",
+          products: orderProducts,
+          orderedAt: +new Date(),
+          buyer_uid: userId || null,
+          buyer_name: data.buyer_name,
+          buyer_tel: data.buyer_tel,
+          buyer_email: data.buyer_email,
+          buyer_addr: data.buyer_addr,
+          buyer_postcode: data.buyer_postcode,
+        });
       }
     });
-  } // ?
+  }
   return { onClickPayment, setShowAlert, showAlert, alertContent };
 }

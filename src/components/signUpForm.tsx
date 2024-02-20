@@ -14,7 +14,7 @@ export default function SignUpForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* 소셜 로그인 - 구글 */}
-          <div className="text-zinc-700 md:mb-3 mb-2">SNS 계정으로 회원가입</div>
+          <div className="text-zinc-700 md:mb-3 mb-2 md:text-base text-sm">SNS 계정으로 회원가입</div>
           <GoogleSignUpButton onClick={onGoogleSignUp} />
           <div className="flex mt-10 flex-row justify-between items-end">
             <div>기본정보</div>
