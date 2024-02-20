@@ -8,11 +8,10 @@ import { AuthContext } from "@/context/authContext";
 import { Button } from "./ui/button";
 import { BasketProductType } from "@/types/product";
 import useOrderModal from "@/hooks/order/useOrderModal";
-import { memo } from "react";
 import Alert from "./alert";
 
 // 모달창 직접 구현
-function PaymentFormModal({
+export default function PaymentFormModal({
   checkedProducts,
   basketProducts,
 }: {
@@ -55,7 +54,7 @@ function PaymentFormModal({
       </div>
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className="flex flex-row justify-between items-end">
-          <div>결제 정보</div>
+          <div>주문서 작성</div>
           <div className="text-xs text-zinc-600">* 필수입력사항</div>
         </div>
         <Modal.Header>
@@ -68,13 +67,13 @@ function PaymentFormModal({
             <div className="font-bold p-5">{shippingFee}</div>
           </div>
           <div className="flex flex-col border border-zinc-400 rounded-r-sm border-l-zinc-200">
-            <div className="text-sm p-3 bg-zinc-100">결제 예정 금액</div>
+            <div className="text-sm p-3 bg-zinc-100 text-nowrap">결제 예정 금액</div>
             <div className="font-bold p-5">{totalPrice! + shippingFee}</div>
           </div>
         </Modal.Header>
         <Modal.Body>
           <Form {...form}>
-            <FormLabel>주문자명 *</FormLabel>
+            <FormLabel className="flex items-center">주문자명 *</FormLabel>
             <FormField
               control={form.control}
               name="buyer_name"
@@ -89,8 +88,7 @@ function PaymentFormModal({
                 </FormItem>
               )}
             />
-            <div />
-            <FormLabel>우편번호 *</FormLabel>
+            <FormLabel className="flex items-center">우편번호 *</FormLabel>
             <FormField
               control={form.control}
               name="buyer_postcode"
@@ -105,8 +103,7 @@ function PaymentFormModal({
                 </FormItem>
               )}
             />
-            <div />
-            <FormLabel>주소 *</FormLabel>
+            <FormLabel className="flex items-center">주소 *</FormLabel>
             <FormField
               control={form.control}
               name="buyer_addr"
@@ -121,8 +118,7 @@ function PaymentFormModal({
                 </FormItem>
               )}
             />
-            <div />
-            <FormLabel>휴대전화 *</FormLabel>
+            <FormLabel className="flex items-center">휴대전화 *</FormLabel>
             <FormField
               control={form.control}
               name="buyer_tel"
@@ -148,8 +144,7 @@ function PaymentFormModal({
                 </FormItem>
               )}
             />
-            <div />
-            <FormLabel>이메일 *</FormLabel>
+            <FormLabel className="flex items-center">이메일 *</FormLabel>
             <FormField
               control={form.control}
               name="buyer_email"
@@ -172,7 +167,9 @@ function PaymentFormModal({
             <div>쇼핑몰 이용약관 동의</div>
           </div>
           <div className="flex gap-4 w-full justify-center">
-            <Modal.Close onClose={onClose} /> {/* 모달 창 닫음 */}
+            {/* 주문취소: 모달 창 닫음 */}
+            <Modal.Close onClose={onClose} />
+            {/* 결제하기 */}
             <PaymentButton
               fieldValues={form.getValues()}
               orderProducts={orderProducts}
@@ -186,4 +183,3 @@ function PaymentFormModal({
     </div>
   );
 }
-export default memo(PaymentFormModal);

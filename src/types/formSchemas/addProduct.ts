@@ -14,7 +14,7 @@ export const addProductFormSchema = z.object({
   image: z.any(), // 이미지 스키마 설정하기
   stock: z.preprocess(Number, z.number()),
   description: z.string().min(1),
-  artist: z.string(),
+  artist: z.string().min(1),
   label: z.string().optional(),
   released: z.string().optional(),
   format: z.string().optional(),

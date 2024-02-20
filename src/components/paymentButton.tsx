@@ -43,7 +43,8 @@ export default function PaymentButton({
   return (
     <>
       <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
-      <Button id="payment" className="bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
+      {/* 모바일에서 결제 오류 발생 */}
+      <Button id="payment" className="md:flex hidden bg-zinc-700 hover:bg-zinc-800" onClick={onClickPayment}>
         결제하기
       </Button>
     </>

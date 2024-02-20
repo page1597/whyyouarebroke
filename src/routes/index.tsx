@@ -71,7 +71,7 @@ export default function Layout() {
           {/* 반응형 구현 */}
           <div className="md:px-12 md:py-8 md:flex">
             <div className="hidden md:inline-block">
-              <div className="flex flex-col mb-7" onClick={() => navigate("/")}>
+              <div className="flex flex-col mb-7 cursor-pointer" onClick={() => navigate("/")}>
                 <img decoding="async" id="logo" src={logo} width={120} height={101.72} alt={"logo"} />
               </div>
               <DocsSidebarNav items={sidebarNav} />
@@ -79,7 +79,7 @@ export default function Layout() {
 
             <div className="md:hidden px-5 py-3 flex justify-between items-center">
               <DocsSidebarNav items={sidebarNav} />
-              <div onClick={() => navigate("/")}>
+              <div onClick={() => navigate("/")} className="cursor-pointer">
                 <img decoding="async" id="logo" src={logo} width={60} height={60} alt={"logo"} />
               </div>
               {/* <DrawerRight direction="right">

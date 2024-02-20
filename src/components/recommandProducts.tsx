@@ -14,10 +14,10 @@ function RecommandProducts({ category, productId }: { category: string; productI
       <div className="text-zinc-700 ml-2 md:ml-8 mt-6">추천 상품</div>
       <div className="flex flex-row justify-center md:mt-10 mt-5">
         {!isLoading && recommands[0] != undefined ? (
-          <Carousel opts={{ align: "start" }} className="w-11/12 flex">
+          <Carousel opts={{ align: "start" }} className="w-11/12">
             <CarouselContent>
               {recommands.map((product: DocumentData) => (
-                <CarouselItem key={product?.id} className="basis-1/2 md:basis-1/4 cursor-pointer">
+                <CarouselItem key={product?.id} className="basis-1/2 sm:basis-1/4 cursor-pointer flex justify-center">
                   <div className="md:flex hidden">
                     {product?.image ? (
                       <div
