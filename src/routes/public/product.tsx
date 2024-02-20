@@ -46,7 +46,7 @@ export default function Product() {
               </div>
             </DrawerRightTrigger>
           )}
-          <DrawerRightContent className="w-[350px]">
+          <DrawerRightContent>
             {productId ? <DrawerBasket setIsAdded={setIsAdded} productId={productId} /> : <></>}
           </DrawerRightContent>
         </DrawerRight>

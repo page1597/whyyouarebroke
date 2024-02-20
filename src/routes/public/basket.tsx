@@ -11,7 +11,7 @@ export default function Basket() {
       <Helmet>
         <title>장바구니</title>
       </Helmet>
-      <h3 className="text-xl">장바구니 ({basket ? basket.length : 0})</h3>
+      <h3 className="md:text-xl text-lg">장바구니 ({basket ? basket.length : 0})</h3>
       <BasketList basket={basket} />
     </>
   );

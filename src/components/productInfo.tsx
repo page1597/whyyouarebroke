@@ -14,8 +14,8 @@ function ProductInfo({
   setQuantity?: Dispatch<SetStateAction<number>>;
 }) {
   return (
-    <div className="flex justify-center flex-col items-center md:items-start">
-      <div className="flex justify-between w-full items-center mt-6 text-zinc-800">
+    <div className="flex mt-6 justify-center flex-col items-center md:items-start">
+      <div className="flex w-full justify-between items-end flex-row">
         <div className="text-xl">
           [{product.format}] {product.name}
         </div>
@@ -54,7 +54,7 @@ function ProductInfo({
             </h3>
           </div>
           <hr />
-          <div className="grid grid-cols-402 md:grid-cols-202 mt-3 ml-4 gap-1 text-base ">
+          <div className="grid grid-cols-402 md:grid-cols-202 mt-3 ml-4 gap-1 md:text-base text-sm">
             <h4 className="text-zinc-600 font-bold">판매가</h4>
             <h4 className="text-zinc-600 font-bold">{product.price}원</h4>
             <h5 className="text-zinc-900 mt-2">재고</h5>

@@ -11,9 +11,10 @@ export default function ProductListWithCarousel({ productList }: { productList: 
       {productList?.map((categoryProduct, index) => (
         <div key={index} className="md:mb-16 mb-10">
           <div className="flex justify-between items-end mr-6 md:mr-12 md:my-5 my-3">
-            <h3 className="text-xl ml-1">{categoryProduct.category.toUpperCase()}</h3>
+            <h3 className="md:text-xl text-lg ml-1">{categoryProduct.category.toUpperCase()}</h3>
             <button
               name="more"
+              className="md:text-base text-sm"
               onClick={() => {
                 const formattedCategory = replaceAll(categoryProduct.category, ["-", ""], ["/", "-"], [" ", ""]);
                 navigate(`/category/${formattedCategory}`);
@@ -68,13 +69,13 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                           <div className="w-40 h-40 bg-zinc-100" />
                         )}
                       </div>
-                      <div className="flex flex-col mt-3">
+                      <div className="flex flex-col md:mt-3 mt-2 md:text-base text-sm">
                         {/* <div className="truncate bg-teal-200">display nameasdfasfasdfasdfsadf</div> */}
                         <div className="flex gap-1 h-6 ">
                           <div>[{product.format}]</div>
-                          <div className="text-base overflow-hidden text-ellipsis">{product.name}</div>
+                          <div className="overflow-hidden text-ellipsis">{product.name}</div>
                         </div>
-                        <div className="mt-1 font-bold text-zinc-500">{product.price}원</div>
+                        <div className="md:mt-1 font-bold text-zinc-500">{product.price}원</div>
                       </div>
                     </div>
                   </div>

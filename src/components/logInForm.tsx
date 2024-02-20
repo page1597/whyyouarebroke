@@ -15,7 +15,7 @@ export default function LogInForm() {
     <>
       <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
       <Form {...form}>
-        <div className="flex flex-col justify-center items-center md:w-96 w-full">
+        <div className="flex flex-col justify-center items-center md:w-96 w-11/12">
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full">
             <div className="flex md:flex-row w-full flex-col">
               <div className="flex flex-col justify-between h-20 w-full md:gap-0 gap-2">
@@ -47,7 +47,7 @@ export default function LogInForm() {
 
               <Button
                 id="log_in"
-                className="md:ml-2 md:h-full md:w-36 bg-zinc-600 hover:bg-zinc-700 md:mt-0 mt-3"
+                className="md:ml-2 md:h-full md:w-36 bg-zinc-700 hover:bg-zinc-800 md:mt-0 mt-3"
                 type="submit"
                 disabled={isPending}
               >

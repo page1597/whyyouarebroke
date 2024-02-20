@@ -39,7 +39,7 @@ function Header({ items }: HeaderNavProps) {
 
       {/* 모바일 헤더 */}
       <div className="md:hidden">
-        <div className="flex bg-zinc-800 justify-end py-1.5 items-center gap-3 px-3">
+        <div className="flex bg-zinc-800 justify-end py-1.5 items-center gap-2 px-3">
           {items.length
             ? items.map((item) => (
                 <div key={item.title} className="text-white text-sm">
