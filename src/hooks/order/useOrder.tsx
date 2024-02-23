@@ -46,7 +46,7 @@ export default function useOrder(
     const buyerInfo = fieldValues;
 
     const data = {
-      pg: "html5_inicis", // PG사
+      pg: "kakaopay", // PG사
       pay_method: "card", // 결제수단
       merchant_uid: `${generateOrderNumber(orderProducts[0].id)}`, // 주문번호
       amount: priceAmount, // 결제금액
@@ -81,21 +81,6 @@ export default function useOrder(
         // 결제 취소
         increaseProductStock(orderProducts);
         alert(`${error_msg}`);
-
-        addOrder({
-          merchant_uid: data.merchant_uid,
-          amount: data.amount,
-          name: data.name,
-          status: "received",
-          products: orderProducts,
-          orderedAt: +new Date(),
-          buyer_uid: userId || null,
-          buyer_name: data.buyer_name,
-          buyer_tel: data.buyer_tel,
-          buyer_email: data.buyer_email,
-          buyer_addr: data.buyer_addr,
-          buyer_postcode: data.buyer_postcode,
-        });
       }
     });
   }
