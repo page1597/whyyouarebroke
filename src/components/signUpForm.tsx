@@ -21,7 +21,9 @@ export default function SignUpForm() {
             <div className="text-xs  text-zinc-600">* 필수입력사항</div>
           </div>
           <div className="hidden md:grid md:grid-cols-102 gap-4 border border-zinc-300 rounded p-8 mt-3">
-            <FormLabel className="flex items-center">이메일 *</FormLabel>
+            <FormLabel htmlFor="email" className="flex items-center">
+              이메일 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="email"
@@ -29,7 +31,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input {...field} />
+                      <Input id="email" {...field} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />
@@ -38,21 +40,23 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <FormLabel className="flex items-center">회원 구분 *</FormLabel>
+            <FormLabel htmlFor="type" className="flex items-center">
+              회원 구분 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormItem {...field}>
+                <FormItem {...field} id="type">
                   <div className="grid grid-cols-202">
                     <FormControl>
                       <RadioGroup className="flex" defaultValue={"일반 회원"} onValueChange={field.onChange}>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="일반 회원" defaultChecked={true} />
+                          <RadioGroupItem value="일반 회원" id="일반 회원" defaultChecked={true} />
                           <Label htmlFor="일반 회원">일반 회원</Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="관리자" />
+                          <RadioGroupItem value="관리자" id="관리자" />
                           <Label htmlFor="관리자">관리자</Label>
                         </div>
                       </RadioGroup>
@@ -61,7 +65,9 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <FormLabel className="flex items-center">비밀번호 *</FormLabel>
+            <FormLabel htmlFor="password" className="flex items-center">
+              비밀번호 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="password"
@@ -69,7 +75,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" id="password" {...field} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage>영문 대소문자 / 숫자 / 특수문자 중 3가지 이상 조합 (8자~16자)</FormMessage>
@@ -79,7 +85,9 @@ export default function SignUpForm() {
               )}
             />
 
-            <FormLabel className="flex items-center">비밀번호 확인 *</FormLabel>
+            <FormLabel htmlFor="confirmPassword" className="flex items-center">
+              비밀번호 확인 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -87,16 +95,18 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" id="confirmPassword" {...field} />
                     </FormControl>
                     <div className="hidden md:flex">
-                      <FormMessage />
+                      <FormMessage data-testid="error-message" />
                     </div>
                   </div>
                 </FormItem>
               )}
             />
-            <FormLabel className="flex items-center">이름 *</FormLabel>
+            <FormLabel htmlFor="name" className="flex items-center">
+              이름 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="name"
@@ -104,7 +114,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input {...field} />
+                      <Input id="name" {...field} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />
@@ -117,7 +127,9 @@ export default function SignUpForm() {
 
           {/* 모바일 화면 */}
           <div className="md:hidden grid grid-cols-302 gap-3 border border-zinc-300 rounded p-6 mt-3 text-sm">
-            <FormLabel className="flex items-center">이메일 *</FormLabel>
+            <FormLabel htmlFor="email" className="flex items-center">
+              이메일 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="email"
@@ -125,27 +137,29 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input {...field} />
+                      <Input id="email" {...field} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
                 </FormItem>
               )}
             />
-            <FormLabel className="flex items-center">회원 구분 *</FormLabel>
+            <FormLabel htmlFor="type" className="flex items-center">
+              회원 구분 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormItem {...field}>
+                <FormItem {...field} id="type">
                   <FormControl>
                     <RadioGroup className="flex" defaultValue={"일반 회원"} onValueChange={field.onChange}>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="일반 회원" defaultChecked={true} />
+                        <RadioGroupItem id="일반 회원" value="일반 회원" defaultChecked={true} />
                         <Label htmlFor="일반 회원">일반 회원</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="관리자" />
+                        <RadioGroupItem id="관리자" value="관리자" />
                         <Label htmlFor="관리자">관리자</Label>
                       </div>
                     </RadioGroup>
@@ -154,7 +168,9 @@ export default function SignUpForm() {
               )}
             />
 
-            <FormLabel className="flex items-center">비밀번호 *</FormLabel>
+            <FormLabel htmlFor="password" className="flex items-center">
+              비밀번호 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="password"
@@ -162,7 +178,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input id="password" type="password" {...field} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
@@ -170,7 +186,9 @@ export default function SignUpForm() {
               )}
             />
 
-            <FormLabel className="flex items-center">비밀번호 확인 *</FormLabel>
+            <FormLabel htmlFor="confirmPassword" className="flex items-center">
+              비밀번호 확인 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -178,14 +196,16 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input id="confirmPassword" type="password" {...field} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
                 </FormItem>
               )}
             />
-            <FormLabel className="flex items-center">이름 *</FormLabel>
+            <FormLabel htmlFor="name" className="flex items-center">
+              이름 *
+            </FormLabel>
             <FormField
               control={form.control}
               name="name"
@@ -193,7 +213,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input {...field} />
+                      <Input id="name" {...field} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>

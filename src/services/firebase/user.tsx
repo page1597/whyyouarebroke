@@ -15,7 +15,6 @@ import { NavigateFunction } from "react-router-dom";
 export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction) {
   try {
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, user.email, user.password!);
-
     try {
       await updateProfile(userCredential.user, { displayName: user.name });
 

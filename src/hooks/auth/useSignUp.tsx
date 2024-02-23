@@ -20,19 +20,19 @@ export default function useSignUp() {
     },
   });
 
-  const onSubmit = useCallback(
-    (values: z.infer<typeof signUpFormSchema>) => {
-      const user: UserSignUpType = {
-        type: values.type,
-        password: values.password,
-        confirmPassword: values.confirmPassword,
-        name: values.name,
-        email: values.email,
-      };
-      fbSignUp(user, navigate);
-    },
-    [navigate]
-  );
+  // 회원가입 폼 제출
+  async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
+    const user: UserSignUpType = {
+      type: values.type,
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+      name: values.name,
+      email: values.email,
+    };
+
+    // firebase 통신 수행
+    await fbSignUp(user, navigate);
+  }
 
   const onGoogleSignUp = useCallback(() => {
     fbGoogleSignUp(navigate, form.getValues("type"));

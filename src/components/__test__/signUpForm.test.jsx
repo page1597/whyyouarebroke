@@ -1,52 +1,78 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import SignUpForm from "../signUpForm";
 import { BrowserRouter as Router } from "react-router-dom"; // BrowserRouter를 import 해야합니다.
 import userEvent from "@testing-library/user-event";
+import * as useSignUpModule from "../../hooks/auth/useSignUp";
+import { FormProvider } from "react-hook-form";
+import SignUpForm from "../signUpForm";
 
-// let mockSignUp = null;
-// beforeEach(() => {
-//   mockSignUp = jest.fn();
-// });
+window.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
 
-test("폼 제출이 제대로 되는지 확인", async () => {
-  const queryClient = new QueryClient(); // QueryClient 생성
-  render(
-    <Router>
-      <QueryClientProvider client={queryClient}>
-        <SignUpForm />
-      </QueryClientProvider>
-    </Router>
-  );
+// jest.mock("../../hooks/auth/useSignUp");
+// jest.mock("../../hooks/auth/useSignUp", () => ({
+//   __esModule: true,
+//   default: jest.fn(),
+// }));
 
-  //   const event = userEvent.setup();
+// jest.mock("../../hooks/auth/useSignUp", () => ({
+//   __esModule: true,
+//   default: () => ({
+//     form: {
+//       handleSubmit: jest.fn((callback) => callback()),
+//       control: {},
+//       getValues: jest.fn(),
+//     },
+//     onSubmit: jest.fn(),
+//     onGoogleSignUp: jest.fn(),
+//   }),
+// }));
+// jest.mock("react-hook-form", () => ({
+//   __esModule: true,
+//   useForm: jest.fn(() => ({
+//     handleSubmit: jest.fn(),
+//     control: {},
+//     getValues: jest.fn(),
+//     formState: {},
+//   })),
+// }));
 
-  //   // 이메일과 비밀번호 입력란을 찾아서 값을 입력
-  //   await event.type(screen.getByPlaceholderText("이메일 *"), "fake@example.com", { allAtOnce: true });
-  //   await event.type(screen.getByPlaceholderText("비밀번호 *"), "iamfakepw!", { allAtOnce: true });
-  //   await event.type(screen.getByPlaceholderText("비밀번호 확인 *"), "iamfakepw!", { allAtOnce: true });
-  //   await event.type(screen.getByPlaceholderText("이름 *"), "가짜닉네임", { allAtOnce: true });
+jest.mock("../../hooks/auth/useSignUp", () => ({
+  __esModule: true,
+  default: () => ({
+    form: {},
+    onSubmit: jest.fn(),
+    onGoogleSignUp: jest.fn(),
+  }),
+}));
 
-  //   // 로그인 버튼을 찾아 클릭
-  //   const signUpButton = screen.getByRole("button", { name: "회원가입" });
-  //   signUpButton.onclick = (e) => {
-  //     e.preventDefault();
-  //     mockSignUp({
-  //       email: screen.getByPlaceholderText("이메일 *").value,
-  //       password: screen.getByPlaceholderText("비밀번호 *").value,
-  //       password_chcek: screen.getByPlaceholderText("비밀번호 확인 *").value,
-  //       name: screen.getByPlaceholderText("이름 *").value,
-  //     });
-  //   };
-  //   userEvent.click(signUpButton);
+describe("signUpForm 테스트", () => {
+  test("회원가입 버튼을 클릭했을 때 폼 제출이 제대로 되는지 확인", async () => {
+    const queryClient = new QueryClient();
 
-  //   // 로그인 함수가 호출되었는지 확인
-  //   await waitFor(() => {
-  //     expect(mockSignUp).toHaveBeenCalledWith({
-  //       email: "fake@example.com",
-  //       password: "iamfakepw!",
-  //       password_chcek: "iamfakepw!",
-  //       name: "가짜닉네임",
-  //     });
-  //   });
+    render(
+      <Router>
+        <QueryClientProvider client={queryClient}>
+          <SignUpForm />
+        </QueryClientProvider>
+      </Router>
+    );
+
+    // 인풋 창에 입력
+    await userEvent.type(screen.getByLabelText("이메일 *"), "fake@example.com", { allAtOnce: true });
+    await userEvent.type(screen.getByLabelText("비밀번호 *"), "iamfakepw!", { allAtOnce: true });
+    await userEvent.type(screen.getByLabelText("비밀번호 확인 *"), "iamfakepw!", { allAtOnce: true });
+    await userEvent.type(screen.getByLabelText("이름 *"), "가짜닉네임", { allAtOnce: true });
+
+    // 버튼 클릭
+    userEvent.click(screen.getByRole("button", { name: "회원가입" }));
+
+    // 로그인 함수가 호출되었는지 확인
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalled();
+    });
+  });
 });
