@@ -19,15 +19,11 @@ export default function useBasketList(basket: BasketProductType[] | null) {
     }
   }, [basket]); // basket이 변경될 때마다 호출
 
-  // 상품 수량이 변경될 때나 상품 체크/해제가 되었을 때 CheckedProducts 업데이트
+  // 상품 수량이 변경될 때나, 상품 체크/해제가 되었을 때 CheckedProducts 업데이트
   useEffect(() => {
     const checkedProductList = basketProducts.filter((product) => checkedProductIds.includes(product.id));
     setCheckedProducts(checkedProductList);
-  }, [checkedProductIds]);
-
-  // useEffect(() => {
-  //   console.log("dd");
-  // }, [basketProducts]);
+  }, [checkedProductIds, basketProducts]);
 
   const onCheck = useCallback(
     (newProductId: string, checked: CheckedState) => {
