@@ -6,8 +6,8 @@ import PublicRoutes from "./routes/public/index.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Layout from "./routes/index.tsx";
 
-const Layout = lazy(() => import("./routes/index"));
 const Basket = lazy(() => import("./routes/public/basket"));
 const RockPopEtc = lazy(() => import("./routes/public/category/rockpopetc"));
 const HipHopRandB = lazy(() => import("./routes/public/category/hiphopR&B"));

@@ -40,7 +40,6 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                           <div className="relative overflow-hidden">
                             <img
                               decoding="async"
-                              loading="lazy"
                               src={product["image"][0]}
                               width={240}
                               height={240}
@@ -57,7 +56,6 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                           <div className="relative overflow-hidden">
                             <img
                               decoding="async"
-                              loading="lazy"
                               src={product["image"][0]}
                               width={160}
                               height={160}
