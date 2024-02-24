@@ -1,20 +1,29 @@
-import { logInFormSchema } from "@/types/formSchemas/logIn";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import useShowAlert from "../useShowAlert";
+import { useMutation } from "@tanstack/react-query";
+import { fbLogIn } from "@/services/firebase/user";
 
-export default function useLogIn(logIn: any) {
-  const onSubmit = useCallback((values: z.infer<typeof logInFormSchema>) => {
-    logIn(values);
-  }, []);
-
-  const form = useForm<z.infer<typeof logInFormSchema>>({
-    resolver: zodResolver(logInFormSchema),
-    defaultValues: {
-      email: "",
-      password: "",
+export default function useLogIn() {
+  const { setShowAlert, showAlert, alertContent } = useShowAlert();
+  const { mutate, isPending, isError } = useMutation({
+    mutationKey: ["log in"],
+    mutationFn: ({ email, password }: { email: string; password: string }) => fbLogIn(email, password), // 비동기 작업을 수행하는 함수
+    onSuccess: () => {
+      // setAlertContent({ title: "로그인", desc: "로그인 되었습니다.", nav: "/" });
+      // setShowAlert(true);
+      alert("로그인 되었습니다.");
+    },
+    onError: (error) => {
+      alert("이메일과 비밀번호를 다시 한 번 확인해 주세요.");
+      console.error("로그인 실패", error);
+      // setAlertContent({ title: "로그인", desc: "이메일과 비밀번호를 다시 한 번 확인해 주세요.", nav: null });
+      // setShowAlert(true);
     },
   });
-  return { onSubmit, form };
+
+  const logIn = useCallback(({ email, password }: { email: string; password: string }) => {
+    mutate({ email, password });
+  }, []);
+
+  return { logIn, isPending, isError, setShowAlert, showAlert, alertContent };
 }

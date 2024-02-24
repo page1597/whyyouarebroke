@@ -1,12 +1,12 @@
 import { HeaderNavProps } from "@/types/navigation";
-import useLogOutMutation from "@/hooks/auth/useLogOutMutation";
 import Alert from "./alert";
 import { useNavigate } from "react-router-dom";
 import { memo } from "react";
 import useBasket from "@/hooks/basket/useBasket";
+import useLogOut from "@/hooks/auth/useLogOut";
 function Header({ items }: HeaderNavProps) {
   const navigate = useNavigate();
-  const { logOut, isPending, setShowAlert, showAlert, alertContent } = useLogOutMutation();
+  const { logOut, isPending, setShowAlert, showAlert, alertContent } = useLogOut();
   const { getBasket } = useBasket();
   const basket = getBasket();
   return (

@@ -3,13 +3,29 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import GoogleLoginButton from "./ui/googleLoginButton";
 import { fbGoogleLogIn } from "@/services/firebase/user";
-import useLogInMutation from "@/hooks/auth/useLogInMutation";
-import useLogIn from "@/hooks/auth/useLogin";
+// import useLogInMutation from "@/hooks/auth/useLogInMutation";
 import Alert from "./alert";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { logInFormSchema } from "@/types/formSchemas/logIn";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useLogIn from "@/hooks/auth/useLogin";
 
-export default function LogInForm() {
-  const { logIn, isPending, showAlert, setShowAlert, alertContent } = useLogInMutation();
-  const { onSubmit, form } = useLogIn(logIn);
+export default function LogInForm({ logIn }: { logIn: any }) {
+  const { isPending, showAlert, setShowAlert, alertContent } = useLogIn();
+  // const { onSubmit, form } = useLogIn(logIn);
+
+  const form = useForm<z.infer<typeof logInFormSchema>>({
+    resolver: zodResolver(logInFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof logInFormSchema>) {
+    await logIn(values);
+  }
 
   return (
     <>

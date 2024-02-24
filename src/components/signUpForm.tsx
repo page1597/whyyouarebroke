@@ -3,13 +3,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
-// import GoogleSignUpButton from "./ui/googleSignupButton";
+import GoogleSignUpButton from "./ui/googleSignupButton";
 import { signUpFormSchema } from "@/types/formSchemas/signUp";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { fbGoogleSignUp } from "@/services/firebase/user";
+import { useNavigate } from "react-router-dom";
 export default function SignUpForm({ signUp }: { signUp: any }) {
   // useSignUp과 useForm 분리
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -21,17 +25,20 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
     },
   });
 
-  const onSubmit = async (data: any) => {
-    await signUp(data.email, data.password);
-  };
+  async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
+    await signUp(values);
+  }
 
+  function onGoogleSignUp(userType: string) {
+    fbGoogleSignUp(navigate, userType);
+  }
   return (
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* 소셜 로그인 - 구글 */}
           <div className="text-zinc-700 md:mb-3 mb-2 md:text-base text-sm">SNS 계정으로 회원가입</div>
-          {/* <GoogleSignUpButton onClick={onGoogleSignUp} /> */}
+          <GoogleSignUpButton onClick={() => onGoogleSignUp(form.getValues("type"))} />
           <div className="flex mt-10 flex-row justify-between items-end">
             <div>기본정보</div>
             <div className="text-xs  text-zinc-600">* 필수입력사항</div>
