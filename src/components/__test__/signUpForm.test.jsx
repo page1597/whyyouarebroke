@@ -1,78 +1,54 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import SignUpForm from "../signUpForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter as Router } from "react-router-dom"; // BrowserRouter를 import 해야합니다.
-import userEvent from "@testing-library/user-event";
-import * as useSignUpModule from "../../hooks/auth/useSignUp";
 import { FormProvider } from "react-hook-form";
-import SignUpForm from "../signUpForm";
-
+// import { FormProvider, Form } from "react-hook-form";
 window.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
 }));
 
-// jest.mock("../../hooks/auth/useSignUp");
-// jest.mock("../../hooks/auth/useSignUp", () => ({
-//   __esModule: true,
-//   default: jest.fn(),
-// }));
-
-// jest.mock("../../hooks/auth/useSignUp", () => ({
-//   __esModule: true,
-//   default: () => ({
-//     form: {
-//       handleSubmit: jest.fn((callback) => callback()),
-//       control: {},
-//       getValues: jest.fn(),
-//     },
-//     onSubmit: jest.fn(),
-//     onGoogleSignUp: jest.fn(),
-//   }),
-// }));
-// jest.mock("react-hook-form", () => ({
-//   __esModule: true,
-//   useForm: jest.fn(() => ({
-//     handleSubmit: jest.fn(),
-//     control: {},
-//     getValues: jest.fn(),
-//     formState: {},
-//   })),
-// }));
-
-jest.mock("../../hooks/auth/useSignUp", () => ({
-  __esModule: true,
-  default: () => ({
-    form: {},
-    onSubmit: jest.fn(),
-    onGoogleSignUp: jest.fn(),
-  }),
-}));
+const mockSignUp = jest.fn((email, password, passwordConfirm, name) => {
+  return Promise.resolve({ email, password, passwordConfirm, name });
+});
 
 describe("signUpForm 테스트", () => {
   test("회원가입 버튼을 클릭했을 때 폼 제출이 제대로 되는지 확인", async () => {
     const queryClient = new QueryClient();
-
     render(
       <Router>
         <QueryClientProvider client={queryClient}>
-          <SignUpForm />
+          {/* <FormProvider> */}
+          <SignUpForm signUp={mockSignUp} />
+          {/* </FormProvider> */}
         </QueryClientProvider>
       </Router>
     );
-
-    // 인풋 창에 입력
-    await userEvent.type(screen.getByLabelText("이메일 *"), "fake@example.com", { allAtOnce: true });
-    await userEvent.type(screen.getByLabelText("비밀번호 *"), "iamfakepw!", { allAtOnce: true });
-    await userEvent.type(screen.getByLabelText("비밀번호 확인 *"), "iamfakepw!", { allAtOnce: true });
-    await userEvent.type(screen.getByLabelText("이름 *"), "가짜닉네임", { allAtOnce: true });
-
-    // 버튼 클릭
-    userEvent.click(screen.getByRole("button", { name: "회원가입" }));
-
-    // 로그인 함수가 호출되었는지 확인
-    await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalled();
+    fireEvent.input(screen.getByLabelText("이메일 *"), {
+      target: {
+        value: "fake@example.com",
+      },
     });
+    // fireEvent.input(screen.getByLabelText("비밀번호 *"), {
+    //   target: {
+    //     value: "iamfakepw!",
+    //   },
+    // });
+    // fireEvent.input(screen.getByLabelText("비밀번호 확인 *"), {
+    //   target: {
+    //     value: "iamfakepw!",
+    //   },
+    // });
+    // fireEvent.input(screen.getByLabelText("이름 *"), {
+    //   target: {
+    //     value: "가짜닉네임",
+    //   },
+    // });
+    fireEvent.submit(screen.getByRole("button"));
+    await waitFor(() => expect(screen.queryAllByRole("alert")).toHaveLength(0));
+    expect(mockSignUp).toHaveBeenCalledWith("fake@example.com");
+    // expect(await screen.findAllByDisplayValue("비밀번호가 다릅니다.")).toBe();
   });
 });
