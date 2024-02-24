@@ -15,10 +15,10 @@ export default function useGetOrders(isAdmin: boolean, userId: string | undefine
   const {
     data,
     fetchNextPage,
-    // hasNextPage,
     isFetchingNextPage,
     status,
     refetch,
+    // hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["orders"],
     // 비회원인 경우? -> 일단 막아놓기

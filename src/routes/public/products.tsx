@@ -2,14 +2,14 @@ import useGetAllProducts from "@/hooks/product/useGetAllProducts";
 import ProductListWithCarousel from "@/components/productListWithCarousel";
 import { Helmet } from "react-helmet";
 export default function Products() {
-  const { loading, productList } = useGetAllProducts();
+  const { isLoading, productList } = useGetAllProducts();
   return (
     <>
       <Helmet>
         <title>whyyouarebroke</title>
       </Helmet>
       <div className="ml-5 text-zinc-900">
-        {loading ? (
+        {isLoading ? (
           <p>Loading...</p>
         ) : productList ? (
           <ProductListWithCarousel productList={productList} />
