@@ -3,7 +3,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -16,7 +15,7 @@ import {
 import { db } from ".";
 import { deleteObject, getBlob, getDownloadURL, getStorage, list, ref, uploadBytes } from "firebase/storage";
 import { ProductType } from "@/types/product";
-import { blobUriToBlob } from "@/lib/utils";
+import { blobUriToBlob, shuffleArray } from "@/lib/utils";
 
 export async function fbGetProducts(
   category: string | null,
@@ -60,48 +59,20 @@ export async function fbGetProducts(
   });
   return products;
 }
-// 추천 상품 목록 가져오는 함수
+
 export async function fbGetRandomProducts(productId: string, category: string, limitParam: number) {
   const collectionRef = collection(db, "products");
-  // 같은 카테고리에 속하는 문서들을 필터링하여 가져옵니다.
-  const querySnapshot = await getDocs(
-    query(collectionRef, where("category", "==", category), where("id", "!=", productId))
-  );
 
-  // 가져온 문서들의 ID 목록을 생성합니다.
-  const docIds = querySnapshot.docs.map((doc) => doc.id);
-  let randomDocuments: DocumentData[] = [];
+  // 해당 카테고리의 모든 제품을 가져옴
+  const querySnapshot = await getDocs(query(collectionRef, where("category", "==", category)));
 
-  if (docIds.length <= 4) {
-    const q = query(collectionRef, where("id", "in", docIds));
-    const querySnapshot = await getDocs(q);
+  // 가져온 제품 중에서 현재 제품은 제외하고 랜덤하게 선택
+  const products = querySnapshot.docs.filter((doc) => doc.id !== productId).map((doc) => doc.data());
 
-    querySnapshot.forEach((doc) => {
-      randomDocuments.push(doc.data());
-    });
-  } else {
-    // 랜덤하게 4개의 문서를 선택
-    while (true) {
-      if (randomDocuments.length === limitParam) break;
-      // 랜덤한 인덱스를 생성합니다.
-      const randomIndex = Math.floor(Math.random() * docIds.length);
+  // 랜덤하게 섞은 후, 필요한 개수만큼 잘라냄
+  const randomProducts = shuffleArray(products).slice(0, limitParam);
 
-      // 해당 인덱스에 해당하는 문서를 가져옵니다.
-      const docRef = doc(collectionRef, docIds[randomIndex]);
-      const docSnapshot = await getDoc(docRef);
-
-      // 문서가 존재하면 데이터를 추출합니다.
-      if (docSnapshot.exists()) {
-        const data = docSnapshot.data();
-        const isIn = randomDocuments.some((document) => document.id === data.id);
-
-        if (!isIn) {
-          randomDocuments.push(data);
-        }
-      }
-    }
-  }
-  return randomDocuments;
+  return randomProducts;
 }
 
 export async function fbGetProduct(productId: string) {

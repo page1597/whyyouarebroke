@@ -11,6 +11,7 @@ import {
   getDocs,
   DocumentData,
   getDoc,
+  orderBy,
 } from "firebase/firestore";
 import { db } from ".";
 
@@ -46,7 +47,7 @@ export async function fbGetOrders(
   pageParam: number | null,
   limitParam: number | null
 ) {
-  let finalQuery = query(collection(db, "orders"));
+  let finalQuery = query(collection(db, "orders"), orderBy("orderedAt", "desc"));
   if (!isAdmin) {
     if (userId !== undefined && userId !== null) {
       finalQuery = query(finalQuery, where("buyer_uid", "==", userId));
