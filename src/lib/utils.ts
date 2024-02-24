@@ -5,12 +5,13 @@ import Resizer from "react-image-file-resizer";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
 export const resizeFile = (file: Blob): Promise<string> =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      300,
-      300,
+      file.size > 1000 ? 1000 : file.size,
+      file.size > 1000 ? 1000 : file.size,
       "WEBP",
       100,
       0,

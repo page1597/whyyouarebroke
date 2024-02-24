@@ -36,13 +36,22 @@ function QuantityInput({
       <button id="minus" type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
         -
       </button>
+      {/* const newValue = Number(e.target.value);
+          if (!isNaN(newValue) && newValue >= 1 && newValue <= 100) {
+            setQuantity(newValue);
+          } */}
       <input
         type="text"
         value={basketProducts.find((basketProducts) => basketProducts.id === product.id)?.quantity}
         onChange={(e) => {
+          let quantity = 1;
+          let newValue = Number(e.target.value);
+          if (!isNaN(newValue) && newValue >= 1 && newValue <= 100) {
+            quantity = newValue;
+          }
           const updateProduct = basketProducts.map((basketProduct) => {
             if (basketProduct.id === product.id) {
-              return { ...basketProduct, quantity: Number(e.target.value) };
+              return { ...basketProduct, quantity: quantity };
             }
             return basketProduct;
           });

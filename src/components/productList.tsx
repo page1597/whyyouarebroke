@@ -125,8 +125,8 @@ function ProductList({ category }: { category?: string }) {
                         navigate({ pathname: "/product", search: `?id=${product.id}` });
                       }}
                     >
-                      <div>
-                        <div className="md:flex hidden">
+                      <div className="md:max-w-60 max-w-40">
+                        <div className="md:flex hidden justify-center ">
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img
@@ -143,7 +143,7 @@ function ProductList({ category }: { category?: string }) {
                             <div className="w-60 h-60 bg-zinc-100" />
                           )}
                         </div>
-                        <div className="md:hidden flex h-40 justify-center items-center  ">
+                        <div className="md:hidden flex h-40 justify-center items-center">
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img
@@ -161,7 +161,9 @@ function ProductList({ category }: { category?: string }) {
                           )}
                         </div>
                         <div className="text-sm font-bold text-zinc-800">
-                          <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis">{product.name}</div>
+                          <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis whites">
+                            {product.name}
+                          </div>
                           <div className="text-xs font-bold">{product.artist}</div>
                           <div className="font-bold text-zinc-500 mt-1">{product.price}원</div>
                         </div>

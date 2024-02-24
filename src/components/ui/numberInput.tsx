@@ -1,5 +1,5 @@
 import { ProductType } from "@/types/product";
-import { Dispatch, SetStateAction, memo, useMemo } from "react";
+import { Dispatch, SetStateAction, memo, useEffect, useMemo } from "react";
 // 전역적으로 (localStorage) 수량이 변함.
 function NumberInput({
   product,
@@ -10,6 +10,10 @@ function NumberInput({
   quantity: number;
   setQuantity: Dispatch<SetStateAction<number>>;
 }) {
+  useEffect(() => {
+    setQuantity(1);
+  }, [product]);
+
   function onPlus() {
     setQuantity(quantity + 1);
   }
@@ -31,7 +35,12 @@ function NumberInput({
       <input
         type="text"
         value={quantity}
-        onChange={(e) => setQuantity(Number(e.target.value))}
+        onChange={(e) => {
+          const newValue = Number(e.target.value);
+          if (!isNaN(newValue) && newValue >= 1 && newValue <= 100) {
+            setQuantity(newValue);
+          }
+        }}
         className="text-sm w-12 h-7 border border-zinc-400 rounded text-center outline-none"
       />
       <button id="plus" type="button" onClick={onPlus} className="px-2 rounded-r cursor-pointer">
