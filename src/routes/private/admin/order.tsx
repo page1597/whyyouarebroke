@@ -7,7 +7,7 @@ export default function Order() {
       <Helmet>
         <title>주문조회</title>
       </Helmet>
-      <h3>주문 조회</h3>
+      <h3 className="md:text-xl text-lg">주문 조회</h3>
       <OrderList isAdmin={true} />
     </>
   );

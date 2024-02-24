@@ -8,10 +8,10 @@ export default function useCheckIsInBasket(productId: string | null) {
   useEffect(() => {
     if (!productId) return; // productId가 null이면 불필요한 호출을 방지
 
-    const getBasket = sessionStorage.getItem("basket");
-    if (!getBasket) return; // 장바구니가 비어있으면 불필요한 호출을 방지
+    const loadedBasket = sessionStorage.getItem("basket");
+    if (!loadedBasket) return; // 장바구니가 비어있으면 불필요한 호출을 방지
 
-    const basket = JSON.parse(getBasket);
+    const basket = JSON.parse(loadedBasket);
     const existingProduct = basket.find((item: { id: string; quantity: number }) => item.id === productId);
 
     if (existingProduct && existingProduct.quantity === quantity) {

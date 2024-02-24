@@ -7,7 +7,7 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
     <div className="w-full grid text-center items-center">
       {order.merchant_uid !== "" ? (
         <div className="grid grid-flow-col md:grid-cols-7 gap-2 grid-cols-4">
-          <div className={`${rowSpan} text-sm justify-center items-center flex-col hidden md:flex`}>
+          <div className={`text-sm justify-center items-center flex-col hidden md:flex ${rowSpan}`}>
             <div>{order.merchant_uid}</div>
             <div className="text-zinc-400">{new Date(order.orderedAt).toLocaleString()}</div>
             <div className="mt-1">{order.buyer_name}</div>

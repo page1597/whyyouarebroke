@@ -5,8 +5,8 @@ import { BasketProductType, ProductType } from "@/types/product";
 export default function useBasket() {
   // 로컬 스토리지 장바구니만 가져오기
   function getBasket() {
-    let sessionStorageBasket = sessionStorage.getItem("basket");
-    let localBasket = sessionStorageBasket === null ? [] : JSON.parse(sessionStorageBasket);
+    const sessionStorageBasket = sessionStorage.getItem("basket");
+    const localBasket = sessionStorageBasket === null ? [] : JSON.parse(sessionStorageBasket);
     return localBasket;
   }
 
@@ -32,8 +32,8 @@ export default function useBasket() {
 
   // 장바구니에 추가
   function addToBasket(userId: string | null, product: ProductType, quantity: number) {
-    let getBasket = sessionStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
-    let basket = getBasket === null ? [] : JSON.parse(getBasket); // 원래 장바구니 리스트
+    const loadedBasket = sessionStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
+    const basket = loadedBasket === null ? [] : JSON.parse(loadedBasket); // 원래 장바구니 리스트
     // 상품이 이미 장바구니에 있는지 확인
     const existingProductIndex = basket.findIndex((item: { id: string }) => item.id === product.id);
 
@@ -65,8 +65,8 @@ export default function useBasket() {
   }
 
   async function updateBasketProductStock(userId: string | null, basketProduct: BasketProductType, stock: number) {
-    let getBasket = sessionStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
-    let basket = getBasket === null ? [] : JSON.parse(getBasket); // 원래 장바구니 리스트
+    const loadedBasket = sessionStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
+    const basket = loadedBasket === null ? [] : JSON.parse(loadedBasket); // 원래 장바구니 리스트
 
     // 상품이 이미 장바구니에 있는지 확인
     const existingProductIndex = basket.findIndex((item: { id: string }) => item.id === basketProduct.id);
@@ -86,15 +86,14 @@ export default function useBasket() {
   }
 
   function removeFromBasket(userId: string | null, productId: string) {
-    let getBasket = sessionStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
-    let basket = getBasket === null ? [] : JSON.parse(getBasket); // 원래 장바구니 리스트
+    const loadedBasket = sessionStorage.getItem("basket"); // 원래 있던 장바구니 꺼내기
+    const basket = loadedBasket === null ? [] : JSON.parse(loadedBasket); // 원래 장바구니 리스트
 
     // 지울 상품 찾기
     const productIndex = basket.findIndex((item: { id: string }) => item.id === productId);
 
     if (productIndex !== -1) {
       basket.splice(productIndex, 1);
-
       sessionStorage.setItem("basket", JSON.stringify(basket));
 
       if (userId) {

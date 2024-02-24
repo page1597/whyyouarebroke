@@ -19,11 +19,15 @@ export default function useBasketList(basket: BasketProductType[] | null) {
     }
   }, [basket]); // basket이 변경될 때마다 호출
 
-  // 상품 수량이 변경될 때나, 상품 체크/해제가 되었을 때 CheckedProducts 업데이트
+  // 상품 수량이 변경될 때나 상품 체크/해제가 되었을 때 CheckedProducts 업데이트
   useEffect(() => {
     const checkedProductList = basketProducts.filter((product) => checkedProductIds.includes(product.id));
     setCheckedProducts(checkedProductList);
   }, [checkedProductIds]);
+
+  // useEffect(() => {
+  //   console.log("dd");
+  // }, [basketProducts]);
 
   const onCheck = useCallback(
     (newProductId: string, checked: CheckedState) => {
@@ -51,7 +55,6 @@ export default function useBasketList(basket: BasketProductType[] | null) {
 
   // 선택된 상품들의 총 가격 계산
   const totalPrice = useMemo(() => {
-    // console.log("total price 계산");
     return checkedProducts.reduce((accumulator, product) => accumulator + product.price * product.quantity, 0);
   }, [checkedProducts]);
 

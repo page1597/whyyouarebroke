@@ -31,7 +31,7 @@ const ModalHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 const ModalBody: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <div className="grid grid-cols-402 gap-5 border border-zinc-300 rounded p-8 mt-3">{children}</div>;
+  return <div className="grid grid-cols-302 gap-5 border border-zinc-300 rounded p-8 mt-3">{children}</div>;
 };
 
 const ModalFooter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
