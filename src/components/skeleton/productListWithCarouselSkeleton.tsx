@@ -2,16 +2,16 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 
 export default function ProductListWithCarouselSkeleton() {
   return (
-    <div className="md:px-6 px-3 md:ml-1 md:-mr-8 -mr-0 ">
+    <div className="sm:px-6 px-3 sm:ml-1 -ml-1 sm:-mr-6 -mr-3 ">
       {Array.from({ length: 4 })?.map((_, index) => (
         <div key={index} className="lg:mb-16 mb-10">
-          <div className="flex justify-between items-end mr-10 lg:my-5 my-3">
+          <div className="flex justify-between items-end mr-4 sm:mr-9 lg:my-5 my-3">
             <h3 className="transparent h-8 w-32 lg:text-xl text-lg ml-1" />
             <button name="more" className="lg:text-base text-sm">
               더보기
             </button>
           </div>
-          <Carousel opts={{ align: "start", active: false }} className="w-11/12 lg:ml-5 ml-1">
+          <Carousel opts={{ align: "start", active: false }} className="w-11/12 lg:ml-5 ml-2">
             <CarouselContent>
               {Array.from({ length: 4 }).map((_, index) => (
                 <CarouselItem
