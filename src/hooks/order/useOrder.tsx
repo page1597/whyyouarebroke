@@ -19,7 +19,6 @@ export default function useOrder(
 
   async function onClickPayment() {
     const validation = paymentFormSchema.safeParse(fieldValues);
-    console.log(fieldValues, validation);
 
     if (!isAgreedTerm) {
       setShowAlert(true);
@@ -57,7 +56,6 @@ export default function useOrder(
       buyer_addr: buyerInfo.buyer_addr, // 구매자 주소
       buyer_postcode: buyerInfo.buyer_postcode, // 구매자 우편번호
     };
-    console.log("IMP request pay");
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
       const { success, error_msg } = response;
       if (success) {

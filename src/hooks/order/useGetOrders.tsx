@@ -16,8 +16,8 @@ export default function useGetOrders(isAdmin: boolean, userId: string | undefine
     data,
     fetchNextPage,
     isFetchingNextPage,
-    status,
     refetch,
+    isLoading,
     // hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["orders"],
@@ -39,5 +39,5 @@ export default function useGetOrders(isAdmin: boolean, userId: string | undefine
   //   }
   // }, [hasNextPage, isFetchingNextPage, queryClient, fetchNextPage]);
 
-  return { data, status, isFetchingNextPage, fetchNextPage, refetch };
+  return { data, isLoading, isFetchingNextPage, fetchNextPage, refetch };
 }

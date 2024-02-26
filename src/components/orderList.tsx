@@ -6,10 +6,10 @@ import useCancelOrderMutation from "@/hooks/order/useCancelOrderMutation";
 import useCancelOrder from "@/hooks/order/useCancelOrder";
 import OrderComponent from "./orderComponent";
 import { OrderType } from "@/types/order";
-import { Button } from "./ui/button";
 import SelectOrderState from "./selectOrderStatus";
 import Alert from "./alert";
 import { Loader2 } from "lucide-react";
+import useShowAlert from "@/hooks/useShowAlert";
 
 // 페이지네이션 ?
 export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
@@ -17,7 +17,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
     triggerOnce: false,
   });
   const userInfo = useContext(AuthContext);
-  const { data, status, isFetchingNextPage, fetchNextPage, refetch } = useGetOrders(isAdmin, userInfo?.id);
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, refetch } = useGetOrders(isAdmin, userInfo?.id);
 
   useEffect(() => {
     if (inView) {
@@ -26,10 +26,11 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
   }, [inView]);
 
   const { cancelOrder } = useCancelOrderMutation(refetch);
-  const { onCancelOrder, setShowAlert, showAlert, alertContent } = useCancelOrder(cancelOrder);
-
+  const { onCancelOrder, setCancelShowAlert, cancelShowAlert, cancelAlertContent } = useCancelOrder(cancelOrder);
+  const { alertContent, setShowAlert, setAlertContent, confirm, showAlert, setConfirm } = useShowAlert();
   const labels = ["주문번호", "이미지", "주문상품", "상품가격", "수량", "합계", "배송정보"];
   const [ordersWithTitle, setOrdersWithTitle] = useState<OrderType[]>();
+  const [orderToCancel, setOrderToCancel] = useState<OrderType>();
 
   const orders = useMemo(() => {
     if (data?.pages !== null) {
@@ -61,30 +62,44 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
     }
   }, [orders]);
 
+  useEffect(() => {
+    if (confirm && orderToCancel) {
+      onCancelOrder(orderToCancel.merchant_uid, orderToCancel.name);
+    }
+  }, [confirm]);
+
   return (
     <>
-      <Alert alertContent={alertContent} setShowAlert={setShowAlert} showAlert={showAlert} />
-      <div className="flex flex-col mt-4">
+      <Alert alertContent={cancelAlertContent} setShowAlert={setCancelShowAlert} showAlert={cancelShowAlert} />
+      <Alert alertContent={alertContent} setShowAlert={setShowAlert} showAlert={showAlert} setConfirm={setConfirm} />
+
+      <div className="flex flex-col m-4">
         <hr />
-        {status === "success" && ordersWithTitle ? (
+        {!isLoading && ordersWithTitle ? (
           <div className="mt-4 flex flex-col gap-5 text-base">
             {ordersWithTitle?.map((order) => (
-              <>
-                <div key={order.merchant_uid} className="flex flex-row items-center md:gap-3 md:text-base text-sm">
+              <div key={order.merchant_uid}>
+                <div className="flex flex-row items-center lg:gap-3 lg:text-base text-sm">
                   <OrderComponent order={order} labels={labels} />
-                  <div className="md:w-[128px] w-[100px] flex justify-center">
+                  <div className="lg:w-[128px] w-[90px] flex justify-center">
                     {order.merchant_uid ? (
                       !isAdmin ? (
-                        <Button
-                          id="cancel_orer"
+                        <button
+                          className="border px-2 py-1 rounded text-sm disabled:bg-zinc-100 disabled:text-zinc-500"
+                          id="cancel_order"
                           disabled={order.status === "주문 취소"}
                           onClick={() => {
-                            onCancelOrder(order.merchant_uid, order.name);
+                            setShowAlert(true);
+                            setOrderToCancel(order);
+                            setAlertContent({
+                              title: "주문 조회",
+                              desc: `${order.name}의 주문을 취소하시겠습니까?`,
+                              nav: null,
+                            });
                           }}
-                          className="bg-zinc-0 border-zinc-800 border text-zinc-800 hover:bg-zinc-100 disabled:bg-zinc-100"
                         >
                           취소하기
-                        </Button>
+                        </button>
                       ) : (
                         <SelectOrderState id={order.merchant_uid} />
                       )
@@ -95,8 +110,8 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
                     )}
                   </div>
                 </div>
-                <hr />
-              </>
+                <hr className="mt-4" />
+              </div>
             ))}
           </div>
         ) : (

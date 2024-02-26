@@ -2,13 +2,16 @@ import { OrderType } from "@/types/order";
 import { memo } from "react";
 
 function OrderComponent({ order, labels }: { order: OrderType; labels: string[] }) {
-  const rowSpan = `row-span-${order.products.length}`;
+  const span = order.products.length;
   return (
     <div className="w-full grid text-center items-center">
       {order.merchant_uid !== "" ? (
-        <div className="grid grid-flow-col md:grid-cols-7 gap-2 grid-cols-4">
-          <div className={`text-sm justify-center items-center flex-col hidden md:flex ${rowSpan}`}>
-            <div>{order.merchant_uid}</div>
+        <div className="grid grid-flow-col lg:grid-cols-7 gap-2 grid-cols-5">
+          <div
+            style={{ gridRow: `span ${span}` }}
+            className="text-xs lg:text-sm justify-center items-center self-center"
+          >
+            <div className="truncate overflow-hidden">{order.merchant_uid}</div>
             <div className="text-zinc-400">{new Date(order.orderedAt).toLocaleString()}</div>
             <div className="mt-1">{order.buyer_name}</div>
           </div>
@@ -18,30 +21,32 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
             </div>
           ))}
           {order.products.map((product) => (
-            <div key={product.id} className="justify-center flex items-center md:text-base text-xs">
+            <div key={product.id} className="justify-center flex items-center lg:text-base text-sm">
               {product.name}
             </div>
           ))}
           {order.products.map((product) => (
-            <div key={product.id} className="justify-center items-center md:text-base text-nowrap md:flex hidden">
+            <div key={product.id} className="justify-center items-center lg:text-base text-nowrap lg:flex hidden">
               {product.price.toLocaleString()}원
             </div>
           ))}
           {order.products.map((product) => (
-            <div key={product.id} className="justify-center flex items-center md:text-base text-xs">
+            <div key={product.id} className="justify-center flex items-center lg:text-base text-sm">
               {product.quantity}개
             </div>
           ))}
-          <div className={`${rowSpan} justify-center flex items-center md:text-base text-xs`}>
+          <div style={{ gridRow: `span ${span}` }} className="flex justify-center items-center lg:text-base text-sm">
             {order.amount.toLocaleString()}원
           </div>
-          <div className={`${rowSpan} hidden md:flex } justify-center flex items-center`}>{order.buyer_addr}</div>
+          <div style={{ gridRow: `span ${span}` }} className="hidden lg:flex justify-center items-center">
+            {order.buyer_addr}
+          </div>
         </div>
       ) : (
-        <div className="grid md:grid-cols-7 grid-cols-4">
+        <div className="grid lg:grid-cols-7 grid-cols-5">
           {labels.map((label, index) =>
-            label === "주문번호" || label === "배송정보" || label === "상품가격" ? (
-              <div className="hidden md:flex text-nowrap justify-center" key={index}>
+            label === "배송정보" || label === "상품가격" ? (
+              <div className="hidden lg:flex text-nowrap justify-center" key={index}>
                 {label}
               </div>
             ) : (

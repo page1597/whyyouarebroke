@@ -7,14 +7,14 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 export default function ProductListWithCarousel({ productList }: { productList: categoryProductType[] }) {
   const navigate = useNavigate();
   return (
-    <div className="sm:px-0 -ml-4 -mr-5 sm:mx-0">
+    <div className="md:px-6 px-3 md:ml-1 md:-mr-8 -mr-0 ">
       {productList?.map((categoryProduct, index) => (
-        <div key={index} className="sm:mb-16 mb-10">
-          <div className="flex justify-between items-end mr-6 sm:mr-12 sm:my-5 my-3">
-            <h3 className="sm:text-xl text-lg ml-1">{categoryProduct.category.toUpperCase()}</h3>
+        <div key={index} className="lg:mb-16 mb-10">
+          <div className="flex justify-between items-end mr-10 lg:my-5 my-3">
+            <h3 className="lg:text-xl text-lg ml-1">{categoryProduct.category.toUpperCase()}</h3>
             <button
               name="more"
-              className="sm:text-base text-sm"
+              className="lg:text-base text-sm"
               onClick={() => {
                 const formattedCategory = replaceAll(categoryProduct.category, ["-", ""], ["/", "-"], [" ", ""]);
                 navigate(`/category/${formattedCategory}`);
@@ -23,11 +23,14 @@ export default function ProductListWithCarousel({ productList }: { productList: 
               더보기
             </button>
           </div>
-          <Carousel opts={{ align: "start" }} className="w-11/12 sm:ml-5">
-            <CarouselContent className="ml-0 ">
+          <Carousel opts={{ align: "start" }} className="w-11/12 lg:ml-5 ml-1">
+            <CarouselContent>
               {categoryProduct.products?.map((product: DocumentData) => (
-                <CarouselItem key={product.id} className="pl-0 sm:ml-0  basis-1/2 sm:basis-1/4">
-                  <div className="sm:p-2 flex justify-center items-centers">
+                <CarouselItem
+                  key={product.id}
+                  className="pl-4 lg:ml-0 basis-1/2 flex justify-center items-center sm:basis-1/4"
+                >
+                  <div className="flex justify-center items-center">
                     <div
                       className="cursor-pointer flex justify-center flex-col"
                       onClick={() => {
@@ -35,10 +38,9 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                         navigate({ pathname: "/product", search: `?id=${product.id}` });
                       }}
                     >
-                      <div className="sm:flex hidden">
+                      <div className="sm:flex hidden justify-center">
                         <div className="relative overflow-hidden">
                           <img
-                            decoding="async"
                             src={product["image"][0]}
                             width={240}
                             height={240}
@@ -47,10 +49,9 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                           />
                         </div>
                       </div>
-                      <div className="sm:hidden flex h-40 justify-center items-center ">
+                      <div className="sm:hidden flex justify-center items-center ">
                         <div className="relative overflow-hidden">
                           <img
-                            decoding="async"
                             src={product["image"][0]}
                             width={160}
                             height={160}
@@ -59,21 +60,20 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                           />
                         </div>
                       </div>
-                      <div className="flex flex-col sm:mt-3 mt-2 sm:text-base text-sm">
-                        {/* <div className="truncate bg-teal-200">display nameasdfasfasdfasdfsadf</div> */}
-                        <div className="flex gap-1 h-6 ">
+                      <div className="flex flex-col lg:mt-3 mt-2 lg:text-base text-sm">
+                        <div className="flex gap-1 h-6">
                           <div>[{product.format}]</div>
-                          <div className="overflow-hidden text-ellipsis">{product.name}</div>
+                          <div className="overflow-hidden">{product.name}</div>
                         </div>
-                        <div className="sm:mt-1 font-bold text-zinc-500">{product.price.toLocaleString()}원</div>
+                        <div className="lg:mt-1 font-bold text-zinc-500">{product.price.toLocaleString()}원</div>
                       </div>
                     </div>
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="sm:-mt-6" />
-            <CarouselNext className="sm:-mt-6" />
+            <CarouselPrevious className="md:-mt-6" />
+            <CarouselNext className="md:-mt-6" />
             {/* <div className="sm:hidden flex -mt-12 bg-slate-300">
               <CarouselPrevious />
               <CarouselNext />

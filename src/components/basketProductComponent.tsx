@@ -59,6 +59,7 @@ function BasketProductComponent({
             <div className="flex justify-center items-center">
               <button
                 id="delete_basket"
+                className="border px-2 py-1 rounded text-sm"
                 onClick={() => {
                   setShowAlert(true);
                   setAlertContent({
@@ -67,7 +68,6 @@ function BasketProductComponent({
                     nav: null,
                   });
                 }}
-                className="border px-2 py-1 rounded text-sm"
               >
                 삭제하기
               </button>

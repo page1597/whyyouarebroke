@@ -127,10 +127,10 @@ function ProductList({ category }: { category?: string }) {
           {data.pages.map((page, index) => (
             <div key={index}>
               {page ? (
-                <div className="grid grid-cols-2 md:grid-cols-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 justify-center gap-y-10 gap-x-2">
                   {page.map((product: ProductType) => (
                     <div
-                      className="flex flex-col justify-center items-center cursor-pointer mb-10 md:mb-20"
+                      className="flex flex-col justify-center h-full items-center cursor-pointer"
                       key={product.id}
                       onClick={() => {
                         preloadImage(product.image, product.name);
@@ -138,7 +138,7 @@ function ProductList({ category }: { category?: string }) {
                       }}
                     >
                       <div className="md:max-w-60 max-w-40">
-                        <div className="md:flex hidden justify-center ">
+                        <div className="md:flex hidden justify-center">
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img

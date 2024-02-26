@@ -1,7 +1,7 @@
 export default function ProductListSkeleton() {
   return (
     <div className="mt-8">
-      <div className="grid grid-cols-2 md:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 justify-center gap-y-10 gap-x-2">
         {Array.from({ length: 12 }).map((_, index) => (
           <div key={index} className="flex flex-col justify-center items-center cursor-pointer mb-10 md:mb-20">
             <div className="md:max-w-60 max-w-40">
