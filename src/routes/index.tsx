@@ -1,14 +1,15 @@
 // root of the project
 import DocsSidebarNav from "@/components/sidebar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import logo from "src/assets/logo.webp";
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { AuthContext } from "@/context/authContext";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
 import Header from "@/components/Header";
 import { HeaderNavItem } from "@/types/navigation";
 import { Helmet } from "react-helmet";
+import useBasket from "@/hooks/basket/useBasket";
 
 export const sidebarNav = [
   {
@@ -41,10 +42,17 @@ export const sidebarNav = [
   },
 ];
 
+type ContextType = {
+  setBasketLength: Dispatch<SetStateAction<number>>;
+};
+
 export default function Layout() {
   const userInfo = useContext(AuthContext);
   const isAdmin = userInfo?.type === "관리자" ? true : false;
   const navigate = useNavigate();
+  const { getBasket } = useBasket();
+  const basket = getBasket();
+  const [basketLength, setBasketLength] = useState<number>(basket.length);
 
   // 전역관리 유저타입 저장
   const headerNav: HeaderNavItem[] = [
@@ -67,7 +75,7 @@ export default function Layout() {
       </Helmet>
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
         <div className="w-full flex flex-col h-screen">
-          <Header items={headerNav} />
+          <Header items={headerNav} basketLength={basketLength} />
           {/* 반응형 구현 */}
           <div className="md:px-12 md:py-8 md:flex">
             <div className="hidden md:inline-block">
@@ -108,7 +116,7 @@ export default function Layout() {
             {/* <div className="md:flex-grow h-full px-6"> */}
             <div className="md:flex-grow md:px-0 h-full px-5 overflow-x-clip">
               <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
-                <Outlet />
+                <Outlet context={{ setBasketLength } satisfies ContextType} />
               </ErrorBoundary>
             </div>
           </div>
@@ -116,4 +124,7 @@ export default function Layout() {
       </ErrorBoundary>
     </>
   );
+}
+export function useBasketLength() {
+  return useOutletContext<ContextType>();
 }

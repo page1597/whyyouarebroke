@@ -1,14 +1,11 @@
 import { HeaderNavProps } from "@/types/navigation";
 import Alert from "./alert";
 import { useNavigate } from "react-router-dom";
-import { memo } from "react";
-import useBasket from "@/hooks/basket/useBasket";
 import useLogOut from "@/hooks/auth/useLogOut";
-function Header({ items }: HeaderNavProps) {
+
+function Header({ items, basketLength }: HeaderNavProps) {
   const navigate = useNavigate();
   const { logOut, isPending, setShowAlert, showAlert, alertContent } = useLogOut();
-  const { getBasket } = useBasket();
-  const basket = getBasket();
   return (
     <>
       <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
@@ -23,7 +20,7 @@ function Header({ items }: HeaderNavProps) {
                     ) : (
                       <>
                         {item.title}
-                        {basket && <>({basket.length})</>}
+                        <>({basketLength})</>
                       </>
                     )}
                   </button>
@@ -50,7 +47,7 @@ function Header({ items }: HeaderNavProps) {
                       ) : (
                         <>
                           {item.title}
-                          {basket && <>({basket.length})</>}
+                          <>({basketLength})</>
                         </>
                       )}
                     </button>
@@ -67,4 +64,4 @@ function Header({ items }: HeaderNavProps) {
     </>
   );
 }
-export default memo(Header);
+export default Header;

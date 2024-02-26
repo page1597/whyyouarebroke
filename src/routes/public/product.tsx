@@ -10,6 +10,7 @@ import useCheckIsInBasket from "@/hooks/basket/useCheckIsInBasket";
 import useGetProduct from "@/hooks/product/useGetProduct";
 import { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useBasketLength } from "..";
 
 // 구매자가 보는 상품 상세 페이지
 export default function Product() {
@@ -18,7 +19,9 @@ export default function Product() {
   const userId = useContext(AuthContext)?.id || null;
   const { isLoading, product } = useGetProduct(productId);
   const { isAdded, setIsAdded, quantity, setQuantity } = useCheckIsInBasket(productId);
-  const { addToBasket } = useBasket();
+  const { addToBasket, getBasket } = useBasket();
+  const { setBasketLength } = useBasketLength();
+
   return (
     <div className="flex flex-col">
       {!isLoading && product ? (
@@ -34,6 +37,8 @@ export default function Product() {
               onClick={() => {
                 addToBasket(userId, product!, quantity);
                 setIsAdded(true);
+                const basket = getBasket();
+                setBasketLength(basket.length);
               }}
               className="bg-zinc-0 border border-zinc-500 text-zinc-900 w-28 hover:bg-zinc-100"
             >
