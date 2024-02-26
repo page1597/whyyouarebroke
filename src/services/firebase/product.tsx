@@ -43,7 +43,11 @@ export async function fbGetProducts(
     );
   }
   if (orderby) {
-    finalQuery = query(finalQuery, orderBy(orderby, "desc"));
+    if (orderby === "price") {
+      finalQuery = query(finalQuery, orderBy(orderby, "asc"));
+    } else {
+      finalQuery = query(finalQuery, orderBy(orderby, "desc"));
+    }
   }
   if (pageParam) {
     finalQuery = query(finalQuery, startAfter(pageParam));
@@ -57,6 +61,7 @@ export async function fbGetProducts(
   querySnapshot.forEach((doc) => {
     products.push(doc.data() as DocumentData);
   });
+
   return products;
 }
 

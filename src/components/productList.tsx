@@ -78,7 +78,7 @@ function ProductList({ category }: { category?: string }) {
               <span
                 className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm text-nowrap ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
               >
-                가격순
+                가격 낮은 순
               </span>
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3 w-60 text-sm">
@@ -92,13 +92,23 @@ function ProductList({ category }: { category?: string }) {
                 <Input
                   className="w-20"
                   value={String(minPrice)}
-                  onChange={(e) => setMinPrice(parseInt(e.target.value))}
+                  onChange={(e) => {
+                    const newValue = Number(e.target.value);
+                    if (!isNaN(newValue) && newValue >= 0 && newValue <= 10000000) {
+                      setMinPrice(newValue);
+                    }
+                  }}
                 />
                 원 ~
                 <Input
                   className="w-20"
                   value={String(maxPrice)}
-                  onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                  onChange={(e) => {
+                    const newValue = Number(e.target.value);
+                    if (!isNaN(newValue) && newValue >= 0 && newValue <= 10000000) {
+                      setMaxPrice(newValue);
+                    }
+                  }}
                 />
                 원
               </div>
@@ -165,7 +175,7 @@ function ProductList({ category }: { category?: string }) {
                             {product.name}
                           </div>
                           <div className="text-xs font-bold">{product.artist}</div>
-                          <div className="font-bold text-zinc-500 mt-1">{product.price}원</div>
+                          <div className="font-bold text-zinc-500 mt-1">{product.price.toLocaleString()}원</div>
                         </div>
                       </div>
                     </div>
