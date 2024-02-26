@@ -3,12 +3,11 @@ import { AuthContext } from "../context/authContext";
 import { UserInfoType } from "@/types/user";
 import { firebaseAuth } from "@/services/firebase";
 import { fbGetUser } from "@/services/firebase/user";
+import { Loader2 } from "lucide-react";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfoType | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // 이전에 호출되었는지 여부를 저장하는 useRef
 
   useEffect(() => {
     // 첫 렌더링 시에는 실행하지 않음
@@ -45,7 +44,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   if (loading) {
-    return <p>로딩 중...</p>;
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <Loader2 className="h-10 w-10 animate-spin" />
+      </div>
+    );
   }
 
   return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;

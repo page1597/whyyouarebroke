@@ -26,7 +26,7 @@ export default function App() {
     {
       path: "/",
       element: (
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<div />}>
           <Layout />
         </Suspense>
       ),

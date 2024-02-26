@@ -109,13 +109,7 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                           <div className="flex gap-2">
                             {previewImages?.map((image, id) => (
                               <div key={id} className="w-20 h-20 relative">
-                                <img
-                                  src={image}
-                                  decoding="async"
-                                  loading="lazy"
-                                  alt={`${image}-${id}`}
-                                  className="w-full h-full absolute"
-                                />
+                                <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
                                 <button
                                   id="delete_image"
                                   onClick={(e) => deleteImage(e, id)}
@@ -315,13 +309,7 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                           <div className="flex gap-2">
                             {previewImages?.map((image, id) => (
                               <div key={id} className="w-20 h-20 relative">
-                                <img
-                                  src={image}
-                                  decoding="async"
-                                  loading="lazy"
-                                  alt={`${image}-${id}`}
-                                  className="w-full h-full absolute"
-                                />
+                                <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
                                 <button
                                   id="delete-image"
                                   onClick={(e) => deleteImage(e, id)}

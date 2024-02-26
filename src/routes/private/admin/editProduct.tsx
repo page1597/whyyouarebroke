@@ -1,6 +1,7 @@
 import AddProductForm from "@/components/addProductForm";
 import useGetProduct from "@/hooks/product/useGetProduct";
 import { useSearchParams } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 export default function EditProduct() {
   const [searchParams] = useSearchParams();
@@ -13,7 +14,7 @@ export default function EditProduct() {
       <hr className="mt-5" />
       <div className="mt-8">
         {!isLoading && product && <AddProductForm product={product} />}
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Loader2 />}
       </div>
     </div>
   );

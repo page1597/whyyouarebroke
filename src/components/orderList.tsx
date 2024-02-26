@@ -9,6 +9,7 @@ import { OrderType } from "@/types/order";
 import { Button } from "./ui/button";
 import SelectOrderState from "./selectOrderStatus";
 import Alert from "./alert";
+import { Loader2 } from "lucide-react";
 
 // 페이지네이션 ?
 export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
@@ -104,7 +105,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
       </div>
       {/* 다음 페이지 로딩 중인 경우 */}
       <div ref={inViewRef} className="h-42 w-full">
-        {isFetchingNextPage && <p>loading...</p>}
+        {isFetchingNextPage && <Loader2 />}
       </div>
     </>
   );

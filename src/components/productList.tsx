@@ -10,6 +10,8 @@ import useDebouncedSearch from "@/hooks/product/useDebouncedSearch";
 import useGetProducts from "@/hooks/product/useGetProducts";
 import { ProductType } from "@/types/product";
 import { preloadImage } from "@/lib/utils";
+import ProductListSkeleton from "./skeleton/productListSkeleton";
+import { Loader2 } from "lucide-react";
 
 function ProductList({ category }: { category?: string }) {
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ function ProductList({ category }: { category?: string }) {
     setMaxPrice,
     changeOrderby,
     onSearchByPrice,
-    status,
+    isLoading,
     isFetchingNextPage,
     fetchNextPage,
     // prefetchNextPage,
@@ -120,9 +122,9 @@ function ProductList({ category }: { category?: string }) {
           <Input className="hidden md:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
         </div>
       </div>
-      {status === "success" ? (
+      {!isLoading && data ? (
         <div className="mt-8">
-          {data?.pages.map((page, index) => (
+          {data.pages.map((page, index) => (
             <div key={index}>
               {page ? (
                 <div className="grid grid-cols-2 md:grid-cols-4">
@@ -140,12 +142,10 @@ function ProductList({ category }: { category?: string }) {
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img
-                                decoding="async"
-                                loading="lazy"
                                 src={product["image"][0]}
                                 width={240}
                                 height={240}
-                                className="h-60 w-60 object-contain transition-transform transform-cpu hover:scale-105"
+                                className="object-contain transition-transform transform-cpu hover:scale-105"
                                 alt={product.name}
                               />
                             </div>
@@ -157,12 +157,10 @@ function ProductList({ category }: { category?: string }) {
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img
-                                decoding="async"
-                                loading="lazy"
                                 src={product["image"][0]}
                                 width={160}
                                 height={160}
-                                className=" h-40 w-40 object-contain transition-transform transform-cpu hover:scale-105"
+                                className="object-contain transition-transform transform-cpu hover:scale-105"
                                 alt={product.name}
                               />
                             </div>
@@ -188,10 +186,10 @@ function ProductList({ category }: { category?: string }) {
           ))}
         </div>
       ) : (
-        <p>loading...</p>
+        <ProductListSkeleton />
       )}
       <div ref={inViewRef} className="h-42 w-full">
-        {isFetchingNextPage && <p>loading...</p>}
+        {isFetchingNextPage && <Loader2 />}
       </div>
     </>
   );

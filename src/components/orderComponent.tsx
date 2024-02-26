@@ -14,7 +14,7 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
           </div>
           {order.products.map((product) => (
             <div key={product.id} className=" flex justify-center items-center">
-              <img decoding="async" loading="lazy" src={product.image} width={96} height={96} />
+              <img src={product.image} width={96} height={96} />
             </div>
           ))}
           {order.products.map((product) => (

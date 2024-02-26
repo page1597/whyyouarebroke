@@ -44,7 +44,7 @@ function BasketProductComponent({
           <div className="grid grid-flow-col md:grid-cols-6 grid-cols-5 gap-2 text-sm md:text-base">
             <div className="flex justify-center items-center">
               <div>
-                <img decoding="async" loading="lazy" src={product.image} width={96} height={96} />
+                <img src={product.image} width={96} height={96} />
               </div>
             </div>
             <div className="flex items-center justify-center">

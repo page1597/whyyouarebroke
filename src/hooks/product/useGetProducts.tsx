@@ -40,8 +40,8 @@ export default function useGetProducts(category: string | null, debouncedSearchV
     data,
     fetchNextPage,
     isFetchingNextPage,
-    status,
     refetch,
+    isLoading,
     // hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["products", category, orderby, JSON.stringify(priceRange), debouncedSearchValue],
@@ -109,7 +109,7 @@ export default function useGetProducts(category: string | null, debouncedSearchV
     setMaxPrice,
     changeOrderby,
     onSearchByPrice,
-    status,
+    isLoading,
     isFetchingNextPage,
     fetchNextPage,
     // prefetchNextPage,

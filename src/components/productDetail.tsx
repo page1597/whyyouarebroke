@@ -10,8 +10,6 @@ function ProductDetail({ product }: { product: ProductType }) {
         {product.image.map((src: string, index: string) => (
           <img
             key={`${product.name}-${index}`}
-            decoding="async"
-            loading="lazy"
             id={product.name}
             alt={product.name}
             width={400}
