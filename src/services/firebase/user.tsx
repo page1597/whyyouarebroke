@@ -45,7 +45,8 @@ export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction)
 
 // Email 로그인
 export async function fbLogIn(email: string, password: string) {
-  await signInWithEmailAndPassword(firebaseAuth, email, password);
+  const response = await signInWithEmailAndPassword(firebaseAuth, email, password);
+  return response;
 }
 
 export async function fbGoogleSignUp(navigate: NavigateFunction, type: string) {

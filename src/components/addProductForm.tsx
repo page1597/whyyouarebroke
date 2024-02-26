@@ -323,7 +323,7 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                                   className="w-full h-full absolute"
                                 />
                                 <button
-                                  id="delete_image"
+                                  id="delete-image"
                                   onClick={(e) => deleteImage(e, id)}
                                   className="absolute right-0"
                                 >

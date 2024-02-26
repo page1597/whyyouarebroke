@@ -55,8 +55,6 @@ export default function useBasketList(basket: BasketProductType[] | null) {
   }, [checkedProducts]);
 
   return {
-    basketProducts,
-    setBasketProducts,
     basketWithTitle,
     checkedProductIds,
     checkedProducts,

@@ -2,7 +2,7 @@
 import DocsSidebarNav from "@/components/sidebar";
 import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import logo from "src/assets/logo.webp";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/context/authContext";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
@@ -10,6 +10,7 @@ import Header from "@/components/Header";
 import { HeaderNavItem } from "@/types/navigation";
 import { Helmet } from "react-helmet";
 import useBasket from "@/hooks/basket/useBasket";
+import { BasketProductType } from "@/types/product";
 
 export const sidebarNav = [
   {
@@ -43,7 +44,8 @@ export const sidebarNav = [
 ];
 
 type ContextType = {
-  setBasketLength: Dispatch<SetStateAction<number>>;
+  basketContext: BasketProductType[];
+  setBasketContext: Dispatch<SetStateAction<BasketProductType[]>>;
 };
 
 export default function Layout() {
@@ -51,8 +53,17 @@ export default function Layout() {
   const isAdmin = userInfo?.type === "관리자" ? true : false;
   const navigate = useNavigate();
   const { getBasket } = useBasket();
-  const basket = getBasket();
-  const [basketLength, setBasketLength] = useState<number>(basket.length);
+  const loadedBasket = getBasket();
+  const [basketContext, setBasketContext] = useState<BasketProductType[]>(loadedBasket);
+  const { matchBasketlocalToDB } = useBasket(setBasketContext);
+
+  // 장바구니 전역 상태 초기화
+  useEffect(() => {
+    if (userInfo?.id) {
+      matchBasketlocalToDB(userInfo?.id);
+    }
+    setBasketContext([]);
+  }, [userInfo]);
 
   // 전역관리 유저타입 저장
   const headerNav: HeaderNavItem[] = [
@@ -75,7 +86,7 @@ export default function Layout() {
       </Helmet>
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
         <div className="w-full flex flex-col h-screen">
-          <Header items={headerNav} basketLength={basketLength} />
+          <Header items={headerNav} basketContext={basketContext} />
           {/* 반응형 구현 */}
           <div className="md:px-12 md:py-8 md:flex">
             <div className="hidden md:inline-block">
@@ -116,7 +127,7 @@ export default function Layout() {
             {/* <div className="md:flex-grow h-full px-6"> */}
             <div className="md:flex-grow md:px-0 h-full px-5 overflow-x-clip">
               <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
-                <Outlet context={{ setBasketLength } satisfies ContextType} />
+                <Outlet context={{ basketContext, setBasketContext } satisfies ContextType} />
               </ErrorBoundary>
             </div>
           </div>
@@ -125,6 +136,6 @@ export default function Layout() {
     </>
   );
 }
-export function useBasketLength() {
+export function useBasketContext() {
   return useOutletContext<ContextType>();
 }

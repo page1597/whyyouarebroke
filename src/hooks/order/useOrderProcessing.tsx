@@ -4,10 +4,12 @@ import { BasketProductType } from "@/types/product";
 import useUpdateProductQuantityMutation from "../product/useUpdateProductQuantityMutation";
 import { useCallback } from "react";
 import useBasket from "../basket/useBasket";
+import { useBasketContext } from "@/routes";
 
 export default function useOrderProcessing(userId: string | null | undefined, orderProducts: BasketProductType[]) {
   const { updateProductQuantity } = useUpdateProductQuantityMutation();
-  const { updateBasketProductStock } = useBasket();
+  const { setBasketContext } = useBasketContext(); // ?
+  const { updateBasketProductStock } = useBasket(setBasketContext);
 
   const checkIsOutOfStock = useCallback(async () => {
     try {

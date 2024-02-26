@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { BasketProductType } from "./product";
 
 export type NavItem = {
   title: string;
@@ -27,5 +28,5 @@ export type HeaderNavItem = {
 };
 export type HeaderNavProps = {
   items: HeaderNavItem[];
-  basketLength: number;
+  basketContext: BasketProductType[];
 };

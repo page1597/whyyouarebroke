@@ -1,22 +1,15 @@
 import PaymentFormModal from "./paymentFormModal";
 import BasketProductComponent from "./basketProductComponent";
 import { Checkbox } from "@/components/ui/checkbox";
-import { BasketProductType } from "@/types/product";
 import useBasketList from "@/hooks/basket/useBasketList";
 import { memo } from "react";
-function BasketList({ basket }: { basket: BasketProductType[] | null }) {
-  const shippingFee = 3000;
-  const {
-    basketProducts,
-    setBasketProducts,
-    basketWithTitle,
-    checkedProductIds,
-    checkedProducts,
-    totalPrice,
-    onCheck,
-  } = useBasketList(basket);
+import { useBasketContext } from "@/routes";
 
-  const labels = ["이미지", "상품명", "판매가", "수량", "합계"];
+function BasketList() {
+  const { setBasketContext, basketContext } = useBasketContext();
+  const { basketWithTitle, checkedProductIds, checkedProducts, totalPrice, onCheck } = useBasketList(basketContext);
+  const labels = ["이미지", "상품명", "판매가", "수량", "합계", "삭제"];
+  const shippingFee = 3000;
 
   return (
     <div className="flex flex-col mt-4">
@@ -30,15 +23,15 @@ function BasketList({ basket }: { basket: BasketProductType[] | null }) {
                 checked={
                   product.id !== ""
                     ? checkedProductIds.some((id) => id === product.id)
-                    : checkedProductIds.length == basketProducts.length
+                    : checkedProductIds.length == basketContext.length
                 }
                 onCheckedChange={(checked) => onCheck(product.id, checked)}
               />
               <BasketProductComponent
                 product={product}
                 labels={labels}
-                basketProducts={basketProducts}
-                setBasketProducts={setBasketProducts}
+                basketProducts={basketContext}
+                setBasketProducts={setBasketContext}
               />
             </div>
           ))}
@@ -57,7 +50,7 @@ function BasketList({ basket }: { basket: BasketProductType[] | null }) {
         <div>합계</div>
         <div className="text-zinc-700 font-bold text-xl">{totalPrice + shippingFee}원</div>
       </div>
-      <PaymentFormModal checkedProducts={checkedProducts} basketProducts={basketProducts} />
+      <PaymentFormModal checkedProducts={checkedProducts} basketProducts={basketContext} />
     </div>
   );
 }

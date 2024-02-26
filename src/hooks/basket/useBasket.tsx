@@ -1,8 +1,9 @@
 import { fbUpdateUserBasket } from "@/services/firebase/basket";
 import { fbGetUser } from "@/services/firebase/user";
 import { BasketProductType, ProductType } from "@/types/product";
+import { Dispatch, SetStateAction } from "react";
 
-export default function useBasket() {
+export default function useBasket(setBasketContext?: Dispatch<SetStateAction<BasketProductType[]>>) {
   // 로컬 스토리지 장바구니만 가져오기
   function getBasket() {
     const sessionStorageBasket = sessionStorage.getItem("basket");
@@ -28,6 +29,9 @@ export default function useBasket() {
 
     fbUpdateUserBasket(userId, uniqueBasket);
     sessionStorage.setItem("basket", JSON.stringify(uniqueBasket));
+    if (setBasketContext) {
+      setBasketContext(uniqueBasket);
+    }
   }
 
   // 장바구니에 추가
@@ -56,7 +60,9 @@ export default function useBasket() {
 
     sessionStorage.setItem("basket", JSON.stringify(basket));
     sessionStorage.setItem("loggedIn", userId ? "yes" : "no");
-
+    if (setBasketContext) {
+      setBasketContext(basket);
+    }
     if (userId) {
       // 로그인 한 상태라면
       // DB에도 업데이트
@@ -77,7 +83,9 @@ export default function useBasket() {
     }
 
     sessionStorage.setItem("basket", JSON.stringify(basket));
-
+    if (setBasketContext) {
+      setBasketContext(basket);
+    }
     if (userId) {
       // 로그인 한 상태라면
       // DB에도 업데이트
@@ -95,7 +103,9 @@ export default function useBasket() {
     if (productIndex !== -1) {
       basket.splice(productIndex, 1);
       sessionStorage.setItem("basket", JSON.stringify(basket));
-
+      if (setBasketContext) {
+        setBasketContext(basket);
+      }
       if (userId) {
         // 로그인 한 상태라면 DB에도 업데이트
         fbUpdateUserBasket(userId, basket);

@@ -3,7 +3,7 @@ import Alert from "./alert";
 import { useNavigate } from "react-router-dom";
 import useLogOut from "@/hooks/auth/useLogOut";
 
-function Header({ items, basketLength }: HeaderNavProps) {
+function Header({ items, basketContext }: HeaderNavProps) {
   const navigate = useNavigate();
   const { logOut, isPending, setShowAlert, showAlert, alertContent } = useLogOut();
   return (
@@ -20,7 +20,7 @@ function Header({ items, basketLength }: HeaderNavProps) {
                     ) : (
                       <>
                         {item.title}
-                        <>({basketLength})</>
+                        <>({basketContext.length})</>
                       </>
                     )}
                   </button>
@@ -47,7 +47,7 @@ function Header({ items, basketLength }: HeaderNavProps) {
                       ) : (
                         <>
                           {item.title}
-                          <>({basketLength})</>
+                          <>({basketContext.length})</>
                         </>
                       )}
                     </button>
