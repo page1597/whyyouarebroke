@@ -46,7 +46,7 @@ export default function DrawerBasket({
             <div className="flex flex-col relative w-full gap-2 text-sm">
               <div>{product.name}</div>
               <div>수량: {product.quantity}</div>
-              <div>가격: {product.quantity * product.price}원</div>
+              <div>가격: {(product.quantity * product.price).toLocaleString()}원</div>
               <button
                 id="delete_product"
                 name="상품 삭제"

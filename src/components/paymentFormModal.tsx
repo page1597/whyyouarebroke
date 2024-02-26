@@ -60,15 +60,15 @@ export default function PaymentFormModal({
         <Modal.Header>
           <div className="flex flex-col border border-r-0 border-zinc-400 rounded-l-sm border-r-zinc-200">
             <div className="text-sm p-3 bg-zinc-100">총 상품금액</div>
-            <div className="font-bold p-5">{totalPrice}</div>
+            <div className="font-bold p-5">{totalPrice.toLocaleString()}원</div>
           </div>
           <div className="flex flex-col border border-r-0 border-zinc-400 border-r-zinc-200 border-l-zinc-200">
             <div className="text-sm p-3 bg-zinc-100">총 배송비</div>
-            <div className="font-bold p-5">{shippingFee}</div>
+            <div className="font-bold p-5">{shippingFee.toLocaleString()}원</div>
           </div>
           <div className="flex flex-col border border-zinc-400 rounded-r-sm border-l-zinc-200">
             <div className="text-sm p-3 bg-zinc-100 text-nowrap">결제 예정 금액</div>
-            <div className="font-bold p-5">{totalPrice! + shippingFee}</div>
+            <div className="font-bold p-5">{(totalPrice! + shippingFee).toLocaleString()}원</div>
           </div>
         </Modal.Header>
         <Modal.Body>

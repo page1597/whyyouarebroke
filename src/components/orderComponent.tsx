@@ -24,7 +24,7 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
           ))}
           {order.products.map((product) => (
             <div key={product.id} className="justify-center items-center md:text-base text-nowrap md:flex hidden">
-              {product.price}원
+              {product.price.toLocaleString()}원
             </div>
           ))}
           {order.products.map((product) => (
@@ -32,7 +32,9 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
               {product.quantity}개
             </div>
           ))}
-          <div className={`${rowSpan} justify-center flex items-center md:text-base text-xs`}>{order.amount}원</div>
+          <div className={`${rowSpan} justify-center flex items-center md:text-base text-xs`}>
+            {order.amount.toLocaleString()}원
+          </div>
           <div className={`${rowSpan} hidden md:flex } justify-center flex items-center`}>{order.buyer_addr}</div>
         </div>
       ) : (

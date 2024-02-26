@@ -73,7 +73,7 @@ export default function ProductListWithCarousel({ productList }: { productList: 
                           <div>[{product.format}]</div>
                           <div className="overflow-hidden text-ellipsis">{product.name}</div>
                         </div>
-                        <div className="md:mt-1 font-bold text-zinc-500">{product.price}원</div>
+                        <div className="md:mt-1 font-bold text-zinc-500">{product.price.toLocaleString()}원</div>
                       </div>
                     </div>
                   </div>

@@ -56,7 +56,7 @@ function ProductInfo({
           <hr />
           <div className="grid grid-cols-302 md:grid-cols-202 mt-3 ml-4 gap-1 md:text-base text-sm">
             <h4 className="text-zinc-600 font-bold">판매가</h4>
-            <h4 className="text-zinc-600 font-bold">{product.price}원</h4>
+            <h4 className="text-zinc-600 font-bold">{product.price.toLocaleString()}원</h4>
             <h5 className="text-zinc-900 mt-2">재고</h5>
             <h5 className="text-zinc-500 mt-2">{product.stock}</h5>
             <h5 className="text-zinc-900">Artist</h5>

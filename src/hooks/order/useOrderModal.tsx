@@ -14,7 +14,7 @@ export default function useOrderModal(
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const [orderProducts, setOrderProducts] = useState<BasketProductType[]>(checkedProducts);
-  const [totalPrice, setTotalPrice] = useState<number>();
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   const { showAlert, setShowAlert, alertContent, setAlertContent } = useShowAlert();
 
   const onOpen = useCallback(

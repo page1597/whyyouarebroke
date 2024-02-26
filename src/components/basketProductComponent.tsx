@@ -55,7 +55,7 @@ function BasketProductComponent({
               {/* 장바구니 페이지 안에서만 수량 변경 */}
               <QuantityInput product={product} basketProducts={basketProducts} setBasketProducts={setBasketProducts} />
             </div>
-            <div className="md:flex hidden items-center justify-center">{totalPrice}원</div>
+            <div className="md:flex hidden items-center justify-center">{totalPrice.toLocaleString()}원</div>
             <div className="flex justify-center items-center">
               <button
                 id="delete_basket"

@@ -28,7 +28,7 @@ function NumberInput({
 
   return (
     <div className="flex items-center text-nowrap">
-      {product ? <div>{totalPrice}원</div> : <></>}
+      {product ? <div>{totalPrice.toLocaleString()}원</div> : <></>}
       <button id="minus" type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
         -
       </button>
