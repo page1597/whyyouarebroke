@@ -64,7 +64,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
 
   useEffect(() => {
     if (confirm && orderToCancel) {
-      onCancelOrder(orderToCancel.merchant_uid, orderToCancel.name);
+      onCancelOrder(orderToCancel.merchant_uid);
     }
   }, [confirm]);
 
