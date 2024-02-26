@@ -7,10 +7,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 export default function ProductListWithCarousel({ productList }: { productList: categoryProductType[] }) {
   const navigate = useNavigate();
   return (
-    <div className="md:px-6 px-3 md:ml-1 md:-mr-8 -mr-0 ">
+    <div className="sm:px-6 px-3 sm:ml-1 -ml-1 sm:-mr-6 -mr-3 ">
       {productList?.map((categoryProduct, index) => (
         <div key={index} className="lg:mb-16 mb-10">
-          <div className="flex justify-between items-end mr-10 lg:my-5 my-3">
+          <div className="flex justify-between items-end mr-4 sm:mr-9 lg:my-5 my-3">
             <h3 className="lg:text-xl text-lg ml-1">{categoryProduct.category.toUpperCase()}</h3>
             <button
               name="more"
@@ -23,7 +23,7 @@ export default function ProductListWithCarousel({ productList }: { productList: 
               더보기
             </button>
           </div>
-          <Carousel opts={{ align: "start" }} className="w-11/12 lg:ml-5 ml-1">
+          <Carousel opts={{ align: "start" }} className="w-11/12 lg:ml-5 ml-2">
             <CarouselContent>
               {categoryProduct.products?.map((product: DocumentData) => (
                 <CarouselItem
