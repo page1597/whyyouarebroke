@@ -6,6 +6,7 @@ import useBasket from "@/hooks/basket/useBasket";
 import { AuthContext } from "@/context/authContext";
 import Alert from "./alert";
 import useShowAlert from "@/hooks/useShowAlert";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 function BasketProductComponent({
   product,
@@ -35,6 +36,7 @@ function BasketProductComponent({
       removeFromBasket(userInfo?.id ? userInfo?.id : null, product.id);
     }
   }, [confirm]);
+  const { width } = useWindowWidth();
   return (
     <>
       <Alert alertContent={alertContent} showAlert={showAlert} setShowAlert={setShowAlert} setConfirm={setConfirm} />
@@ -59,7 +61,7 @@ function BasketProductComponent({
             <div className="flex justify-center items-center">
               <button
                 id="delete_basket"
-                className="border px-2 py-1 rounded text-sm"
+                className="border px-2 py-1 rounded text-sm bg-white"
                 onClick={() => {
                   setShowAlert(true);
                   setAlertContent({
@@ -69,7 +71,7 @@ function BasketProductComponent({
                   });
                 }}
               >
-                삭제하기
+                {width > 640 ? <>삭제하기</> : <>삭제</>}
               </button>
             </div>
           </div>

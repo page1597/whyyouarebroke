@@ -1,8 +1,10 @@
+import useWindowWidth from "@/hooks/useWindowWidth";
 import { OrderType } from "@/types/order";
 import { memo } from "react";
 
 function OrderComponent({ order, labels }: { order: OrderType; labels: string[] }) {
   const span = order.products.length;
+  const { width } = useWindowWidth();
   return (
     <div className="w-full grid text-center items-center">
       {order.merchant_uid !== "" ? (
@@ -36,7 +38,8 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
             </div>
           ))}
           <div style={{ gridRow: `span ${span}` }} className="flex justify-center items-center lg:text-base text-sm">
-            {order.amount.toLocaleString()}원
+            {order.amount.toLocaleString()}
+            {width > 640 ? <>원</> : <></>}
           </div>
           <div style={{ gridRow: `span ${span}` }} className="hidden lg:flex justify-center items-center">
             {order.buyer_addr}

@@ -96,7 +96,7 @@ export default function Layout() {
               <DocsSidebarNav items={sidebarNav} />
             </div>
 
-            <div className="md:hidden px-5 py-3 flex justify-between items-center">
+            <div className="md:hidden px-5 py-3 flex justify-between items-center ">
               <DocsSidebarNav items={sidebarNav} />
               <div onClick={() => navigate("/")} className="cursor-pointer">
                 <img id="logo" src={logo} width={60} height={60} alt={"logo"} />
@@ -122,7 +122,7 @@ export default function Layout() {
                 <SearchFilterProducts />
               </DrawerRightContent>
             </DrawerRight> */}
-              <div className="w-8" />
+              <div className="w-6" />
             </div>
             {/* <div className="md:flex-grow h-full px-6"> */}
             <div className="md:flex-grow md:px-0 h-full px-5 overflow-x-clip">

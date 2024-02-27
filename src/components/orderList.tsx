@@ -10,9 +10,11 @@ import SelectOrderState from "./selectOrderStatus";
 import Alert from "./alert";
 import { Loader2 } from "lucide-react";
 import useShowAlert from "@/hooks/useShowAlert";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 // 페이지네이션 ?
 export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
+  const { width } = useWindowWidth();
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
@@ -73,7 +75,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
       <Alert alertContent={cancelAlertContent} setShowAlert={setCancelShowAlert} showAlert={cancelShowAlert} />
       <Alert alertContent={alertContent} setShowAlert={setShowAlert} showAlert={showAlert} setConfirm={setConfirm} />
 
-      <div className="flex flex-col m-4">
+      <div className="flex flex-col mt-4">
         <hr />
         {!isLoading && ordersWithTitle ? (
           <div className="mt-4 flex flex-col gap-5 text-base">
@@ -85,7 +87,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
                     {order.merchant_uid ? (
                       !isAdmin ? (
                         <button
-                          className="border px-2 py-1 rounded text-sm disabled:bg-zinc-100 disabled:text-zinc-500"
+                          className="border px-2 py-1 rounded text-sm bg-white disabled:bg-zinc-100 disabled:text-zinc-500"
                           id="cancel_order"
                           disabled={order.status === "주문 취소"}
                           onClick={() => {
@@ -98,7 +100,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
                             });
                           }}
                         >
-                          취소하기
+                          {width > 640 ? <>취소하기</> : <>취소</>}
                         </button>
                       ) : (
                         <SelectOrderState id={order.merchant_uid} />

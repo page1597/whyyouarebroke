@@ -57,7 +57,7 @@ function QuantityInput({
           });
           setBasketProducts(updateProduct);
         }}
-        className="text-sm w-12 h-7 border border-zinc-400 rounded text-center outline-none"
+        className="text-sm w-6 lg:w-12 sm:w-8 h-7 border border-zinc-400 rounded text-center outline-none"
       />
       <button id="plus" type="button" onClick={onPlus} className="px-2 rounded-r cursor-pointer">
         +
