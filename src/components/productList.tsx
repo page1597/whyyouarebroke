@@ -95,7 +95,8 @@ function ProductList({ category }: { category?: string }) {
               <div className="flex justify-between items-center w-full">
                 <Input
                   className="w-20"
-                  value={String(minPrice)}
+                  type="number"
+                  value={minPrice}
                   onChange={(e) => {
                     const newValue = Number(e.target.value);
                     if (!isNaN(newValue) && newValue >= 0 && newValue <= 10000000) {
@@ -105,8 +106,9 @@ function ProductList({ category }: { category?: string }) {
                 />
                 원 ~
                 <Input
+                  type="number"
                   className="w-20"
-                  value={String(maxPrice)}
+                  value={maxPrice}
                   onChange={(e) => {
                     const newValue = Number(e.target.value);
                     if (!isNaN(newValue) && newValue >= 0 && newValue <= 10000000) {
