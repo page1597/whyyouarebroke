@@ -28,9 +28,10 @@ const DrawerRightContent = React.forwardRef<
     <DrawerRightOverlay />
     <DrawerPrimitive.Content
       ref={ref}
+      style={{ WebkitOverflowScrolling: "touch" }}
       className={cn(
         //w-[300px]
-        "w-[300px] bg-white flex flex-col h-full mt-24 fixed bottom-0 right-0 overflow-y-auto overflow-x-hidden",
+        "w-[80%] sm:w-[350px] p-6 sm:p-8 bg-white flex flex-col h-full mt-24 fixed bottom-0 right-0 overflow-y-scroll overflow-x-hidden",
         className
       )}
       {...props}

@@ -14,7 +14,7 @@ export default function EditProduct() {
       <hr className="mt-5" />
       <div className="mt-8">
         {!isLoading && product && <AddProductForm product={product} />}
-        {isLoading && <Loader2 />}
+        {isLoading && <Loader2 className="h-10 w-10 animate-spin" />}
       </div>
     </div>
   );
