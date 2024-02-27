@@ -47,14 +47,14 @@ function ProductInfo({
         </div>
         <div className="flex-grow mt-8 lg:mt-0">
           <hr />
-          <div className="grid grid-cols-302 md:grid-cols-202 text-lg md:text-xl text-zinc-900 my-3 ml-4">
+          <div className="grid grid-cols-302 md:grid-cols-202 text-lg md:text-xl text-zinc-900 my-3 mx-4">
             <h3>상품명</h3>
             <h3>
               [{product.format}] {product.name}
             </h3>
           </div>
           <hr />
-          <div className="grid grid-cols-302 md:grid-cols-202 mt-3 ml-4 gap-1 md:text-base text-sm">
+          <div className="grid grid-cols-302 md:grid-cols-202 mt-3 mx-4 gap-y-1 md:text-base text-sm">
             <h4 className="text-zinc-600 font-bold">판매가</h4>
             <h4 className="text-zinc-600 font-bold">{product.price.toLocaleString()}원</h4>
             <h5 className="text-zinc-900 mt-2">재고</h5>

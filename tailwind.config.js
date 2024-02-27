@@ -84,7 +84,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         // 데스크탑 화면
-        103: "110px 198px 200px",
+        103: "110px 198px 1fr",
         202: "200px 1fr",
         102: "110px 1fr",
         502: "350px 1fr",

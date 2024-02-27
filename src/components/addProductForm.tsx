@@ -10,6 +10,7 @@ import useUploadProduct from "@/hooks/product/useUploadProduct";
 import Combobox from "./ui/comboBox";
 import Alert from "./alert";
 import { useNavigate } from "react-router-dom";
+import { Plus, X } from "lucide-react";
 
 export default function AddProductForm({ product }: { product?: ProductType }) {
   const isEdit = product ? true : false;
@@ -98,78 +99,59 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                   )}
                 />
                 <div />
+                {/* <div className="col-span-2">dd</div> */}
                 <FormLabel>상품이미지 *</FormLabel>
-                <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="flex">
-                          <div className="flex gap-2">
-                            {previewImages?.map((image, id) => (
-                              <div key={id} className="w-20 h-20 relative">
-                                <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
-                                <button
-                                  id="delete_image"
-                                  onClick={(e) => deleteImage(e, id)}
-                                  className="absolute right-0"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="#000000"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
+                <div className="grid-cols-subgrid col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex overflow-x-scroll">
+                            <div className="flex">
+                              {previewImages?.map((image, id) => (
+                                <div key={id} className="w-28 h-28 relative mr-2">
+                                  <img
+                                    src={image}
+                                    alt={`${image}-${id}`}
+                                    className="w-full h-full absolute rounded"
+                                    width={112}
+                                    height={112}
+                                  />
+                                  <button
+                                    id="delete_image"
+                                    onClick={(e) => deleteImage(e, id)}
+                                    className="absolute right-1 top-1 bg-zinc-900 bg-opacity-20 rounded"
                                   >
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                  </svg>
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                          <Label htmlFor="input-file">
-                            <div className="flex justify-center items-center w-20 h-20 rounded border border-zinc-400 bg-zinc-100">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#828282"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                              </svg>
-
-                              <input
-                                {...field}
-                                type="file"
-                                className="hidden"
-                                multiple
-                                id="input-file"
-                                onChange={addImages}
-                                onKeyDown={onKeyDown}
-                              />
+                                    <X width={16} height={16} color="white" />
+                                  </button>
+                                </div>
+                              ))}
                             </div>
-                          </Label>
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <div />
+                            <Label htmlFor="input-file">
+                              <div className="flex justify-center items-center w-28 h-28 rounded border border-zinc-400 bg-zinc-100">
+                                <Plus />
+                                <input
+                                  {...field}
+                                  type="file"
+                                  className="hidden"
+                                  multiple
+                                  id="input-file"
+                                  onChange={addImages}
+                                  onKeyDown={onKeyDown}
+                                />
+                              </div>
+                            </Label>
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <FormLabel>상품설명 *</FormLabel>
-                <div className="grid-cols-subgrid col-span-2">
+                <div className="grid-cols-subgrid col-span-2 w-[70%]">
                   <FormField
                     control={form.control}
                     name="description"
@@ -298,75 +280,54 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                 />
                 <FormLabel>상품이미지 *</FormLabel>
                 <div />
-
-                <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="flex">
-                          <div className="flex gap-2">
-                            {previewImages?.map((image, id) => (
-                              <div key={id} className="w-20 h-20 relative">
-                                <img src={image} alt={`${image}-${id}`} className="w-full h-full absolute" />
-                                <button
-                                  id="delete-image"
-                                  onClick={(e) => deleteImage(e, id)}
-                                  className="absolute right-0"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="#000000"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
+                <div className="overflow-x-scroll grid-cols-subgrid col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex">
+                            <div className="flex">
+                              {previewImages?.map((image, id) => (
+                                <div key={id} className="w-20 h-20 relative mr-2">
+                                  <img
+                                    src={image}
+                                    alt={`${image}-${id}`}
+                                    width={80}
+                                    height={80}
+                                    className="w-full h-full absolute rounded"
+                                  />
+                                  <button
+                                    id="delete_image"
+                                    onClick={(e) => deleteImage(e, id)}
+                                    className="absolute right-1 top-1 bg-zinc-900 bg-opacity-20 rounded"
                                   >
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                  </svg>
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                          <Label htmlFor="input-file">
-                            <div className="flex justify-center items-center w-20 h-20 rounded border border-zinc-400 bg-zinc-100">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#828282"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                              </svg>
-
-                              <input
-                                {...field}
-                                type="file"
-                                className="hidden"
-                                multiple
-                                id="input-file"
-                                onChange={addImages}
-                                onKeyDown={onKeyDown}
-                              />
+                                    <X width={16} height={16} color="white" />
+                                  </button>
+                                </div>
+                              ))}
                             </div>
-                          </Label>
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <div />
+                            <Label htmlFor="input-file">
+                              <div className="flex justify-center items-center w-20 h-20 rounded border border-zinc-400 bg-zinc-100">
+                                <Plus />
+                                <input
+                                  {...field}
+                                  type="file"
+                                  className="hidden"
+                                  multiple
+                                  id="input-file"
+                                  onChange={addImages}
+                                  onKeyDown={onKeyDown}
+                                />
+                              </div>
+                            </Label>
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <FormLabel>상품설명 *</FormLabel>
                 <div className="grid-cols-subgrid col-span-2">
