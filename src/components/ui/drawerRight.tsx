@@ -30,8 +30,7 @@ const DrawerRightContent = React.forwardRef<
       ref={ref}
       style={{ WebkitOverflowScrolling: "touch" }}
       className={cn(
-        //w-[300px]
-        "w-[80%] sm:w-[350px] p-6 sm:p-8 bg-white flex flex-col h-full mt-24 fixed bottom-0 right-0 overflow-y-scroll overflow-x-hidden",
+        "w-[80%] sm:w-[350px] p-6 sm:p-8 bg-white flex flex-col h-screen fixed bottom-0 right-0 overflow-y-scroll overflow-visible overflow-x-hidden",
         className
       )}
       {...props}
