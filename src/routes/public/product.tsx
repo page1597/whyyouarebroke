@@ -11,6 +11,7 @@ import useGetProduct from "@/hooks/product/useGetProduct";
 import { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useBasketContext } from "..";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // 구매자가 보는 상품 상세 페이지
 export default function Product() {
@@ -50,7 +51,9 @@ export default function Product() {
             </DrawerRightTrigger>
           )}
           <DrawerRightContent>
-            {productId ? <DrawerBasket setIsAdded={setIsAdded} productId={productId} /> : <></>}
+            <ScrollArea>
+              {productId ? <DrawerBasket setIsAdded={setIsAdded} productId={productId} /> : <></>}
+            </ScrollArea>
           </DrawerRightContent>
         </DrawerRight>
 

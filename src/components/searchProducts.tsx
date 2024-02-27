@@ -22,7 +22,7 @@ export default function SearchProducts() {
   }, [inView]);
 
   return (
-    <>
+    <div className="p-6 sm:p-8">
       <Input className="h-10" placeholder="상품을 검색하세요." onChange={onSearch} />
       {!isLoading ? (
         data && debouncedSearchValue ? (
@@ -59,6 +59,6 @@ export default function SearchProducts() {
       <div ref={inViewRef} className="h-42 w-screen">
         {isFetchingNextPage && <Loader2 className="h-6 w-6 animate-spin" />}
       </div>
-    </>
+    </div>
   );
 }

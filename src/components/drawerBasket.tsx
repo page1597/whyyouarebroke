@@ -30,7 +30,7 @@ export default function DrawerBasket({
   }, [isRemoved]);
 
   return (
-    <div className="text-zinc-900">
+    <div className="text-zinc-900 p-6 sm:p-8">
       <div className="text-lg">장바구니 ({basket.length})</div>
       <div className="mt-4 flex flex-col gap-3">
         {basket.map((product: BasketProductType) => (
