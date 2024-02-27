@@ -15,7 +15,6 @@ export default function useGetProducts(category: string | null, debouncedSearchV
 
   function changeOrderby(order: string) {
     setOrderby(order);
-
     refetch();
   }
 
@@ -24,7 +23,6 @@ export default function useGetProducts(category: string | null, debouncedSearchV
       minPrice: minPrice,
       maxPrice: maxPrice,
     });
-
     refetch();
   }, [minPrice, maxPrice]);
 

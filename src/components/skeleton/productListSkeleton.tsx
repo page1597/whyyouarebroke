@@ -16,9 +16,9 @@ export default function ProductListSkeleton() {
                 </div>
               </div>
               <div className="text-sm font-bold text-zinc-800">
-                <div className="mt-2 h-5"></div>
-                <div className="bg-zinc-100 h-6 w-9/12" />
-                <div className="bg-zinc-100 h-6 mt-1 w-7/12" />
+                <div className="bg-zinc-100 mt-2 h-5" />
+                <div className="bg-zinc-100 mt-1 h-4 w-9/12" />
+                <div className="bg-zinc-100 h-4 mt-1 w-7/12" />
               </div>
             </div>
           </div>

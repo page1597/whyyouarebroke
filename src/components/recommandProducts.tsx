@@ -3,22 +3,14 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { useNavigate } from "react-router-dom";
 import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
 import { preloadImage } from "@/lib/utils";
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import RecommandProductsSkeleton from "./skeleton/recommandProductsSkeleton";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 function RecommandProducts({ category, productId }: { category: string; productId: string }) {
   const navigate = useNavigate();
   const { isLoading, recommands } = useGetRecommandProducts(productId, category, 4);
-  const [width, setWidth] = useState(window.innerWidth);
-  const handleResize = () => {
-    setWidth(window.innerWidth);
-  };
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { width } = useWindowWidth();
   return (
     <div>
       <div className="text-zinc-700 ml-2 sm:ml-8 mt-6">추천 상품</div>

@@ -12,9 +12,11 @@ import { ProductType } from "@/types/product";
 import { preloadImage } from "@/lib/utils";
 import ProductListSkeleton from "./skeleton/productListSkeleton";
 import { Loader2 } from "lucide-react";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 function ProductList({ category }: { category?: string }) {
   const navigate = useNavigate();
+  const { width } = useWindowWidth();
   const [inViewRef, inView] = useInView({
     triggerOnce: false,
   });
@@ -38,10 +40,10 @@ function ProductList({ category }: { category?: string }) {
   } = useGetProducts(category ?? null, debouncedSearchValue);
 
   useEffect(() => {
+    // 스크롤이 끝에 도달할 때마다 페이지 증가
     if (inView && orderby) {
       fetchNextPage();
     }
-    // 스크롤이 끝에 도달할 때마다 페이지 증가
   }, [inView, orderby]);
 
   // useEffect(() => {
@@ -80,7 +82,7 @@ function ProductList({ category }: { category?: string }) {
               <span
                 className={`bg-transparent text-zinc-600 hover:bg-transparent text-sm text-nowrap ${orderby === "price" ? "font-extrabold" : "font-medium"}`}
               >
-                가격 낮은 순
+                {width > 640 ? <>가격 낮은 순</> : <>가격낮은순</>}
               </span>
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3 w-60 text-sm">
@@ -130,13 +132,14 @@ function ProductList({ category }: { category?: string }) {
                 <div className="grid grid-cols-2 md:grid-cols-4 justify-center gap-y-10 gap-x-2">
                   {page.map((product: ProductType) => (
                     <div
-                      className="flex flex-col justify-center h-full items-center cursor-pointer"
+                      className={`flex flex-col justify-center h-full items-center cursor-pointer ${index !== 0 ? `mt-7` : `md-0`}`}
                       key={product.id}
                       onClick={() => {
                         preloadImage(product.image, product.name);
                         navigate({ pathname: "/product", search: `?id=${product.id}` });
                       }}
                     >
+                      {/* {last?.name} */}
                       <div className="md:max-w-60 max-w-40">
                         <div className="md:flex hidden justify-center">
                           {product.image ? (
@@ -169,10 +172,8 @@ function ProductList({ category }: { category?: string }) {
                           )}
                         </div>
                         <div className="text-sm font-bold text-zinc-800">
-                          <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis whites">
-                            {product.name}
-                          </div>
-                          <div className="text-xs font-bold">{product.artist}</div>
+                          <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis">{product.name}</div>
+                          <div className="text-xs font-bold h-4 overflow-hidden text-ellipsis">{product.artist}</div>
                           <div className="font-bold text-zinc-500 mt-1">{product.price.toLocaleString()}원</div>
                         </div>
                       </div>
@@ -188,7 +189,7 @@ function ProductList({ category }: { category?: string }) {
       ) : (
         <ProductListSkeleton />
       )}
-      <div ref={inViewRef} className="h-42 w-full">
+      <div ref={inViewRef} className="h-42 w-screen">
         {isFetchingNextPage && <Loader2 />}
       </div>
     </>
