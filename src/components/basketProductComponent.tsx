@@ -52,7 +52,10 @@ function BasketProductComponent({
             <div className="flex items-center justify-center">
               [{product.format}] {product.name}
             </div>
-            <div className="flex items-center justify-center">{product.price}원</div>
+            <div className="flex items-center justify-center">
+              {product.price}
+              {width > 640 ? <>원</> : <></>}
+            </div>
             <div className="flex justify-center items-center">
               {/* 장바구니 페이지 안에서만 수량 변경 */}
               <QuantityInput product={product} basketProducts={basketProducts} setBasketProducts={setBasketProducts} />

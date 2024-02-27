@@ -40,7 +40,7 @@ function BasketList() {
         <></>
       )}
       <hr className="my-6" />
-      <div className="flex w-full md:justify-end justify-center gap-2 items-center text-zinc-700 md:text-sm text-xs text-nowrap">
+      <div className="flex w-full md:justify-end justify-center md:gap-2 gap-1 items-center text-zinc-700 md:text-sm text-xs text-nowrap">
         <div>상품구매금액</div>
         <div className="text-zinc-500 font-bold text-base">{totalPrice.toLocaleString()}원</div>
         <div>+</div>
