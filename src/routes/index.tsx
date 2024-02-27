@@ -11,6 +11,8 @@ import { HeaderNavItem } from "@/types/navigation";
 import { Helmet } from "react-helmet";
 import useBasket from "@/hooks/basket/useBasket";
 import { BasketProductType } from "@/types/product";
+import { DrawerRight, DrawerRightTrigger, DrawerRightContent } from "@/components/ui/drawerRight";
+import SearchProducts from "@/components/searchProducts";
 
 export const sidebarNav = [
   {
@@ -96,33 +98,34 @@ export default function Layout() {
               <DocsSidebarNav items={sidebarNav} />
             </div>
 
-            <div className="md:hidden px-5 py-3 flex justify-between items-center ">
+            <div className="md:hidden px-5 py-3 flex justify-between items-center">
               <DocsSidebarNav items={sidebarNav} />
               <div onClick={() => navigate("/")} className="cursor-pointer">
                 <img id="logo" src={logo} width={60} height={60} alt={"logo"} />
               </div>
-              {/* <DrawerRight direction="right">
-              <DrawerRightTrigger name="search">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                  />
-                </svg>
-              </DrawerRightTrigger>
-              <DrawerRightContent className="w-[300px]">
-                <SearchFilterProducts />
-              </DrawerRightContent>
-            </DrawerRight> */}
-              <div className="w-6" />
+              <DrawerRight direction="right">
+                <DrawerRightTrigger name="search">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                    />
+                  </svg>
+                </DrawerRightTrigger>
+                <DrawerRightContent>
+                  <SearchProducts />
+                  {/* <SearchFilterProducts /> */}
+                </DrawerRightContent>
+              </DrawerRight>
+              {/* <div className="w-6" /> */}
             </div>
             {/* <div className="md:flex-grow h-full px-6"> */}
             <div className="md:flex-grow md:px-0 h-full px-5 overflow-x-clip">

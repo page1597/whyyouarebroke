@@ -122,7 +122,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
       </div>
       {/* 다음 페이지 로딩 중인 경우 */}
       <div ref={inViewRef} className="h-42 w-full">
-        {isFetchingNextPage && <Loader2 />}
+        {isFetchingNextPage && <Loader2 className="h-10 w-10 animate-spin" />}
       </div>
     </>
   );

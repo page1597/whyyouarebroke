@@ -123,7 +123,7 @@ function ProductList({ category }: { category?: string }) {
               </Button>
             </PopoverContent>
           </Popover>
-          <Input className="hidden md:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
+          <Input className="hidden sm:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
         </div>
       </div>
       {!isLoading && data ? (
@@ -131,7 +131,7 @@ function ProductList({ category }: { category?: string }) {
           {data.pages.map((page, index) => (
             <div key={index}>
               {page ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 justify-center gap-y-10 gap-x-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 justify-center gap-y-10 gap-x-2">
                   {page.map((product: ProductType) => (
                     <div
                       className={`flex flex-col justify-center h-full items-center cursor-pointer ${index !== 0 ? `mt-7` : `md-0`}`}
@@ -141,9 +141,8 @@ function ProductList({ category }: { category?: string }) {
                         navigate({ pathname: "/product", search: `?id=${product.id}` });
                       }}
                     >
-                      {/* {last?.name} */}
-                      <div className="md:max-w-60 max-w-40">
-                        <div className="md:flex hidden justify-center">
+                      <div className="sm:max-w-60 max-w-40">
+                        <div className="sm:flex hidden justify-center">
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img
@@ -158,7 +157,7 @@ function ProductList({ category }: { category?: string }) {
                             <div className="w-60 h-60 bg-zinc-100" />
                           )}
                         </div>
-                        <div className="md:hidden flex h-40 justify-center items-center">
+                        <div className="sm:hidden flex h-40 justify-center items-center">
                           {product.image ? (
                             <div className="relative overflow-hidden">
                               <img
@@ -192,7 +191,7 @@ function ProductList({ category }: { category?: string }) {
         <ProductListSkeleton />
       )}
       <div ref={inViewRef} className="h-42 w-screen">
-        {isFetchingNextPage && <Loader2 />}
+        {isFetchingNextPage && <Loader2 className="h-10 w-10 animate-spin" />}
       </div>
     </>
   );

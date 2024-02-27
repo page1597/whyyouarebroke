@@ -2,6 +2,7 @@ import { AuthContext } from "@/context/authContext";
 import useBasket from "@/hooks/basket/useBasket";
 import { useBasketContext } from "@/routes";
 import { BasketProductType } from "@/types/product";
+import { X } from "lucide-react";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 export default function DrawerBasket({
@@ -29,27 +30,27 @@ export default function DrawerBasket({
   }, [isRemoved]);
 
   return (
-    <div className="p-8 text-zinc-900">
-      <div className="text-xl">장바구니 ({basket.length})</div>
-      <div className="mt-6 flex flex-col gap-4">
+    <div className="text-zinc-900">
+      <div className="text-lg">장바구니 ({basket.length})</div>
+      <div className="mt-4 flex flex-col gap-3">
         {basket.map((product: BasketProductType) => (
-          <div key={product.id} className="flex flex-row gap-5 text-zinc-800">
-            <img alt={product.name} src={product.image} width={96} height={96} className="w-24 h-24 object-cover" />
-            <div className="flex flex-col relative w-full gap-2 text-sm">
+          <div key={product.id} className="flex flex-row gap-3 text-zinc-800">
+            <img alt={product.name} src={product.image} width={96} height={96} />
+            <div className="flex flex-col relative w-full gap-1 text-sm justify-center">
               <div>{product.name}</div>
               <div>수량: {product.quantity}</div>
               <div>가격: {(product.quantity * product.price).toLocaleString()}원</div>
               <button
                 id="delete_product"
                 name="상품 삭제"
-                className="absolute top-0 right-0 text-lg"
+                className="absolute top-0 right-0 text-base"
                 onClick={() => {
                   removeFromBasket(userId, product.id);
                   setIsRemoved(!isRemoved);
                   setIsAdded(productId !== product.id);
                 }}
               >
-                x
+                <X width={14} height={14} />
               </button>
             </div>
           </div>
