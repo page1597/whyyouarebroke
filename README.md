@@ -29,7 +29,7 @@
 ### 설치 및 실행
 ```shell
 $ git clone https://github.com/page1597/commerce.git
-$ yarn add
+$ yarn install
 $ yarn dev
 ```
 ```shell
