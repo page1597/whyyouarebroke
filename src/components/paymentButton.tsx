@@ -17,12 +17,14 @@ export default function PaymentButton({
   orderProducts,
   isAgreedTerm,
   setIsAgreedTerm,
+  setIsSuccess,
   userId,
 }: {
   fieldValues: FieldValues;
   orderProducts: BasketProductType[];
   isAgreedTerm: boolean;
   setIsAgreedTerm: Dispatch<SetStateAction<boolean>>;
+  setIsSuccess: Dispatch<SetStateAction<boolean>>;
   userId?: string | null;
 }) {
   const { checkIsOutOfStock, decreaseProductStock, increaseProductStock } = useOrderProcessing(userId, orderProducts);
@@ -33,7 +35,8 @@ export default function PaymentButton({
     orderProducts,
     checkIsOutOfStock,
     decreaseProductStock,
-    increaseProductStock
+    increaseProductStock,
+    setIsSuccess
   );
 
   useEffect(() => {

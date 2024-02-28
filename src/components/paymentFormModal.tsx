@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "@/components/ui/modal";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "./ui/formInput";
@@ -21,6 +21,7 @@ export default function PaymentFormModal({
   const userInfo = useContext(AuthContext);
   const [isAgreedTerm, setIsAgreedTerm] = useState(false);
   const shippingFee = 3000;
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const {
     form,
@@ -34,6 +35,16 @@ export default function PaymentFormModal({
     setShowAlert,
     alertContent,
   } = useOrderModal(userInfo, checkedProducts, basketProducts);
+  const [modalOpen, setModalOpen] = useState<boolean>(isOpen);
+  useEffect(() => {
+    if (isSuccess) {
+      setModalOpen(false);
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    setModalOpen(isOpen);
+  }, [isOpen]);
 
   return (
     <div>
@@ -52,7 +63,7 @@ export default function PaymentFormModal({
           전체상품주문
         </Button>
       </div>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={modalOpen} onClose={onClose}>
         <div className="flex flex-row justify-between items-end">
           <div>주문서 작성</div>
           <div className="text-xs text-zinc-600">* 필수입력사항</div>
@@ -175,6 +186,7 @@ export default function PaymentFormModal({
               orderProducts={orderProducts}
               isAgreedTerm={isAgreedTerm}
               setIsAgreedTerm={setIsAgreedTerm}
+              setIsSuccess={setIsSuccess}
               userId={userInfo?.id === undefined || userInfo?.id === null ? null : userInfo.id}
             />
           </div>

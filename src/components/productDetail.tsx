@@ -18,7 +18,7 @@ function ProductDetail({ product }: { product: ProductType }) {
           />
         ))}
       </div>
-      <div className="my-16 whitespace-pre-line">{product.description}</div>
+      <div className="m-20 whitespace-pre-line">{product.description}</div>
     </div>
   );
 }
