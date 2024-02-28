@@ -173,7 +173,9 @@ function ProductList({ category }: { category?: string }) {
                           )}
                         </div>
                         <div className="text-sm font-bold text-zinc-800">
-                          <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis">{product.name}</div>
+                          <div className="mt-2 h-5 font-medium overflow-hidden text-ellipsis">
+                            [{product.format}] {product.name}
+                          </div>
                           <div className="text-xs font-bold h-4 overflow-hidden text-ellipsis">{product.artist}</div>
                           <div className="font-bold text-zinc-500 mt-1">{product.price.toLocaleString()}원</div>
                         </div>
