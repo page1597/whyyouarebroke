@@ -8,13 +8,13 @@ import { AuthContext } from "@/context/authContext";
 import useBasket from "@/hooks/basket/useBasket";
 import useCheckIsInBasket from "@/hooks/basket/useCheckIsInBasket";
 import useGetProduct from "@/hooks/product/useGetProduct";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useBasketContext } from "..";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 // 구매자가 보는 상품 상세 페이지
-export default function Product() {
+function Product() {
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("id");
   const userId = useContext(AuthContext)?.id || null;
@@ -68,3 +68,4 @@ export default function Product() {
     </div>
   );
 }
+export default memo(Product);

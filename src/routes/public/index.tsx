@@ -3,7 +3,7 @@ import { lazy } from "react";
 import { UserInfoType } from "@/types/user";
 const Products = lazy(() => import("./products"));
 const Product = lazy(() => import("./product"));
-const Orders = lazy(() => import("./order"));
+const Orders = lazy(() => import("./orders"));
 const MyPage = lazy(() => import("./member/myPage"));
 const LogIn = lazy(() => import("./login"));
 const SignUp = lazy(() => import("./signup"));
