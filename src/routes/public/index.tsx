@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { lazy } from "react";
 import { UserInfoType } from "@/types/user";
-const Products = lazy(() => import("./products"));
+import Products from "./products";
 const Product = lazy(() => import("./product"));
 const Orders = lazy(() => import("./orders"));
 const MyPage = lazy(() => import("./member/myPage"));
