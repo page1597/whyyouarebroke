@@ -1,7 +1,7 @@
 import OrderList from "@/components/orderList";
 import { Helmet } from "react-helmet";
 
-export default function Order() {
+export default function Orders() {
   // 구매자 구매 확인 목록
   return (
     <>

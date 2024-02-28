@@ -8,8 +8,9 @@ import {
   DrawerLeftTitle,
 } from "@/components/ui/drawerLeft";
 import { DocsSidebarNavProps } from "@/types/navigation";
+import { memo } from "react";
 
-export default function DocsSidebarNav({ items }: DocsSidebarNavProps) {
+function DocsSidebarNav({ items }: DocsSidebarNavProps) {
   const navigate = useNavigate();
   return (
     <>
@@ -64,3 +65,4 @@ export default function DocsSidebarNav({ items }: DocsSidebarNavProps) {
     </>
   );
 }
+export default memo(DocsSidebarNav);

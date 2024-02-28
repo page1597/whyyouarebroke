@@ -2,6 +2,7 @@ import { HeaderNavProps } from "@/types/navigation";
 import Alert from "./alert";
 import { useNavigate } from "react-router-dom";
 import useLogOut from "@/hooks/auth/useLogOut";
+import { memo } from "react";
 
 function Header({ items, basketContext }: HeaderNavProps) {
   const navigate = useNavigate();
@@ -64,4 +65,4 @@ function Header({ items, basketContext }: HeaderNavProps) {
     </>
   );
 }
-export default Header;
+export default memo(Header);
