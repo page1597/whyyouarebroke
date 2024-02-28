@@ -10,6 +10,13 @@ jobs:
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v2
+        # Github Repository Secrets를 통해 환경 변수 파일을 생성
+      - name: Generate environment variables file for production
+        run: |
+          echo "VITE_APP_API_KEY=$VITE_APP_API_KEY" >> .env.production
+        env:
+          VITE_APP_API_KEY: ${{ secrets.VITE_APP_API_KEY }}
+
       - name: Install dependencies
         run: yarn
       - name: Build
