@@ -5,6 +5,7 @@ import { generateOrderNumber } from "@/lib/utils";
 import { OrderStatusType } from "@/types/order";
 import useShowAlert from "../useShowAlert";
 import { paymentFormSchema } from "@/types/formSchemas/payment";
+import { Dispatch, SetStateAction } from "react";
 export default function useOrder(
   userId: string | null | undefined,
   fieldValues: FieldValues,
@@ -12,7 +13,8 @@ export default function useOrder(
   orderProducts: BasketProductType[],
   checkIsOutOfStock: any,
   decreaseProductStock: any,
-  increaseProductStock: any
+  increaseProductStock: any,
+  setIsSuccess: Dispatch<SetStateAction<boolean>>
 ) {
   const { addOrder } = useAddOrderMutation();
   const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
@@ -59,8 +61,6 @@ export default function useOrder(
     IMP.request_pay(data, async (response: { success: any; merchant_uid: any; error_msg: any }) => {
       const { success, error_msg } = response;
       if (success) {
-        setShowAlert(true);
-        setAlertContent({ title: "주문/결제", desc: "결제가 완료되었습니다.", nav: null });
         addOrder({
           merchant_uid: data.merchant_uid,
           status: OrderStatusType.PURCHASE_CONFIRMED,
@@ -75,6 +75,7 @@ export default function useOrder(
           buyer_addr: data.buyer_addr,
           buyer_postcode: data.buyer_postcode,
         });
+        setIsSuccess(true);
       } else {
         // 결제 취소
         increaseProductStock(orderProducts);
