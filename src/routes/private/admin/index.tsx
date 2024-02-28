@@ -1,7 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { lazy } from "react";
-
-const Products = lazy(() => import("./products"));
+import Products from "./products";
 const Orders = lazy(() => import("./order"));
 const Product = lazy(() => import("./product"));
 const AddProduct = lazy(() => import("./addProduct"));

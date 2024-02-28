@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { fbGoogleSignUp } from "@/services/firebase/user";
 import { useNavigate } from "react-router-dom";
+import { onKeyDown } from "@/lib/utils";
 export default function SignUpForm({ signUp }: { signUp: any }) {
   // useSignUp과 useForm 분리
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />
@@ -92,7 +93,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage>영문 대소문자 / 숫자 / 특수문자 중 3가지 이상 조합 (8자~16자)</FormMessage>
@@ -110,7 +111,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />
@@ -127,7 +128,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div className="grid grid-cols-202">
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <div className="hidden md:flex">
                       <FormMessage />
@@ -148,7 +149,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
@@ -185,7 +186,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
@@ -201,7 +202,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
@@ -216,7 +217,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 <FormItem>
                   <div>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} onKeyDown={onKeyDown} />
                     </FormControl>
                     <FormMessage className="mt-1 text-xs text-zinc-500" />
                   </div>
