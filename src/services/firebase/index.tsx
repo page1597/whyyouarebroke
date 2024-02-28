@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore";
 
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
-  authDomain: "commerce-fee29.firebaseapp.com",
-  projectId: "commerce-fee29",
-  storageBucket: "commerce-fee29.appspot.com",
-  messagingSenderId: "15783501222",
-  appId: "1:15783501222:web:0c81c141fefd0bf5ecc367",
-  measurementId: "G-FD0CJWB3K4",
+  authDomain: "whyyouarebroke-cee8d.firebaseapp.com",
+  projectId: "whyyouarebroke-cee8d",
+  storageBucket: "whyyouarebroke-cee8d.appspot.com",
+  messagingSenderId: "726538082246",
+  appId: "1:726538082246:web:82288bcff67a25163fc4c7",
+  measurementId: "G-XGDZXEWEX2",
 };
 
 export const app = initializeApp(firebaseConfig);
