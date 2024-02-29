@@ -70,7 +70,9 @@ function ProductInfo({
           </div>
           {!isAdmin && quantity && setQuantity ? (
             <div className="flex justify-between bg-zinc-100 w-full p-5 pr-2 md:pr-3 mt-5 md:text-lg font-normal text-zinc-700">
-              [{product.format}] {product.name}
+              <span className="flex justify-center items-center">
+                [{product.format}] {product.name}
+              </span>
               <NumberInput product={product} quantity={quantity} setQuantity={setQuantity} />
             </div>
           ) : (
