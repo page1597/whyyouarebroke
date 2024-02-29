@@ -18,7 +18,7 @@ function ProductDetail({ product }: { product: ProductType }) {
           />
         ))}
       </div>
-      <div className="m-20 whitespace-pre-line">{product.description}</div>
+      <div className="m-[5%] mt-16 md:mx-[15%] sm:mx-[25%]  whitespace-pre-line">{product.description}</div>
     </div>
   );
 }
