@@ -58,7 +58,6 @@ $ npm run dev
 
 <br/>
 
-## 💥 기술적 의사결정 및 트러블슈팅
-[프로젝트 자세히 보기](https://ripple-mosquito-141.notion.site/whyyouarebroke-efa339bd48c84bc588dcf5645771f195?pvs=4)
-
+## 💥 [기술적 의사결정 및 트러블슈팅](https://ripple-mosquito-141.notion.site/whyyouarebroke-efa339bd48c84bc588dcf5645771f195?pvs=4)
+프로젝트 자세히 보기 👆🏻
 
