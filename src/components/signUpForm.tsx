@@ -76,7 +76,7 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                           <Label htmlFor="일반 회원">일반 회원</Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="관리자" />
+                          <RadioGroupItem disabled={true} value="관리자" />
                           <Label htmlFor="관리자">관리자</Label>
                         </div>
                       </RadioGroup>
