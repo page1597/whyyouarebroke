@@ -6,11 +6,14 @@
 ## 주요 기능
 - <b>관리자 및 구매자를 위한 회원가입 및 로그인 기능</b>
   - Firebase Authentication을 이용한 회원가입 및 로그인 구현
+    
 - <b>상품 및 주문 조회</b>
   - react-query를 이용한 무한 스크롤 목록 구현
+    
   - 검색 및 필터링 기능 구현
 - <b>관리자를 위한 상품 등록 및 수정 기능</b>
   - Firebase Firestore Databse를 이용한 상품 등록 및 수정 기능 구현
+    
 - <b>구매자를 위한 장바구니 및 상품 구매 기능</b>
   - sessionStorage, Firestore, Context API를 이용한 장바구니 기능 구현
   - 포트원을 통한 상품 구매(결제) 기능 구현
