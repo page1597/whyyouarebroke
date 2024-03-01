@@ -3,6 +3,8 @@
 
 <img width="700" alt="스크린샷" src="https://github.com/page1597/commerce/assets/62283847/aa91edfb-9481-498d-8e6e-be38edf95c5d">
 
+<br/>
+
 ## 📌 주요 기능
 - <b>관리자 및 구매자를 위한 회원가입 및 로그인 기능</b>
   - Firebase Authentication을 이용한 회원가입 및 로그인 구현
@@ -18,6 +20,8 @@
   - sessionStorage, Firestore, Context API를 이용한 장바구니 기능 구현
   - 포트원을 통한 상품 구매(결제) 기능 구현
 
+<br/>
+
 ## 🏁 시작하기
 ### yarn
 ```shell
@@ -31,6 +35,7 @@ $ git clone https://github.com/page1597/commerce.git
 $ npm install
 $ npm run dev
 ```
+<br/>
 
 ## 🔧 기술 스택
 <div>
@@ -50,6 +55,8 @@ $ npm run dev
   <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> 
   <img src="https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"> 
 </div>
+
+<br/>
 
 ## 💥 기술적 의사결정 및 트러블슈팅
 [프로젝트 자세히 보기](https://ripple-mosquito-141.notion.site/whyyouarebroke-efa339bd48c84bc588dcf5645771f195?pvs=4)
