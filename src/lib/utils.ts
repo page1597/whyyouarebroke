@@ -10,8 +10,8 @@ export const resizeFile = (file: Blob): Promise<string> =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      file.size > 1000 ? 1000 : file.size,
-      file.size > 1000 ? 1000 : file.size,
+      800,
+      800,
       "WEBP",
       100,
       0,
