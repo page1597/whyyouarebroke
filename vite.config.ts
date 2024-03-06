@@ -7,9 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import Sitemap from "vite-plugin-sitemap";
 
+const categories = ["rock/pop/etc", "hip hop/r&b", "jazz", "ost", "k-pop", "j-pop/city pop/asia", "merchandise"];
+const dynamicRoutes = ["/", ...categories.map((category) => `/category/${category}`)];
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), Sitemap({})],
+  plugins: [react(), tsconfigPaths(), Sitemap({ dynamicRoutes })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src/"),
