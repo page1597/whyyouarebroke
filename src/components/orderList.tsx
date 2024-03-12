@@ -70,6 +70,16 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
     }
   }, [confirm]);
 
+  function onConfirmCancel(order: OrderType) {
+    setShowAlert(true);
+    setOrderToCancel(order);
+    setAlertContent({
+      title: "주문 조회",
+      desc: `${order.name}의 주문을 취소하시겠습니까?`,
+      nav: null,
+    });
+  }
+
   return (
     <>
       <Alert alertContent={cancelAlertContent} setShowAlert={setCancelShowAlert} showAlert={cancelShowAlert} />
@@ -90,15 +100,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
                           className="border px-2 py-1 rounded text-sm bg-white disabled:bg-zinc-100 disabled:text-zinc-500"
                           id="cancel_order"
                           disabled={order.status === "주문 취소"}
-                          onClick={() => {
-                            setShowAlert(true);
-                            setOrderToCancel(order);
-                            setAlertContent({
-                              title: "주문 조회",
-                              desc: `${order.name}의 주문을 취소하시겠습니까?`,
-                              nav: null,
-                            });
-                          }}
+                          onClick={() => onConfirmCancel(order)}
                         >
                           {width > 640 ? <>취소하기</> : <>취소</>}
                         </button>

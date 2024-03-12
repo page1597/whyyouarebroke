@@ -72,7 +72,7 @@ export default function LogInForm({ logIn }: { logIn: any }) {
 
           <div className="w-full flex flex-col justify-center items-center mt-14">
             <div className="text-zinc-500 mb-5">소셜 로그인</div>
-            <GoogleLoginButton onClick={() => fbGoogleLogIn()} />
+            <GoogleLoginButton onClick={fbGoogleLogIn} />
           </div>
         </div>
       </Form>

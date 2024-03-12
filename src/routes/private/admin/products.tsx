@@ -1,9 +1,12 @@
 import ProductList from "@/components/productList";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Plus } from "lucide-react";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 export default function Products() {
   const navigate = useNavigate();
+  const { width } = useWindowWidth();
   return (
     <>
       <Helmet>
@@ -15,21 +18,7 @@ export default function Products() {
         className="fixed md:right-10 md:bottom-10 right-6 bottom-6 bg-zinc-200 rounded-full p-2 z-10"
         onClick={() => navigate("/add-product")}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#555555"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="md:w-14 md:h-14"
-        >
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
+        <Plus width={width > 640 ? 50 : 30} height={width > 640 ? 50 : 30} color="#555555" />
       </button>
       <ProductList />
     </>

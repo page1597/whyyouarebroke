@@ -53,7 +53,7 @@ function Header({ items, basketContext }: HeaderNavProps) {
                       )}
                     </button>
                   ) : (
-                    <button id={item.title} disabled={isPending} onClick={() => logOut()}>
+                    <button id={item.title} disabled={isPending} onClick={logOut}>
                       {item.title}
                     </button>
                   )}

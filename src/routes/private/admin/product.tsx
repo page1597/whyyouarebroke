@@ -6,10 +6,11 @@ import useDeleteProductMutation from "@/hooks/product/useDeleteProductMutation";
 import useGetProduct from "@/hooks/product/useGetProduct";
 import useShowAlert from "@/hooks/useShowAlert";
 import { ProductType } from "@/types/product";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-export default function Product() {
+// 관리자(판매자)가 보는 상품 페이지
+function Product() {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -25,6 +26,15 @@ export default function Product() {
     }
   }, [confirm]);
 
+  function onConfirmDelete(product: ProductType) {
+    setShowAlert(true);
+    setAlertContent({
+      title: "상품 삭제",
+      desc: `${product.id} 상품을 삭제하시겠습니까?`,
+      nav: null,
+    });
+  }
+
   return (
     <>
       <Alert alertContent={mutateAlertContent} setShowAlert={setMutateShowAlert} showAlert={mutateShowAlert} />
@@ -37,14 +47,7 @@ export default function Product() {
             <div className="w-full right-0 flex justify-end items-center gap-3 mt-5">
               <Button
                 id="delete_product"
-                onClick={() => {
-                  setShowAlert(true);
-                  setAlertContent({
-                    title: "상품 삭제",
-                    desc: `${product.id} 상품을 삭제하시겠습니까?`,
-                    nav: null,
-                  });
-                }}
+                onClick={() => onConfirmDelete(product)}
                 className="bg-zinc-500 w-28 hover:bg-zinc-600"
               >
                 상품 삭제
@@ -66,3 +69,4 @@ export default function Product() {
     </>
   );
 }
+export default memo(Product);

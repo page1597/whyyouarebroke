@@ -29,6 +29,12 @@ export default function DrawerBasket({
     setBasket(loadedBasket);
   }, [isRemoved]);
 
+  function onDelete(product: BasketProductType) {
+    removeFromBasket(userId, product.id);
+    setIsRemoved(!isRemoved);
+    setIsAdded(productId !== product.id);
+  }
+
   return (
     <div className="text-zinc-900 p-6 sm:p-8">
       <div className="text-lg">장바구니 ({basket.length})</div>
@@ -44,11 +50,7 @@ export default function DrawerBasket({
                 id="delete_product"
                 name="상품 삭제"
                 className="absolute top-0 right-0 text-base"
-                onClick={() => {
-                  removeFromBasket(userId, product.id);
-                  setIsRemoved(!isRemoved);
-                  setIsAdded(productId !== product.id);
-                }}
+                onClick={() => onDelete(product)}
               >
                 <X width={14} height={14} />
               </button>

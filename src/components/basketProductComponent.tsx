@@ -37,6 +37,15 @@ function BasketProductComponent({
     }
   }, [confirm]);
   const { width } = useWindowWidth();
+
+  function onConfirmDelete() {
+    setShowAlert(true);
+    setAlertContent({
+      title: "장바구니",
+      desc: `장바구니에서 ${product.name} 상품을 삭제하시겠습니까?`,
+      nav: null,
+    });
+  }
   return (
     <>
       <Alert alertContent={alertContent} showAlert={showAlert} setShowAlert={setShowAlert} setConfirm={setConfirm} />
@@ -65,14 +74,7 @@ function BasketProductComponent({
               <button
                 id="delete_basket"
                 className="border px-2 py-1 rounded text-sm bg-white"
-                onClick={() => {
-                  setShowAlert(true);
-                  setAlertContent({
-                    title: "장바구니",
-                    desc: `장바구니에서 ${product.name} 상품을 삭제하시겠습니까?`,
-                    nav: null,
-                  });
-                }}
+                onClick={onConfirmDelete}
               >
                 {width > 640 ? <>삭제하기</> : <>삭제</>}
               </button>
