@@ -1,4 +1,4 @@
-import LogInForm from "@/components/logInForm";
+import LogInForm from "@/components/form/logInForm";
 import useLogIn from "@/hooks/auth/useLogin";
 import { Helmet } from "react-helmet";
 

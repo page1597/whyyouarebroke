@@ -1,5 +1,5 @@
 import { HeaderNavProps } from "@/types/navigation";
-import Alert from "./alert";
+import Alert from "../customUI/alert";
 import { useNavigate } from "react-router-dom";
 import useLogOut from "@/hooks/auth/useLogOut";
 import { memo } from "react";
@@ -53,7 +53,7 @@ function Header({ items, basketContext }: HeaderNavProps) {
                       )}
                     </button>
                   ) : (
-                    <button id={item.title} disabled={isPending} onClick={() => logOut()}>
+                    <button id={item.title} disabled={isPending} onClick={logOut}>
                       {item.title}
                     </button>
                   )}

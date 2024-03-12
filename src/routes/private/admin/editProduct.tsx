@@ -1,4 +1,4 @@
-import AddProductForm from "@/components/addProductForm";
+import AddProductForm from "@/components/form/addProductForm";
 import useGetProduct from "@/hooks/product/useGetProduct";
 import { useSearchParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";

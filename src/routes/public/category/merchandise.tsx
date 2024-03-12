@@ -1,4 +1,4 @@
-import Products from "@/components/productList";
+import Products from "@/components/list/productList";
 import { Helmet } from "react-helmet";
 
 export default function Merchandise() {

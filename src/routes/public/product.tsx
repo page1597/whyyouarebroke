@@ -1,7 +1,7 @@
-import DrawerBasket from "@/components/drawerBasket";
-import ProductDetail from "@/components/productDetail";
-import ProductInfo from "@/components/productInfo";
-import RecommandProducts from "@/components/recommandProducts";
+import DrawerBasket from "@/components/list/drawerBasket";
+import ProductDetail from "@/components/detail/productDetail";
+import ProductInfo from "@/components/detail/productInfo";
+import RecommandProducts from "@/components/list/recommandProducts";
 import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
 import { AuthContext } from "@/context/authContext";
@@ -18,10 +18,16 @@ function Product() {
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("id");
   const userId = useContext(AuthContext)?.id || null;
+
   const { isLoading, product } = useGetProduct(productId);
   const { isAdded, setIsAdded, quantity, setQuantity } = useCheckIsInBasket(productId);
   const { setBasketContext } = useBasketContext();
   const { addToBasket } = useBasket(setBasketContext);
+
+  function onAddBasket() {
+    addToBasket(userId, product!, quantity);
+    setIsAdded(true);
+  }
 
   return (
     <div className="flex flex-col">
@@ -35,10 +41,7 @@ function Product() {
           {!isAdded ? (
             <Button
               id="add_basket"
-              onClick={() => {
-                addToBasket(userId, product!, quantity);
-                setIsAdded(true);
-              }}
+              onClick={onAddBasket}
               className="bg-zinc-0 border border-zinc-500 text-zinc-900 w-28 hover:bg-zinc-100"
             >
               장바구니 추가

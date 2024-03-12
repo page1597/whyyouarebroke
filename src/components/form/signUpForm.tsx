@@ -3,7 +3,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
-import GoogleSignUpButton from "./ui/googleSignupButton";
+import GoogleSignUpButton from "../ui/googleSignupButton";
 import { signUpFormSchema } from "@/types/formSchemas/signUp";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -102,7 +102,6 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 </FormItem>
               )}
             />
-
             <FormLabel className="flex items-center">비밀번호 확인 *</FormLabel>
             <FormField
               control={form.control}
@@ -138,7 +137,6 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
               )}
             />
           </div>
-
           {/* 모바일 화면 */}
           <div className="md:hidden grid grid-cols-302 gap-3 border border-zinc-300 rounded p-6 mt-3 text-sm">
             <FormLabel className="flex items-center">이메일 *</FormLabel>
@@ -177,7 +175,6 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 </FormItem>
               )}
             />
-
             <FormLabel className="flex items-center">비밀번호 *</FormLabel>
             <FormField
               control={form.control}
@@ -193,7 +190,6 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
                 </FormItem>
               )}
             />
-
             <FormLabel className="flex items-center">비밀번호 확인 *</FormLabel>
             <FormField
               control={form.control}
@@ -225,7 +221,6 @@ export default function SignUpForm({ signUp }: { signUp: any }) {
               )}
             />
           </div>
-
           <div className="flex w-full justify-center">
             <Button id="sign_up" type="submit" className="mt-6 w-32 bg-zinc-700 hover:bg-zinc-800">
               회원가입

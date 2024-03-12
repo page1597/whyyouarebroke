@@ -1,7 +1,8 @@
 import useGetAllProducts from "@/hooks/product/useGetAllProducts";
-import ProductListWithCarousel from "@/components/productListWithCarousel";
+import ProductListWithCarousel from "@/components/list/productListWithCarousel";
 import { Helmet } from "react-helmet";
 import ProductListWithCarouselSkeleton from "@/components/skeleton/productListWithCarouselSkeleton";
+
 export default function Products() {
   const { isLoading, productList } = useGetAllProducts();
   return (

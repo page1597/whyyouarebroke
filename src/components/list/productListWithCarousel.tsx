@@ -2,7 +2,7 @@ import { preloadImage, replaceAll } from "@/lib/utils";
 import { categoryProductType } from "@/types/product";
 import { DocumentData } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "./ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../ui/carousel";
 
 export default function ProductListWithCarousel({ productList }: { productList: categoryProductType[] }) {
   const navigate = useNavigate();
@@ -74,10 +74,6 @@ export default function ProductListWithCarousel({ productList }: { productList: 
             </CarouselContent>
             <CarouselPrevious className="md:-mt-6" />
             <CarouselNext className="md:-mt-6" />
-            {/* <div className="sm:hidden flex -mt-12 bg-slate-300">
-              <CarouselPrevious />
-              <CarouselNext />
-            </div> */}
           </Carousel>
         </div>
       ))}

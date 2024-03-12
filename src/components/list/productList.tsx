@@ -1,16 +1,16 @@
 import { memo, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { X } from "lucide-react";
 import useDebouncedSearch from "@/hooks/product/useDebouncedSearch";
 import useGetProducts from "@/hooks/product/useGetProducts";
 import { ProductType } from "@/types/product";
 import { preloadImage } from "@/lib/utils";
-import ProductListSkeleton from "./skeleton/productListSkeleton";
+import ProductListSkeleton from "../skeleton/productListSkeleton";
 import { Loader2 } from "lucide-react";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
@@ -34,9 +34,6 @@ function ProductList({ category }: { category?: string }) {
     isLoading,
     isFetchingNextPage,
     fetchNextPage,
-    // prefetchNextPage,
-    // currentPage, // 현재 페이지 상태 반환
-    // setCurrentPage, // 현재 페이지 설정 함수 반환
   } = useGetProducts(category ?? null, debouncedSearchValue);
 
   useEffect(() => {
@@ -45,17 +42,6 @@ function ProductList({ category }: { category?: string }) {
       fetchNextPage();
     }
   }, [inView, orderby]);
-
-  // useEffect(() => {
-  //   // prefetchNextPage()가 호출되었을 때만 currentPage를 증가시킴
-  //   if (isFetchingNextPage) {
-  //     setCurrentPage((prevPage) => prevPage + 1);
-  //   }
-  // }, [isFetchingNextPage]);
-
-  // useEffect(() => {
-  //   console.log(currentPage);
-  // }, [currentPage]);
 
   return (
     <>

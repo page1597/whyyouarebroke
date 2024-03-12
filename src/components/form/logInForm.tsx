@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import GoogleLoginButton from "./ui/googleLoginButton";
+import GoogleLoginButton from "../ui/googleLoginButton";
 import { fbGoogleLogIn } from "@/services/firebase/user";
-// import useLogInMutation from "@/hooks/auth/useLogInMutation";
-import Alert from "./alert";
+import Alert from "../customUI/alert";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { logInFormSchema } from "@/types/formSchemas/logIn";
@@ -13,7 +12,6 @@ import useLogIn from "@/hooks/auth/useLogin";
 
 export default function LogInForm({ logIn }: { logIn: any }) {
   const { isPending, showAlert, setShowAlert, alertContent } = useLogIn();
-  // const { onSubmit, form } = useLogIn(logIn);
 
   const form = useForm<z.infer<typeof logInFormSchema>>({
     resolver: zodResolver(logInFormSchema),
@@ -72,7 +70,7 @@ export default function LogInForm({ logIn }: { logIn: any }) {
 
           <div className="w-full flex flex-col justify-center items-center mt-14">
             <div className="text-zinc-500 mb-5">소셜 로그인</div>
-            <GoogleLoginButton onClick={() => fbGoogleLogIn()} />
+            <GoogleLoginButton onClick={fbGoogleLogIn} />
           </div>
         </div>
       </Form>

@@ -7,8 +7,8 @@ import { onKeyDown } from "@/lib/utils";
 import { ProductType } from "@/types/product";
 import useUploadProductMutation from "@/hooks/product/useUploadProductMutation";
 import useUploadProduct from "@/hooks/product/useUploadProduct";
-import Combobox from "./ui/comboBox";
-import Alert from "./alert";
+import Combobox from "../ui/comboBox";
+import Alert from "../customUI/alert";
 import { useNavigate } from "react-router-dom";
 import { Plus, X } from "lucide-react";
 
@@ -99,7 +99,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                   )}
                 />
                 <div />
-                {/* <div className="col-span-2">dd</div> */}
                 <FormLabel>상품이미지 *</FormLabel>
                 <div className="grid-cols-subgrid col-span-2">
                   <FormField
@@ -149,7 +148,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     )}
                   />
                 </div>
-
                 <FormLabel>상품설명 *</FormLabel>
                 <div className="grid-cols-subgrid col-span-2 w-[70%]">
                   <FormField
@@ -167,11 +165,9 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     )}
                   />
                 </div>
-
-                <div className=" mt-6 mb-3 text-base">부가정보</div>
+                <div className="mt-6 mb-3 text-base">부가정보</div>
                 <div />
                 <div />
-
                 <FormLabel>Artist</FormLabel>
                 <FormField
                   control={form.control}
@@ -194,9 +190,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                       <FormControl>
                         <Input {...field} onKeyDown={onKeyDown} />
                       </FormControl>
-                      {/* <div className="hidden md:flex">
-                      <FormMessage />
-                    </div> */}
                     </FormItem>
                   )}
                 />
@@ -241,7 +234,6 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     </FormItem>
                   )}
                 />
-                {/* <div className="bg-yellow-400"></div> */}
                 <FormLabel>상품명 *</FormLabel>
                 <FormField
                   control={form.control}
@@ -346,10 +338,8 @@ export default function AddProductForm({ product }: { product?: ProductType }) {
                     )}
                   />
                 </div>
-
                 <div className="mt-6 mb-3 text-base">부가정보</div>
                 <div />
-
                 <FormLabel>Artist</FormLabel>
                 <FormField
                   control={form.control}

@@ -1,10 +1,10 @@
 import { BasketProductType } from "@/types/product";
 import { Dispatch, SetStateAction, memo, useContext, useEffect } from "react";
-import QuantityInput from "./quantityInput";
+import QuantityInput from "../customUI/quantityInput";
 import { useBasketContext } from "@/routes";
 import useBasket from "@/hooks/basket/useBasket";
 import { AuthContext } from "@/context/authContext";
-import Alert from "./alert";
+import Alert from "../customUI/alert";
 import useShowAlert from "@/hooks/useShowAlert";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
@@ -19,24 +19,33 @@ function BasketProductComponent({
   basketProducts: BasketProductType[];
   setBasketProducts: Dispatch<SetStateAction<BasketProductType[]>>;
 }) {
+  const { width } = useWindowWidth();
+  const { setShowAlert, setAlertContent, showAlert, alertContent, setConfirm, confirm } = useShowAlert();
   const { basketContext, setBasketContext } = useBasketContext();
-
   const { removeFromBasket } = useBasket(setBasketContext);
   const userInfo = useContext(AuthContext);
 
   const foundProduct = basketContext.find((basketProduct) => basketProduct.id === product.id);
+
   let totalPrice = 0;
   if (foundProduct) {
     totalPrice = foundProduct.quantity * product.price;
   }
-  const { setShowAlert, setAlertContent, showAlert, alertContent, setConfirm, confirm } = useShowAlert();
 
   useEffect(() => {
     if (confirm) {
       removeFromBasket(userInfo?.id ? userInfo?.id : null, product.id);
     }
   }, [confirm]);
-  const { width } = useWindowWidth();
+
+  function onConfirmDelete() {
+    setShowAlert(true);
+    setAlertContent({
+      title: "장바구니",
+      desc: `장바구니에서 ${product.name} 상품을 삭제하시겠습니까?`,
+      nav: null,
+    });
+  }
   return (
     <>
       <Alert alertContent={alertContent} showAlert={showAlert} setShowAlert={setShowAlert} setConfirm={setConfirm} />
@@ -65,14 +74,7 @@ function BasketProductComponent({
               <button
                 id="delete_basket"
                 className="border px-2 py-1 rounded text-sm bg-white"
-                onClick={() => {
-                  setShowAlert(true);
-                  setAlertContent({
-                    title: "장바구니",
-                    desc: `장바구니에서 ${product.name} 상품을 삭제하시겠습니까?`,
-                    nav: null,
-                  });
-                }}
+                onClick={onConfirmDelete}
               >
                 {width > 640 ? <>삭제하기</> : <>삭제</>}
               </button>
