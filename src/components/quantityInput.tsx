@@ -36,10 +36,6 @@ function QuantityInput({
       <button id="minus" type="button" onClick={onMinus} className="px-2 rounded-l cursor-pointer">
         -
       </button>
-      {/* const newValue = Number(e.target.value);
-          if (!isNaN(newValue) && newValue >= 1 && newValue <= 100) {
-            setQuantity(newValue);
-          } */}
       <input
         type="text"
         value={basketProducts.find((basketProducts) => basketProducts.id === product.id)?.quantity}

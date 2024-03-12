@@ -137,17 +137,6 @@ export default function PaymentFormModal({
                 <FormItem>
                   <FormControl {...field}>
                     <Input {...field} />
-                    {/* <Input
-                        {...field}
-                        type="text"
-                        name="buyer_tel1"
-                        defaultValue={"010"}
-                        maxLength={3}
-                      />
-                      -
-                      <Input {...field} type="text" name="buyer_tel2" maxLength={4} />
-                      -
-                      <Input {...field} type="text" name="buyer_tel3" maxLength={4} /> */}
                   </FormControl>
                   <div className="hidden md:flex">
                     <FormMessage />

@@ -31,14 +31,6 @@ export default function App() {
         </Suspense>
       ),
       children: [
-        // {
-        //   path: "/basket", // order/basket
-        //   element: <Basket />,
-        // },
-        // {
-        //   path: "/order", // order/basket
-        //   element: isAdmin ? <AdminOrder /> : <Order />,
-        // },
         {
           path: "/category/rock-pop-etc",
           element: <RockPopEtc />,
@@ -76,7 +68,6 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
       <RouterProvider router={router} />
     </QueryClientProvider>
   );

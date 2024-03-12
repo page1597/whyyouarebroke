@@ -3,7 +3,6 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import GoogleLoginButton from "./ui/googleLoginButton";
 import { fbGoogleLogIn } from "@/services/firebase/user";
-// import useLogInMutation from "@/hooks/auth/useLogInMutation";
 import Alert from "./alert";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +12,6 @@ import useLogIn from "@/hooks/auth/useLogin";
 
 export default function LogInForm({ logIn }: { logIn: any }) {
   const { isPending, showAlert, setShowAlert, alertContent } = useLogIn();
-  // const { onSubmit, form } = useLogIn(logIn);
 
   const form = useForm<z.infer<typeof logInFormSchema>>({
     resolver: zodResolver(logInFormSchema),

@@ -74,10 +74,6 @@ export default function ProductListWithCarousel({ productList }: { productList: 
             </CarouselContent>
             <CarouselPrevious className="md:-mt-6" />
             <CarouselNext className="md:-mt-6" />
-            {/* <div className="sm:hidden flex -mt-12 bg-slate-300">
-              <CarouselPrevious />
-              <CarouselNext />
-            </div> */}
           </Carousel>
         </div>
       ))}

@@ -34,9 +34,6 @@ function ProductList({ category }: { category?: string }) {
     isLoading,
     isFetchingNextPage,
     fetchNextPage,
-    // prefetchNextPage,
-    // currentPage, // 현재 페이지 상태 반환
-    // setCurrentPage, // 현재 페이지 설정 함수 반환
   } = useGetProducts(category ?? null, debouncedSearchValue);
 
   useEffect(() => {
@@ -45,17 +42,6 @@ function ProductList({ category }: { category?: string }) {
       fetchNextPage();
     }
   }, [inView, orderby]);
-
-  // useEffect(() => {
-  //   // prefetchNextPage()가 호출되었을 때만 currentPage를 증가시킴
-  //   if (isFetchingNextPage) {
-  //     setCurrentPage((prevPage) => prevPage + 1);
-  //   }
-  // }, [isFetchingNextPage]);
-
-  // useEffect(() => {
-  //   console.log(currentPage);
-  // }, [currentPage]);
 
   return (
     <>
