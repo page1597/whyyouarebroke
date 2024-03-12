@@ -3,8 +3,25 @@ import { OrderType } from "@/types/order";
 import { memo } from "react";
 
 function OrderComponent({ order, labels }: { order: OrderType; labels: string[] }) {
-  const span = order.products.length;
   const { width } = useWindowWidth();
+  const span = order.products.length;
+
+  function OrderElement({ className, type }: { className?: string; type: string }) {
+    return (
+      <>
+        {order.products.map((product) => (
+          <div key={product.id} className={`justify-center items-center ${className}`}>
+            {type == "image" && <img src={product.image} width={96} height={96} />}
+            {type == "name" && product.name}
+            {type == "price" && <>{product.price.toLocaleString()}원</>}
+            {type == "quantity" && <>{product.quantity}개</>}
+            {type == "address" && <div style={{ gridRow: `span ${span}` }}>{order.buyer_addr}</div>}
+          </div>
+        ))}
+      </>
+    );
+  }
+
   return (
     <div className="w-full grid text-center items-center">
       {order.merchant_uid !== "" ? (
@@ -17,33 +34,15 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
             <div className="text-zinc-400">{new Date(order.orderedAt).toLocaleString()}</div>
             <div className="mt-1">{order.buyer_name}</div>
           </div>
-          {order.products.map((product) => (
-            <div key={product.id} className=" flex justify-center items-center">
-              <img src={product.image} width={96} height={96} />
-            </div>
-          ))}
-          {order.products.map((product) => (
-            <div key={product.id} className="justify-center flex items-center lg:text-base text-sm">
-              {product.name}
-            </div>
-          ))}
-          {order.products.map((product) => (
-            <div key={product.id} className="justify-center items-center lg:text-base text-nowrap lg:flex hidden">
-              {product.price.toLocaleString()}원
-            </div>
-          ))}
-          {order.products.map((product) => (
-            <div key={product.id} className="justify-center flex items-center lg:text-base text-sm">
-              {product.quantity}개
-            </div>
-          ))}
+          <OrderElement type="image" className="flex" />
+          <OrderElement type="name" className="flex lg:text-base text-sm" />
+          <OrderElement type="price" className="lg:text-base text-nowrap lg:flex hidden" />
+          <OrderElement type="quantity" className="flex lg:text-base text-sm" />
           <div style={{ gridRow: `span ${span}` }} className="flex justify-center items-center lg:text-base text-sm">
             {order.amount.toLocaleString()}
             {width > 640 ? <>원</> : <></>}
           </div>
-          <div style={{ gridRow: `span ${span}` }} className="hidden lg:flex justify-center items-center">
-            {order.buyer_addr}
-          </div>
+          <OrderElement type="address" className="hidden lg:flex" />
         </div>
       ) : (
         <div className="grid lg:grid-cols-7 grid-cols-5">

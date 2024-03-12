@@ -41,18 +41,19 @@ export default function useBasket(setBasketContext?: Dispatch<SetStateAction<Bas
     // 상품이 이미 장바구니에 있는지 확인
     const existingProductIndex = basket.findIndex((item: { id: string }) => item.id === product.id);
 
+    // 이미 장바구니에 해당 상품이 있는 경우, 수량 업데이트
     if (existingProductIndex !== -1) {
-      // 이미 장바구니에 해당 상품이 있는 경우, 수량 업데이트
       basket[existingProductIndex].quantity = quantity;
-    } else {
-      // 장바구니에 해당 상품이 없는 경우, 새로 추가
+    }
+    // 장바구니에 해당 상품이 없는 경우, 새로 추가
+    else {
       const newBasket: BasketProductType = {
         id: product.id,
         name: product.name,
         format: product.format,
         stock: product.stock,
         price: product.price,
-        quantity: quantity, // 수량
+        quantity: quantity,
         image: product.image,
       };
       basket.push(newBasket);
@@ -63,9 +64,8 @@ export default function useBasket(setBasketContext?: Dispatch<SetStateAction<Bas
     if (setBasketContext) {
       setBasketContext(basket);
     }
+    // 로그인 한 상태라면 DB에도 업데이트
     if (userId) {
-      // 로그인 한 상태라면
-      // DB에도 업데이트
       fbUpdateUserBasket(userId, basket);
     }
   }
@@ -77,8 +77,8 @@ export default function useBasket(setBasketContext?: Dispatch<SetStateAction<Bas
     // 상품이 이미 장바구니에 있는지 확인
     const existingProductIndex = basket.findIndex((item: { id: string }) => item.id === basketProduct.id);
 
+    // 이미 장바구니에 해당 상품이 있는 경우, 수량 업데이트
     if (existingProductIndex !== -1) {
-      // 이미 장바구니에 해당 상품이 있는 경우, 수량 업데이트
       basket[existingProductIndex].stock = stock;
     }
 
@@ -86,9 +86,8 @@ export default function useBasket(setBasketContext?: Dispatch<SetStateAction<Bas
     if (setBasketContext) {
       setBasketContext(basket);
     }
+    // 로그인 한 상태라면 DB에도 업데이트
     if (userId) {
-      // 로그인 한 상태라면
-      // DB에도 업데이트
       fbUpdateUserBasket(userId, basket);
     }
   }

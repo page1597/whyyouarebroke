@@ -19,24 +19,24 @@ function BasketProductComponent({
   basketProducts: BasketProductType[];
   setBasketProducts: Dispatch<SetStateAction<BasketProductType[]>>;
 }) {
+  const { width } = useWindowWidth();
+  const { setShowAlert, setAlertContent, showAlert, alertContent, setConfirm, confirm } = useShowAlert();
   const { basketContext, setBasketContext } = useBasketContext();
-
   const { removeFromBasket } = useBasket(setBasketContext);
   const userInfo = useContext(AuthContext);
 
   const foundProduct = basketContext.find((basketProduct) => basketProduct.id === product.id);
+
   let totalPrice = 0;
   if (foundProduct) {
     totalPrice = foundProduct.quantity * product.price;
   }
-  const { setShowAlert, setAlertContent, showAlert, alertContent, setConfirm, confirm } = useShowAlert();
 
   useEffect(() => {
     if (confirm) {
       removeFromBasket(userInfo?.id ? userInfo?.id : null, product.id);
     }
   }, [confirm]);
-  const { width } = useWindowWidth();
 
   function onConfirmDelete() {
     setShowAlert(true);

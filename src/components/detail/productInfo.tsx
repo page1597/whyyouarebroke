@@ -54,18 +54,18 @@ function ProductInfo({
             </h3>
           </div>
           <hr />
-          <div className="grid grid-cols-302 md:grid-cols-202 mt-3 mx-4 gap-y-1 md:text-base text-sm">
+          <div className="grid grid-cols-302 md:grid-cols-202 mt-3 mx-4 gap-y-1 md:text-base text-sm text-zinc-900">
             <h4 className="text-zinc-600 font-bold">판매가</h4>
             <h4 className="text-zinc-600 font-bold">{product.price.toLocaleString()}원</h4>
-            <h5 className="text-zinc-900 mt-2">재고</h5>
+            <h5 className="mt-2">재고</h5>
             <h5 className="text-zinc-500 mt-2">{product.stock}</h5>
-            <h5 className="text-zinc-900">Artist</h5>
+            <h5>Artist</h5>
             <h5 className="text-zinc-500 font-light">{product.artist}</h5>
-            <h5 className="text-zinc-900">Label</h5>
+            <h5>Label</h5>
             <h5 className="text-zinc-500 font-light">{product.label}</h5>
-            <h5 className="text-zinc-900">Released</h5>
+            <h5>Released</h5>
             <h5 className="text-zinc-500 font-light">{product.released}</h5>
-            <h5 className="text-zinc-900">Format</h5>
+            <h5>Format</h5>
             <h5 className="text-zinc-500 font-light">{product.format}</h5>
           </div>
           {!isAdmin && quantity && setQuantity ? (
