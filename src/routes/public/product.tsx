@@ -1,7 +1,7 @@
-import DrawerBasket from "@/components/drawerBasket";
-import ProductDetail from "@/components/productDetail";
-import ProductInfo from "@/components/productInfo";
-import RecommandProducts from "@/components/recommandProducts";
+import DrawerBasket from "@/components/list/drawerBasket";
+import ProductDetail from "@/components/detail/productDetail";
+import ProductInfo from "@/components/detail/productInfo";
+import RecommandProducts from "@/components/list/recommandProducts";
 import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
 import { AuthContext } from "@/context/authContext";

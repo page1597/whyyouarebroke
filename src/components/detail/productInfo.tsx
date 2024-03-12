@@ -1,5 +1,5 @@
 import { ProductType } from "@/types/product";
-import NumberInput from "./ui/numberInput";
+import NumberInput from "../ui/numberInput";
 import { Dispatch, SetStateAction, memo } from "react";
 
 function ProductInfo({

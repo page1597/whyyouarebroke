@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
-import SearchProducts from "./searchProducts";
-import { DrawerRight, DrawerRightTrigger, DrawerRightContent } from "./ui/drawerRight";
+import SearchProducts from "../list/searchProducts";
+import { DrawerRight, DrawerRightTrigger, DrawerRightContent } from "../ui/drawerRight";
 
 export default function SearchDrawer() {
   return (

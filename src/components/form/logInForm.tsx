@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import GoogleLoginButton from "./ui/googleLoginButton";
+import GoogleLoginButton from "../ui/googleLoginButton";
 import { fbGoogleLogIn } from "@/services/firebase/user";
-import Alert from "./alert";
+import Alert from "../customUI/alert";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { logInFormSchema } from "@/types/formSchemas/logIn";

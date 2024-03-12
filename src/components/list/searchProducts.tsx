@@ -1,6 +1,6 @@
 import useDebouncedSearch from "@/hooks/product/useDebouncedSearch";
 import useGetProducts from "@/hooks/product/useGetProducts";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";

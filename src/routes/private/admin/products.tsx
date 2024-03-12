@@ -1,4 +1,4 @@
-import ProductList from "@/components/productList";
+import ProductList from "@/components/list/productList";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Plus } from "lucide-react";

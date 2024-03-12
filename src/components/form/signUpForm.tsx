@@ -3,7 +3,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
-import GoogleSignUpButton from "./ui/googleSignupButton";
+import GoogleSignUpButton from "../ui/googleSignupButton";
 import { signUpFormSchema } from "@/types/formSchemas/signUp";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

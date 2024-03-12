@@ -1,4 +1,4 @@
-import BasketList from "@/components/basketList";
+import BasketList from "@/components/list/basketList";
 import { Helmet } from "react-helmet";
 import { useBasketContext } from "..";
 

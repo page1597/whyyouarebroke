@@ -7,8 +7,8 @@ import { onKeyDown } from "@/lib/utils";
 import { ProductType } from "@/types/product";
 import useUploadProductMutation from "@/hooks/product/useUploadProductMutation";
 import useUploadProduct from "@/hooks/product/useUploadProduct";
-import Combobox from "./ui/comboBox";
-import Alert from "./alert";
+import Combobox from "../ui/comboBox";
+import Alert from "../customUI/alert";
 import { useNavigate } from "react-router-dom";
 import { Plus, X } from "lucide-react";
 

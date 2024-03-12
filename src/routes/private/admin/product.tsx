@@ -1,6 +1,6 @@
-import Alert from "@/components/alert";
-import ProductDetail from "@/components/productDetail";
-import ProductInfo from "@/components/productInfo";
+import Alert from "@/components/customUI/alert";
+import ProductDetail from "@/components/detail/productDetail";
+import ProductInfo from "@/components/detail/productInfo";
 import { Button } from "@/components/ui/button";
 import useDeleteProductMutation from "@/hooks/product/useDeleteProductMutation";
 import useGetProduct from "@/hooks/product/useGetProduct";

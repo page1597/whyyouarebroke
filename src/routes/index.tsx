@@ -1,17 +1,17 @@
 // root of the project
-import DocsSidebarNav from "@/components/sidebar";
+import DocsSidebarNav from "@/components/layout/sidebar";
 import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/context/authContext";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/errorFallback";
-import Header from "@/components/Header";
+import Header from "@/components/layout/Header";
 import { HeaderNavItem } from "@/types/navigation";
 import { Helmet } from "react-helmet";
 import useBasket from "@/hooks/basket/useBasket";
 import { BasketProductType } from "@/types/product";
-import SearchDrawer from "@/components/searchDrawer";
-import Logo from "@/components/logo";
+import SearchDrawer from "@/components/customUI/searchDrawer";
+import Logo from "@/components/layout/logo";
 
 export const sidebarNav = [
   {

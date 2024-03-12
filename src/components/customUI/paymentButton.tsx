@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { FieldValues } from "react-hook-form";
 import { BasketProductType } from "@/types/product";
 import { Dispatch, SetStateAction, useEffect } from "react";

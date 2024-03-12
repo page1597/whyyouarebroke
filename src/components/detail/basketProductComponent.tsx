@@ -1,10 +1,10 @@
 import { BasketProductType } from "@/types/product";
 import { Dispatch, SetStateAction, memo, useContext, useEffect } from "react";
-import QuantityInput from "./quantityInput";
+import QuantityInput from "../customUI/quantityInput";
 import { useBasketContext } from "@/routes";
 import useBasket from "@/hooks/basket/useBasket";
 import { AuthContext } from "@/context/authContext";
-import Alert from "./alert";
+import Alert from "../customUI/alert";
 import useShowAlert from "@/hooks/useShowAlert";
 import useWindowWidth from "@/hooks/useWindowWidth";
 

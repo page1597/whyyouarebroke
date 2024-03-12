@@ -1,5 +1,5 @@
-import PaymentFormModal from "./paymentFormModal";
-import BasketProductComponent from "./basketProductComponent";
+import PaymentFormModal from "../form/paymentFormModal";
+import BasketProductComponent from "../detail/basketProductComponent";
 import { Checkbox } from "@/components/ui/checkbox";
 import useBasketList from "@/hooks/basket/useBasketList";
 import { memo } from "react";
@@ -40,15 +40,15 @@ function BasketList() {
         <></>
       )}
       <hr className="my-6" />
-      <div className="flex w-full md:justify-end justify-center md:gap-2 gap-1 items-center text-zinc-700 md:text-sm text-xs text-nowrap">
+      <div className="flex w-full font-bold md:justify-end justify-center md:gap-2 gap-1 items-center text-zinc-700 md:text-sm text-xs text-nowrap">
         <div>상품구매금액</div>
-        <div className="text-zinc-500 font-bold text-base">{totalPrice.toLocaleString()}원</div>
+        <div className="text-zinc-500 text-base">{totalPrice.toLocaleString()}원</div>
         <div>+</div>
         <div>배송비</div>
-        <div className="text-zinc-500 font-bold text-base">{shippingFee.toLocaleString()}원</div>
+        <div className="text-zinc-500 text-base">{shippingFee.toLocaleString()}원</div>
         <div>=</div>
         <div>합계</div>
-        <div className="text-zinc-700 font-bold text-xl">{(totalPrice + shippingFee).toLocaleString()}원</div>
+        <div className="text-xl">{(totalPrice + shippingFee).toLocaleString()}원</div>
       </div>
       <PaymentFormModal checkedProducts={checkedProducts} basketProducts={basketContext} />
     </div>

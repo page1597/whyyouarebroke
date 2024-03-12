@@ -7,7 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
+} from "../ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 
 export default function Alert({

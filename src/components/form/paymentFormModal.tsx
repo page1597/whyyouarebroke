@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import Modal from "@/components/ui/modal";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "./ui/formInput";
+import { Input } from "../ui/formInput";
 import { Checkbox } from "@/components/ui/checkbox";
-import PaymentButton from "./paymentButton";
+import PaymentButton from "../customUI/paymentButton";
 import { AuthContext } from "@/context/authContext";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { BasketProductType } from "@/types/product";
 import useOrderModal from "@/hooks/order/useOrderModal";
-import Alert from "./alert";
+import Alert from "../customUI/alert";
 
 // 모달창 직접 구현
 export default function PaymentFormModal({

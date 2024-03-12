@@ -1,10 +1,10 @@
 import { DocumentData } from "firebase/firestore";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 import { useNavigate } from "react-router-dom";
 import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
 import { preloadImage } from "@/lib/utils";
 import { memo } from "react";
-import RecommandProductsSkeleton from "./skeleton/recommandProductsSkeleton";
+import RecommandProductsSkeleton from "../skeleton/recommandProductsSkeleton";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
 function RecommandProducts({ category, productId }: { category: string; productId: string }) {

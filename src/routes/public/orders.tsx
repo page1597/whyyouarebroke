@@ -1,4 +1,4 @@
-import OrderList from "@/components/orderList";
+import OrderList from "@/components/list/orderList";
 import { Helmet } from "react-helmet";
 
 export default function Orders() {
