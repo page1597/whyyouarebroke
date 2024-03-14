@@ -89,8 +89,6 @@ module.exports = {
         102: "110px 1fr",
         502: "350px 1fr",
 
-        // 107: "200px 100px 1fr 1fr 1fr 1fr 1fr",
-
         // 모바일 화면
         302: "30% 1fr",
       },

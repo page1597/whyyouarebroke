@@ -78,10 +78,15 @@ export default function Layout() {
     <>
       <Helmet>
         <title>whyyouarebroke</title>
-      </Helmet>
-      <Helmet>
         <meta name="description" content="whyyouarebroke" />
         <meta name="keywords" content="whyyouarebroke" />
+        <meta property="og:title" content="whyyouarebroke" />
+        <meta property="og:description" content="whyyouarebroke" />
+        <meta property="og:url" content="https://d35k4wnncttxix.cloudfront.net/" />
+        <meta
+          property="og:image"
+          content="https://firebasestorage.googleapis.com/v0/b/whyyouarebroke-cee8d.appspot.com/o/logo%2Flogo.png?alt=media&token=4f12b6be-3111-4537-b4b7-898f36093bd3"
+        />
       </Helmet>
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
         <div className="w-full flex flex-col h-screen">
