@@ -37,6 +37,10 @@ $ npm run dev
 ```
 <br/>
 
+## 🧛🏻‍♂️ 테스트 계정
+<div><b>구매자 계정</b> : user132@gmail.com / user132!</div>
+<div><b>판매자 계정</b> : admin132@gmail.com / djemals132!</div>
+
 ## 🔧 기술 스택
 <div>
   <img src="https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white"> 
