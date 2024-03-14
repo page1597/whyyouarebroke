@@ -5,7 +5,6 @@ import PrivateRoutes from "./routes/private/admin/index.tsx";
 import PublicRoutes from "./routes/public/index.tsx";
 import { AuthContext } from "./context/authContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Layout from "./routes/index.tsx";
 
 const Basket = lazy(() => import("./routes/public/basket"));
