@@ -8,7 +8,7 @@ import Alert from "../customUI/alert";
 import useShowAlert from "@/hooks/useShowAlert";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
-function BasketProductComponent({
+function BasketProductCard({
   product,
   labels,
   basketProducts,
@@ -97,4 +97,4 @@ function BasketProductComponent({
     </>
   );
 }
-export default memo(BasketProductComponent);
+export default memo(BasketProductCard);
