@@ -2,7 +2,7 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import { OrderType } from "@/types/order";
 import { memo } from "react";
 
-function OrderComponent({ order, labels }: { order: OrderType; labels: string[] }) {
+function OrderCard({ order, labels }: { order: OrderType; labels: string[] }) {
   const { width } = useWindowWidth();
   const span = order.products.length;
 
@@ -62,4 +62,4 @@ function OrderComponent({ order, labels }: { order: OrderType; labels: string[] 
     </div>
   );
 }
-export default memo(OrderComponent);
+export default memo(OrderCard);

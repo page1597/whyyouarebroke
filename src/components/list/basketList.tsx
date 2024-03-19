@@ -1,5 +1,5 @@
 import PaymentFormModal from "../form/paymentFormModal";
-import BasketProductComponent from "../detail/basketProductComponent";
+import BasketProductCard from "../detail/basketProductCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import useBasketList from "@/hooks/basket/useBasketList";
 import { memo } from "react";
@@ -27,7 +27,7 @@ function BasketList() {
                 }
                 onCheckedChange={(checked) => onCheck(product.id, checked)}
               />
-              <BasketProductComponent
+              <BasketProductCard
                 product={product}
                 labels={labels}
                 basketProducts={basketContext}

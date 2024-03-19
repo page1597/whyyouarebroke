@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../context/authContext";
 import { UserInfoType } from "@/types/user";
 import { firebaseAuth } from "@/services/firebase";
@@ -43,6 +43,8 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     return unsubscribe;
   }, []);
 
+  const memoizedValue = useMemo(() => user, [user]);
+
   if (loading) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
@@ -51,5 +53,5 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     );
   }
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
 }

@@ -4,13 +4,13 @@ import { useInView } from "react-intersection-observer";
 import useGetOrders from "@/hooks/order/useGetOrders";
 import useCancelOrderMutation from "@/hooks/order/useCancelOrderMutation";
 import useCancelOrder from "@/hooks/order/useCancelOrder";
-import OrderComponent from "../detail/orderComponent";
 import { OrderType } from "@/types/order";
 import SelectOrderState from "../customUI/selectOrderStatus";
 import Alert from "../customUI/alert";
 import { Loader2 } from "lucide-react";
 import useShowAlert from "@/hooks/useShowAlert";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import OrderCard from "../detail/orderCard";
 
 // 페이지네이션 ?
 export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
@@ -92,7 +92,7 @@ export default function OrderList({ isAdmin }: { isAdmin: boolean }) {
             {ordersWithTitle?.map((order) => (
               <div key={order.merchant_uid}>
                 <div className="flex flex-row items-center lg:gap-3 lg:text-base text-sm">
-                  <OrderComponent order={order} labels={labels} />
+                  <OrderCard order={order} labels={labels} />
                   <div className="lg:w-[128px] w-[90px] flex justify-center">
                     {order.merchant_uid ? (
                       !isAdmin ? (
