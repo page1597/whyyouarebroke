@@ -117,7 +117,7 @@ function ProductList({ category }: { category?: string }) {
               {page ? (
                 <div className="grid grid-cols-2 sm:grid-cols-4 justify-center gap-y-10 gap-x-2">
                   {page.map((product: ProductType) => (
-                    <ProductCard product={product} index={index} />
+                    <ProductCard key={product.id} product={product} index={index} />
                   ))}
                 </div>
               ) : (

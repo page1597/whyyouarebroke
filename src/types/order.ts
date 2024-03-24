@@ -43,6 +43,8 @@ export const OrderStatusType = {
   SHIPMENT_STARTED: "발송 시작",
   ORDER_CANCELLED: "주문 취소",
   SALE_COMPLETED: "판매 완료",
-};
+} as const;
+
+export type OrderStatusType = "구매 확인" | "발송 대기" | "발송 시작" | "주문 취소" | "판매 완료";
 
 // export type OrderStatusType = keyof typeof OrderStatus;
