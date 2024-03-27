@@ -38,8 +38,10 @@ $ npm run dev
 <br/>
 
 ## 🧛🏻‍♂️ 테스트 계정
-<div><b>구매자 계정</b> : user132@gmail.com / user132!</div>
-<div><b>판매자 계정</b> : admin132@gmail.com / djemals132!</div>
+```shell
+구매자 계정: user132@gmail.com / user132!
+판매자 계정: admin132@gmail.com / djemals132!
+```
 
 ## 🔧 기술 스택
 <div>
