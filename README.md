@@ -1,7 +1,7 @@
 # whyyouarebroke
 1인 프론트엔드 프로젝트로 진행한 음반 판매 커머스 웹사이트 (2024.02.01 - 2024.02.29)
 
-<img width="700" alt="스크린샷" src="https://github.com/page1597/commerce/assets/62283847/aa91edfb-9481-498d-8e6e-be38edf95c5d">
+<img width="700" alt="screenshot" src="https://github.com/page1597/commerce/assets/62283847/aa91edfb-9481-498d-8e6e-be38edf95c5d">
 
 <br/>
 
