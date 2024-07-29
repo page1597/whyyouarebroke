@@ -129,7 +129,7 @@ function ProductList({ category }: { category?: string }) {
       ) : (
         <ProductListSkeleton />
       )}
-      <div ref={inViewRef} className="h-42 w-screen">
+      <div ref={inViewRef} className="h-42 mt-12 w-full flex justify-center">
         {isFetchingNextPage && <Loader2 className="h-10 w-10 animate-spin" />}
       </div>
     </>

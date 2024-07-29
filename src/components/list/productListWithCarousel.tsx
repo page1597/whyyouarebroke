@@ -28,7 +28,7 @@ export default function ProductListWithCarousel({ productList }: { productList: 
               {categoryProduct.products?.map((product: DocumentData) => (
                 <CarouselItem
                   key={product.id}
-                  className="pl-4 lg:ml-0 basis-1/2 flex justify-center items-center sm:basis-1/4"
+                  className="w-0 pl-4 lg:ml-0 basis-1/2 flex justify-center items-center sm:basis-1/4"
                 >
                   <div className="flex justify-center items-center">
                     <div
