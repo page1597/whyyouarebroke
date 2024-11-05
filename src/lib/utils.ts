@@ -13,7 +13,7 @@ export const resizeFile = (file: Blob): Promise<string> =>
       800,
       800,
       "WEBP",
-      100,
+      80,
       0,
       (uri) => {
         resolve(URL.createObjectURL(uri as Blob));
