@@ -12,7 +12,7 @@ import { db, firebaseAuth } from "../firebase";
 import { NavigateFunction } from "react-router-dom";
 
 // Email 회원가입
-export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction) {
+export async function fbSignUp(user: UserSignUpType) {
   try {
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, user.email, user.password!);
     try {
@@ -30,11 +30,8 @@ export async function fbSignUp(user: UserSignUpType, navigate: NavigateFunction)
         console.error("사용자 데이터 저장 에러:", editProduct);
       }
 
-      alert("회원가입 되었습니다.");
-
       // 로그아웃 후 로그인 페이지로 이동
       await signOut(firebaseAuth);
-      navigate("/login");
     } catch (e) {
       console.error("프로필 업데이트 에러:", e);
     }

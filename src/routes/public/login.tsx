@@ -1,11 +1,13 @@
+import Alert from "@/components/customUI/alert";
 import LogInForm from "@/components/form/logInForm";
 import useLogIn from "@/hooks/auth/useLogin";
 import { Helmet } from "react-helmet";
 
 export default function LogIn() {
-  const { logIn } = useLogIn();
+  const { logIn, setShowAlert, showAlert, alertContent } = useLogIn();
   return (
     <>
+      <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
       <Helmet>
         <title>로그인</title>
       </Helmet>
