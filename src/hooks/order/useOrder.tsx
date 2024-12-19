@@ -6,6 +6,7 @@ import { OrderStatusType } from "@/types/order";
 import useShowAlert from "../useShowAlert";
 import { paymentFormSchema } from "@/types/formSchemas/payment";
 import { Dispatch, SetStateAction } from "react";
+import { useNavigate } from "react-router-dom";
 export default function useOrder(
   userId: string | null | undefined,
   fieldValues: FieldValues,
@@ -18,6 +19,7 @@ export default function useOrder(
 ) {
   const { addOrder } = useAddOrderMutation();
   const { setShowAlert, showAlert, setAlertContent, alertContent } = useShowAlert();
+  const navigate = useNavigate();
 
   async function onClickPayment() {
     const validation = paymentFormSchema.safeParse(fieldValues);
@@ -76,14 +78,12 @@ export default function useOrder(
           buyer_postcode: data.buyer_postcode,
         });
         setIsSuccess(true);
-        setAlertContent({ title: "상품 주문", desc: "주문을 완료하였습니다.", nav: null });
-        setShowAlert(true);
+        alert("주문이 완료되었습니다.");
+        navigate("/order");
       } else {
         // 결제 취소
         increaseProductStock(orderProducts);
         alert(`${error_msg}`);
-        setAlertContent({ title: "상품 주문", desc: "주문을 실패하였습니다.", nav: null });
-        setShowAlert(true);
       }
     });
   }
