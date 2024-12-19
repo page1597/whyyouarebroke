@@ -6,7 +6,6 @@ import { z } from "zod";
 import useShowAlert from "../useShowAlert";
 
 export default function useSignUp() {
-  // const navigate = useNavigate();
   const { setShowAlert, showAlert, alertContent, setAlertContent } = useShowAlert();
 
   async function signUp(values: z.infer<typeof signUpFormSchema>) {

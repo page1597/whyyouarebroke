@@ -76,10 +76,14 @@ export default function useOrder(
           buyer_postcode: data.buyer_postcode,
         });
         setIsSuccess(true);
+        setAlertContent({ title: "상품 주문", desc: "주문을 완료하였습니다.", nav: null });
+        setShowAlert(true);
       } else {
         // 결제 취소
         increaseProductStock(orderProducts);
         alert(`${error_msg}`);
+        setAlertContent({ title: "상품 주문", desc: "주문을 실패하였습니다.", nav: null });
+        setShowAlert(true);
       }
     });
   }
