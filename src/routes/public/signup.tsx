@@ -1,12 +1,15 @@
+import Alert from "@/components/customUI/alert";
 import SignUpForm from "@/components/form/signUpForm";
 import useSignUp from "@/hooks/auth/useSignUp";
 import { Helmet } from "react-helmet";
 
 export default function SignUp() {
-  const { signUp } = useSignUp();
+  const { setShowAlert, showAlert, alertContent, signUp } = useSignUp();
 
   return (
     <>
+      <Alert setShowAlert={setShowAlert} showAlert={showAlert} alertContent={alertContent} />
+
       <Helmet>
         <title>회원가입</title>
       </Helmet>

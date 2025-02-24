@@ -96,7 +96,7 @@ export default function Layout() {
               <Logo width={60} height={60} />
               <SearchDrawer />
             </div>
-            <div className="md:flex-grow md:px-0 h-full px-5 overflow-x-clip">
+            <div className="md:flex-grow md:px-0 h-full min-w-0 px-5 overflow-x-clip">
               <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => navigate("/")}>
                 <Outlet context={{ basketContext, setBasketContext } satisfies ContextType} />
               </ErrorBoundary>
