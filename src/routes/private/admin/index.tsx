@@ -11,7 +11,6 @@ export default function PrivateRoutes() {
   return [
     { path: "/", element: <Products /> }, // 판매상품조회
     { path: "/order", element: <Orders /> }, // 주문조회
-    { path: "/category/test", elemeng: <div>test</div> },
     { path: "/login", element: <Navigate to="/" replace /> },
     { path: "/signup", element: <Navigate to="/" replace /> },
     { path: "/product", element: <Product /> },

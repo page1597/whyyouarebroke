@@ -15,7 +15,9 @@ export default function PublicRoutes(userInfo: UserInfoType | null) {
     { path: "/product", element: <Product /> }, // 판매 상품 상세
     { path: "/order", element: userInfo ? <Orders /> : <Navigate to="/login" replace /> }, // 회원만 접근 가능
     { path: "/mypage", element: userInfo ? <MyPage /> : <Navigate to="/login" replace /> }, // 회원만 접근 가능
-    { path: "/login", element: userInfo ? <Navigate to="/" replace /> : <LogIn /> }, // 로그인 했으면 들어가지 못함.
-    { path: "/signup", element: userInfo ? <Navigate to="/" replace /> : <SignUp /> }, // 로그인 했으면 들어가지 못함. 너무 느림
+    { path: "/login", element: userInfo ? <Navigate to="/" replace /> : <LogIn /> }, // 로그인 시 접근 불가
+    { path: "/signup", element: userInfo ? <Navigate to="/" replace /> : <SignUp /> }, // 로그인 시 접근 불가
+    { path: "/add-product", element: <Navigate to="/login" replace /> },
+    { path: "/edit-product", element: <Navigate to="/login" replace /> },
   ];
 }
