@@ -1,26 +1,26 @@
 import { DocumentData } from "firebase/firestore";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 import { useNavigate } from "react-router-dom";
-import useGetRecommandProducts from "@/hooks/product/useGetRecommandProducts";
+import useGetRecommendProducts from "@/hooks/product/useGetRecommendProducts";
 import { preloadImage } from "@/lib/utils";
 import { memo } from "react";
-import RecommandProductsSkeleton from "../skeleton/recommandProductsSkeleton";
+import RecommendProductsSkeleton from "../skeleton/recommendProductsSkeleton";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
-function RecommandProducts({ category, productId }: { category: string; productId: string }) {
+function RecommendProducts({ category, productId }: { category: string; productId: string }) {
   const navigate = useNavigate();
-  const { isLoading, recommands } = useGetRecommandProducts(productId, category, 4);
+  const { isLoading, recommends } = useGetRecommendProducts(productId, category, 4);
   const { width } = useWindowWidth();
   return (
     <div>
       <div className="text-zinc-700 ml-2 sm:ml-8 mt-6">추천 상품</div>
       <div className="flex flex-row justify-center sm:mt-10 mt-5">
         {isLoading ? (
-          <RecommandProductsSkeleton />
-        ) : recommands && recommands.length > 0 ? (
+          <RecommendProductsSkeleton />
+        ) : recommends && recommends.length > 0 ? (
           <Carousel opts={{ align: "start", active: width > 640 ? false : true }} className="w-11/12">
             <CarouselContent>
-              {recommands.map((product: DocumentData) => (
+              {recommends.map((product: DocumentData) => (
                 <CarouselItem key={product?.id} className="basis-1/2 sm:basis-1/4 cursor-pointer flex justify-center">
                   <div className="sm:flex hidden">
                     <div
@@ -63,11 +63,11 @@ function RecommandProducts({ category, productId }: { category: string; productI
             <CarouselNext className="sm:mt-0 mt-6" />
           </Carousel>
         ) : (
-          <RecommandProductsSkeleton />
+          <RecommendProductsSkeleton />
         )}
       </div>
     </div>
   );
 }
 
-export default memo(RecommandProducts);
+export default memo(RecommendProducts);

@@ -1,6 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 
-function RecommandProductsSkeleton() {
+function RecommendProductsSkeleton() {
   return (
     <div className="w-11/12">
       <Carousel opts={{ align: "start", active: false }}>
@@ -39,4 +39,4 @@ function RecommandProductsSkeleton() {
   );
 }
 
-export default RecommandProductsSkeleton;
+export default RecommendProductsSkeleton;
