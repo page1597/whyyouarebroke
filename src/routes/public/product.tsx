@@ -1,7 +1,7 @@
 import DrawerBasket from "@/components/list/drawerBasket";
 import ProductDetail from "@/components/detail/productDetail";
 import ProductInfo from "@/components/detail/productInfo";
-import RecommandProducts from "@/components/list/recommandProducts";
+import RecommendProducts from "@/components/list/recommendProducts";
 import { Button } from "@/components/ui/button";
 import { DrawerRight, DrawerRightContent, DrawerRightTrigger } from "@/components/ui/drawerRight";
 import { AuthContext } from "@/context/authContext";
@@ -65,7 +65,7 @@ function Product() {
         </Button>
       </div>
       <hr className="mt-8" />
-      {product ? <RecommandProducts category={product.category} productId={product.id} /> : <></>}
+      {product ? <RecommendProducts category={product.category} productId={product.id} /> : <></>}
       <hr className="mt-10" />
       {product ? <ProductDetail product={product} /> : <></>}
     </div>
