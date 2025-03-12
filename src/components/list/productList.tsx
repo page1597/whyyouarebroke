@@ -12,6 +12,7 @@ import ProductListSkeleton from "../skeleton/productListSkeleton";
 import { Loader2 } from "lucide-react";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import ProductCard from "../detail/productCard";
+import usePreloadImages from "@/hooks/product/usePreloadImages";
 
 function ProductList({ category }: { category?: string }) {
   const { width } = useWindowWidth();
@@ -33,6 +34,7 @@ function ProductList({ category }: { category?: string }) {
     isFetchingNextPage,
     fetchNextPage,
   } = useGetProducts(category ?? null, debouncedSearchValue);
+  const { isImagesLoaded } = usePreloadImages(data, isLoading);
 
   useEffect(() => {
     // 스크롤이 끝에 도달할 때마다 페이지 증가
@@ -110,24 +112,26 @@ function ProductList({ category }: { category?: string }) {
           <Input className="hidden sm:flex w-52" placeholder="상품을 검색하세요" onChange={onSearch} />
         </div>
       </div>
-      {!isLoading && data ? (
-        <div className="mt-8">
-          {data.pages.map((page, index) => (
-            <div key={index}>
-              {page ? (
-                <div className="grid grid-cols-2 sm:grid-cols-4 justify-center gap-y-10 gap-x-2">
-                  {page.map((product: ProductType) => (
-                    <ProductCard key={product.id} product={product} index={index} />
-                  ))}
-                </div>
-              ) : (
-                <p>상품이 존재하지 않습니다.</p>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
+      {isLoading || !isImagesLoaded ? (
         <ProductListSkeleton />
+      ) : (
+        <div className="mt-8">
+          {data ? (
+            data.pages.map((page, index) => (
+              <div key={index}>
+                {page && (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 justify-center gap-y-10 gap-x-2">
+                    {page.map((product: ProductType) => (
+                      <ProductCard key={product.id} product={product} index={index} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>상품이 존재하지 않습니다.</p>
+          )}
+        </div>
       )}
       <div ref={inViewRef} className="h-42 mt-12 w-full flex justify-center">
         {isFetchingNextPage && <Loader2 className="h-10 w-10 animate-spin" />}
